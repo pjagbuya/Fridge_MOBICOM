@@ -3,9 +3,11 @@
 
     <string name="app_mobicom_name">Whats In My Fridge?</string>
     <string name="app_loading_text">A kitchen helper that organizes your groceries</string>
+    <string name="get_started">Get Started</string>
 
     <string name="container_header">My Containers</string>
     <string name="profile_header">My Profile</string>
+    <string name="login_header">Log In</string>
 
     <string name="container_nav">Containers</string>
     <string name="groceries_nav">Groceries</string>
@@ -16,4 +18,9 @@
     <string name="shared_acc_desc">
         A shared account lets multiple users (like family members or housemates) manage a common kitchen inventory. Everyone added to the account can view, and update items, so all members see one combined list of what’s in the kitchen.
         It helps coordinate shopping, reduce waste, and keep everyone on the same page.</string>
+
+    <string name="email">Email Address*</string>
+    <string name="password">Password*</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>
