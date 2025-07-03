@@ -154,6 +154,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/navigation"
                 tools:srcCompat="@android:drawable/btn_radio" />
 
             <ImageButton
@@ -162,6 +163,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/navigation"
                 tools:srcCompat="@android:drawable/btn_radio" />
 
             <ImageButton
@@ -170,6 +172,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/navigation"
                 tools:srcCompat="@android:drawable/btn_radio" />
 
             <ImageButton
@@ -178,6 +181,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/navigation"
                 tools:srcCompat="@android:drawable/btn_radio" />
         </LinearLayout>
 
