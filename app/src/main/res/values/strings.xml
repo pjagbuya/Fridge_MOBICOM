@@ -26,4 +26,6 @@
     <string name="backBtn">backBtn</string>
     <string name="EditText">EditText</string>
     <string name="navigation">navigation</string>
+    <string name="recipe_header">MY RECIPE</string>
+    <string name="add_recipe">Add Recipe</string>
 </resources>
