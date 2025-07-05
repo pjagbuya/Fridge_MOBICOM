@@ -17,8 +17,12 @@ class MainActivity : ComponentActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //activities
         binding.profileBtn.setOnClickListener({
             startActivity(Intent(this, ProfileActivity::class.java))
+        })
+        binding.recipesBtn.setOnClickListener({
+            startActivity(Intent(this, RecipeActivity::class.java))
         })
 
         initContainer()

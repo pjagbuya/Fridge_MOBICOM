@@ -11,20 +11,26 @@
         android:layout_width="0dp"
         android:layout_height="120dp"
         android:background="@drawable/header_rounded_corners"
-        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="6dp"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/containerHeaderTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/poppins_bold"
-            android:gravity="center"
+            android:fontFamily="@font/poppins_semibold"
             android:text="@string/profile_header"
+            android:textAlignment="center"
+            android:layout_gravity="center"
             android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="28sp"
+            android:shadowColor="#80000000"
+            android:shadowDx="0"
+            android:shadowDy="2"
+            android:shadowRadius="4" />
     </FrameLayout>
 
     <!-- LOGIN / SIGNUP BUTTONS -->
@@ -154,6 +160,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/navigation"
                 tools:srcCompat="@android:drawable/btn_radio" />
 
             <ImageButton
@@ -162,6 +169,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/navigation"
                 tools:srcCompat="@android:drawable/btn_radio" />
 
             <ImageButton
@@ -170,6 +178,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/navigation"
                 tools:srcCompat="@android:drawable/btn_radio" />
 
             <ImageButton
@@ -178,6 +187,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/navigation"
                 tools:srcCompat="@android:drawable/btn_radio" />
         </LinearLayout>
 

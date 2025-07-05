@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.RecipeActivity">
 
     <!-- Header -->
     <FrameLayout
@@ -24,14 +24,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins_semibold"
-            android:text="@string/container_header"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="28sp"
             android:shadowColor="#80000000"
             android:shadowDx="0"
             android:shadowDy="2"
-            android:shadowRadius="4" />
+            android:shadowRadius="4"
+            android:text="@string/recipe_header"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="28sp" />
 
         <EditText
             android:id="@+id/searchBarEt"
@@ -43,18 +43,18 @@
             android:layout_marginEnd="40dp"
             android:background="@color/gray_white"
             android:drawableEnd="@mipmap/magnifying_glass"
-            android:hint="Search"
-            android:textColorHint="@color/forest_green"
-            android:paddingEnd="8dp"
-            android:textSize="16sp"
             android:fontFamily="@font/poppins_regular"
+            android:hint="Search"
             android:inputType="text"
-            android:paddingStart="8dp" />
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textColorHint="@color/forest_green"
+            android:textSize="16sp" />
     </FrameLayout>
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/containerRecyclerView"
+        android:id="@+id/RecipeRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
@@ -69,32 +69,34 @@
 
     <!-- Add Container Button -->
     <ImageButton
-        android:id="@+id/addContainerBtn"
+        android:id="@+id/addRecipeBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="72dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:src="@android:drawable/btn_radio"
-        app:layout_constraintBottom_toTopOf="@+id/navBarLayout"
-        android:contentDescription="@string/add_container"
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/add_recipe"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/add_btn"
+        app:layout_constraintBottom_toTopOf="@+id/addContainerTv"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Add Container Text -->
+
     <TextView
         android:id="@+id/addContainerTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="36dp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="@string/add_container"
+        android:text="@string/add_recipe"
         android:textAlignment="center"
         android:textColor="@color/brown"
         app:layout_constraintBottom_toTopOf="@id/navBarLayout"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/addRecipeBtn"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="@+id/addRecipeBtn" />
 
-    <!-- Bottom Navigation Bar -->
     <LinearLayout
         android:id="@+id/navBarLayout"
         android:layout_width="0dp"
@@ -125,8 +127,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:contentDescription="@string/navigation"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/navigation"
                 app:srcCompat="@android:drawable/btn_radio" />
 
             <ImageButton
@@ -145,8 +147,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:contentDescription="@string/navigation"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/navigation"
                 app:srcCompat="@android:drawable/btn_radio" />
         </LinearLayout>
 
