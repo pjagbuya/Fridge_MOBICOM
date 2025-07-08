@@ -9,7 +9,7 @@ import java.util.Locale
 
 class Container(
     var name : String,
-//    var image: Image,
+    var image: Image,
     var currCap : Int,
     var maxCap : Int,
     var timeStamp : String = getTimeStamp(),

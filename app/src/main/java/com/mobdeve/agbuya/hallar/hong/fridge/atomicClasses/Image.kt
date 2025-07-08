@@ -12,7 +12,12 @@ import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 
 class Image {
-    var bitmap: Bitmap
+    private var resId : Int = -1
+
+
+    fun getResId(): Int {
+        return resId
+    }
     companion object{
 
 
@@ -58,47 +63,18 @@ class Image {
     }
 
 
-    constructor(bitmap: Bitmap) {
-        this.bitmap = bitmap
-    }
 
     // Constructor 2: Load Bitmap from resource ID using Context
     constructor(context: Context, resourceId: Int) {
-        this.bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+
+        this.resId = resourceId
     }
 
 
 
-    // Modern Android Version use below
-    constructor(context: Context, uriToPath:String){
-        val uri = Uri.parse("android.resource://${context.packageName}/${uriToPath}")
-
-
-        // For modern versions android 10+
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val source = ImageDecoder.createSource(context.contentResolver, uri)
-            bitmap = ImageDecoder.decodeBitmap(source)
-        }
-        // For older versions below android 10
-        else {
-            bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-        }
-
-    }
 
 
 
-    fun loadToImage(imageView : ImageView){
 
-        Glide.with(imageView)
-            .load(bitmap)
-            .into(imageView)
-    }
 
-    fun loadToIcon(context: Context, imageView : ImageView){
-        Glide.with(context)
-            .load(bitmap)
-            .circleCrop()
-            .into(imageView)
-    }
 }
