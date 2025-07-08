@@ -2,8 +2,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
-    id("kotlin-parcelize")
-
 }
 
 android {
@@ -54,7 +52,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.9.1")
     implementation("com.google.android.material:material:1.12.0")
