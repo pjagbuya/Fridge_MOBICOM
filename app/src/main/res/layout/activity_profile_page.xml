@@ -161,7 +161,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                tools:srcCompat="@android:drawable/btn_radio" />
+                tools:srcCompat="@mipmap/container_white" />
 
             <ImageButton
                 android:id="@+id/groceriesBtn"
@@ -170,7 +170,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                tools:srcCompat="@android:drawable/btn_radio" />
+                tools:srcCompat="@mipmap/ingredient_white" />
 
             <ImageButton
                 android:id="@+id/recipesBtn"
@@ -188,7 +188,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                tools:srcCompat="@android:drawable/btn_radio" />
+                tools:srcCompat="@mipmap/profile_dark" />
         </LinearLayout>
 
         <LinearLayout

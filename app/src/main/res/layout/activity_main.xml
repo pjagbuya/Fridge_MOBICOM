@@ -68,19 +68,22 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <!-- Add Container Button -->
+
+    <!-- Add Container Text -->
+
     <ImageButton
         android:id="@+id/addContainerBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="72dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:src="@android:drawable/btn_radio"
-        app:layout_constraintBottom_toTopOf="@+id/navBarLayout"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/add_container"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/add_btn"
+        app:layout_constraintBottom_toTopOf="@+id/addContainerTv"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Add Container Text -->
     <TextView
         android:id="@+id/addContainerTv"
         android:layout_width="wrap_content"
@@ -118,7 +121,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@android:drawable/btn_radio" />
+                app:srcCompat="@mipmap/container_dark" />
 
             <ImageButton
                 android:id="@+id/groceriesBtn"
@@ -127,18 +130,16 @@
                 android:layout_weight="1"
                 android:contentDescription="@string/navigation"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@android:drawable/btn_radio" />
+                app:srcCompat="@mipmap/ingredient_white" />
 
             <ImageButton
                 android:id="@+id/recipesBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                app:srcCompat="@mipmap/recipe_white" />
+                app:srcCompat="@mipmap/recipe_dark" />
 
             <ImageButton
                 android:id="@+id/profileBtn"
@@ -147,7 +148,7 @@
                 android:layout_weight="1"
                 android:contentDescription="@string/navigation"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@android:drawable/btn_radio" />
+                app:srcCompat="@mipmap/profile_white" />
         </LinearLayout>
 
         <!-- Labels Row -->
