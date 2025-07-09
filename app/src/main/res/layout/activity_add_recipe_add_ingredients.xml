@@ -28,7 +28,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@mipmap/container_white" />
+                android:src="@mipmap/container_white" />
 
             <ImageButton
                 android:id="@+id/groceriesBtn"
@@ -37,7 +37,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@mipmap/ingredient_white" />
+                android:src="@mipmap/ingredient_white" />
 
             <ImageButton
                 android:id="@+id/recipesBtn"
@@ -46,7 +46,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@mipmap/recipe_dark" />
+                android:src="@mipmap/recipe_dark" />
 
             <ImageButton
                 android:id="@+id/profileBtn"
@@ -55,7 +55,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@mipmap/profile_white" />
+                android:src="@mipmap/profile_white" />
         </LinearLayout>
 
         <!-- Labels Row -->
