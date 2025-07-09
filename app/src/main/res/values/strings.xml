@@ -28,4 +28,10 @@
     <string name="navigation">navigation</string>
     <string name="recipe_header">MY RECIPE</string>
     <string name="add_recipe">Add Recipe</string>
+    <string name="recipe_name_et">Enter name of Recipe</string>
+    <string name="recipe_description">Description</string>
+    <string name="recipe_ingredient_label">Ingredients</string>
+    <string name="recipe_add_ingredient_btn">+ Add/Edit Ingredient</string>
+    <string name="recipe_cancel_btn">Cancel</string>
+    <string name="recipe_save_btn">Save</string>
 </resources>
