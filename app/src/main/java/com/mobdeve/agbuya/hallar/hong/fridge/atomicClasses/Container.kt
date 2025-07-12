@@ -1,19 +1,22 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses
 
 import android.os.Build
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
-
+@Suppress("DEPRECATED_ANNOTATION")
+@Parcelize
 class Container(
     var name : String,
-    var image: Image,
+    var imageContainer: ImageContainer,
     var currCap : Int,
     var maxCap : Int,
     var timeStamp : String = getTimeStamp(),
-) {
+) : Parcelable {
     companion object{
         fun getTimeStamp() : String {
 
