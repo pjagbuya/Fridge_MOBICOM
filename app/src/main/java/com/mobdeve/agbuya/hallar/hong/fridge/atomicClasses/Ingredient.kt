@@ -10,7 +10,7 @@ class Ingredient(
     val unit : UnitOfMeasurement = UnitOfMeasurement.PIECE,
     val conditionType: ConditionType = ConditionType.VERY_OK,
     val itemType: ItemType = ItemType.OTHER,
-    val imageList : ArrayList<Image> = ArrayList<Image>()
+    val imageContainerLists : ArrayList<ImageContainer> = ArrayList<ImageContainer>()
 
 ) {
     companion object{

@@ -22,6 +22,10 @@
     <!-- Paul's Container Strings -->
 
     <string name="capacity_format">%1$d/%2$d</string>
+    <string name="container_name_label">Container Name</string>
+    <string name="cancel_text">Cancel</string>
+    <string name="ok_text">OK</string>
+
 
 
 </resources>

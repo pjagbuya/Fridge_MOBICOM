@@ -10,6 +10,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
 
 class PaulMainActivity : AppCompatActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -22,5 +23,8 @@ class PaulMainActivity : AppCompatActivity() {
 
 
     }
+
+
+
 }
 
