@@ -3,20 +3,30 @@ package com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
+import android.graphics.PorterDuff
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
+import android.os.Parcelable
 import android.widget.ImageView
-import androidx.annotation.RequiresApi
+import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
+import kotlinx.android.parcel.Parcelize
 
-class Image {
-    private var resId : Int = -1
+@Parcelize
+class ImageContainer(
+    @DrawableRes
+    private var resId : Int,
+    private var colorId : Int
+) : Parcelable {
+
 
 
     fun getResId(): Int {
         return resId
+    }
+
+    fun getColorId(): Int {
+        return colorId
     }
     companion object{
 
@@ -38,12 +48,12 @@ class Image {
                 .load(uri)
                 .into(imageView)
         }
-
         // Default same thread load image, suitable for quick accessible urls
         fun LOAD_IMAGE(context: Context, imageView : ImageView,  resourceId: Int){
             val temp : Bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             imageView.setImageBitmap(temp)
         }
+
 
         fun LOAD_ICON(context: Context, imageView : ImageView, uriToImage: String){
             val uri = Uri.parse("android.resource://${context.packageName}/${uriToImage}")
@@ -64,17 +74,20 @@ class Image {
 
 
 
-    // Constructor 2: Load Bitmap from resource ID using Context
-    constructor(context: Context, resourceId: Int) {
 
-        this.resId = resourceId
+    // Default same thread load image, suitable for quick accessible urls
+    fun loadImageView(imageView : ImageView){
+        val context = imageView.context
+        imageView.setImageResource(this.resId)
+        imageView.setColorFilter(this.colorId, PorterDuff.Mode.SRC_IN)
     }
 
 
 
 
-
-
+    fun swapImageContainer(newId : Int){
+        this.resId = newId
+    }
 
 
 }
