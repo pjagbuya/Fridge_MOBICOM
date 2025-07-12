@@ -19,6 +19,7 @@ class ContainerActivityAdapter(private val data: ArrayList<Container>) : Recycle
     }
 
     override fun onBindViewHolder(holder: ContainerViewHolder, position: Int) {
+
         holder.bindData(data[position])
     }
 

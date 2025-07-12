@@ -83,11 +83,5 @@ class ColorGenerator(private val initialExcludedColorsHex: List<String>) {
             green = ComponentColorRange(0, 255),
             blue = ComponentColorRange(0, 255)
         )
-
-        val DARK_RGB_RANGE = RgbColorRange(
-            red = ComponentColorRange(0, 155),
-            green = ComponentColorRange(0, 155),
-            blue = ComponentColorRange(0, 155)
-        )
     }
 }
