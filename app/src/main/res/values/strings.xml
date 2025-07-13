@@ -37,4 +37,11 @@
     <string name="add_ingredient_in_recipe_label">Add Ingredients to Your Recipe</string>
     <string name="add_ingredient_not_found_btn">+Add Ingredient Not Found</string>
     <string name="recipe_done_btn">Done</string>
+    <string name="recipe_name">Recipe Name Here</string>
+    <string name="recipe_info_edit_btn">Edit</string>
+    <string name="recipe_info_delete_btn">Delete</string>
+    <string name="ingredient_amount">11</string>
+    <string name="ingredient_piece_etc">pieces</string>
+    <string name="ingredient_name">Tomatoes</string>
+    <string name="unit">pieces</string>
 </resources>
