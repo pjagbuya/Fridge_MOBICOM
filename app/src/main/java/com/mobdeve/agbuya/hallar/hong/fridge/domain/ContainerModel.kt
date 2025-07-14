@@ -1,16 +1,18 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses
+package com.mobdeve.agbuya.hallar.hong.fridge.domain
 
 import android.os.Build
 import android.os.Parcelable
+import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageContainer
 import kotlinx.android.parcel.Parcelize
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
+
 @Suppress("DEPRECATED_ANNOTATION")
 @Parcelize
-class Container(
+class ContainerModel(
     var name : String,
     var imageContainer: ImageContainer,
     var currCap : Int,

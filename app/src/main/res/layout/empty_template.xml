@@ -5,13 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <TextView
         android:id="@+id/emptyText_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:fontFamily="@font/poppins_regular"
+        android:fontFamily="@font/poppins"
         android:text="@string/empty"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/placeholderEmpty_tv"
@@ -26,9 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="176dp"
+        tools:layout_editor_absoluteY="340dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
