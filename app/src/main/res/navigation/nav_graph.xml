@@ -3,10 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@+id/firstFragment">
+    app:startDestination="@+id/containerMain">
     <fragment
-        android:id="@+id/firstFragment"
+        android:id="@+id/containerMain"
         android:name="com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerActivityFragment"
         android:label="fragment_container_main"
         tools:layout="@layout/container_activity_main" />
+
+    <fragment
+        android:id="@+id/containerEdit"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerActivityFragment"
+        android:label="fragment_second"
+        tools:layout="@layout/container_activity_edit" />
+
+
+    <action
+        android:id="@+id/gotoContainerMain"
+        app:destination="@id/containerMain"
+        />
+    <action
+        android:id="@+id/gotoContainerEdit"
+        app:destination="@id/containerEdit"
+        />
+
+
+
 </navigation>

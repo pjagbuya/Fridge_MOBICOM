@@ -20,4 +20,9 @@
     <color name="search_opaque">#ffaa3f</color>
     <color name="selected_background">#ffaa3f</color>
     <color name="default_background">#3d3d3d</color>
+
+
+    <!--Shades of light_green-->
+    <color name="light_green_set_transparency_light">#12768A4E</color>
+
 </resources>
