@@ -28,7 +28,7 @@
             android:shadowDx="0"
             android:shadowDy="2"
             android:shadowRadius="4"
-            android:text="@string/recipe_header"
+            android:text="@string/grocery_header"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="28sp" />
@@ -129,7 +129,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                android:src="@mipmap/ingredient_white" />
+                android:src="@mipmap/ingredients_dark" />
 
             <ImageButton
                 android:id="@+id/recipesBtn"
@@ -138,7 +138,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                android:src="@mipmap/recipe_dark" />
+                android:src="@mipmap/recipe_white" />
 
             <ImageButton
                 android:id="@+id/profileBtn"

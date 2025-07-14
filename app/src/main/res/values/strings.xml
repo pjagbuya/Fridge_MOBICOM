@@ -27,6 +27,7 @@
     <string name="EditText">EditText</string>
     <string name="navigation">navigation</string>
     <string name="recipe_header">MY RECIPE</string>
+
     <string name="add_recipe">Add Recipe</string>
     <string name="recipe_name_et">Enter name of Recipe</string>
     <string name="recipe_description">Description</string>
@@ -44,4 +45,28 @@
     <string name="ingredient_piece_etc">pieces</string>
     <string name="ingredient_name">Tomatoes</string>
     <string name="unit">pieces</string>
+
+    <string name="grocery_header">MY GROCERIES</string>
+
+    <string-array name="gocery_category_dropdown_options">
+        <item> Fresh Meat / Seafood </item>
+        <item> Vegetables </item>
+        <item> Fruits </item>
+        <item> Pantry Staples / Dried </item>
+        <item> Dairy Products </item>
+        <item> Seasoning and Spices </item>
+        <item> Beverages </item>
+        <item> Snacks </item>
+        <item> Bakery Goods / Sweets </item>
+    </string-array>
+
+    <string-array name="grocery_unit_dropdown_options">
+        <item> Pack </item>
+        <item> Can </item>
+        <item> Piece </item>
+        <item> Bottle </item>
+        <item> Jar </item>
+        <item> Sack </item>
+        <item> Box </item>
+    </string-array>
 </resources>
