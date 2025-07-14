@@ -56,13 +56,13 @@ class ContainerActivityEditFragment : Fragment(){
         containerList= ContainerDataHelper.containerModelsSelection
 
 
-        binding.apply {
-            containerRecyclerView.adapter = ContainerActivityEditAdapter(containerList){
-                findNavController().navigate(R.id.gotoContainerMain)
-            }
-            containerRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        }
+//        binding.apply {
+//            containerRecyclerView.adapter = ContainerActivityEditAdapter(containerList){
+//                findNavController().navigate(R.id.gotoContainerMain)
+//            }
+//            containerRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+//
+//        }
 
 
         return view

@@ -7,30 +7,42 @@
     android:layout_height="match_parent"
     tools:ignore="MergeRootFrame">
 
-    <FrameLayout
-        android:id="@+id/FrameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ImageButton
+        android:id="@+id/addContainerBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
         android:elevation="10dp"
+        android:contentDescription="@string/add_container"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/add_btn"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="@+id/containerRecyclerView"
+        app:layout_constraintHorizontal_bias="0.867"
+        app:layout_constraintStart_toStartOf="@+id/containerRecyclerView"
+        app:layout_constraintTop_toTopOf="@+id/containerRecyclerView"
+        app:layout_constraintVertical_bias="0.913" />
 
-        <include
-            android:id="@+id/searchBarContainer"
-            layout="@layout/base_searchbar_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="4dp" />
-    </FrameLayout>
-
+    <TextView
+        android:id="@+id/addContainerTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:elevation="10dp"
+        android:text="@string/add_container"
+        android:textAlignment="center"
+        android:textColor="@color/brown"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/containerRecyclerView"
+        app:layout_constraintHorizontal_bias="0.929"
+        app:layout_constraintStart_toStartOf="@+id/containerRecyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/addContainerBtn"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/containerRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="115dp"
         android:elevation="0dp"
         android:layoutDirection="ltr"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,37 +54,5 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:elevation="5dp"
-        android:text="+"
-        android:textColor="#926E50"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/addContainerBtn"
-        app:layout_constraintEnd_toEndOf="@+id/addContainerBtn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/addContainerBtn"
-        app:layout_constraintTop_toTopOf="@+id/addContainerBtn"
-        app:layout_constraintVertical_bias="0.5" />
 
-    <Button
-        android:id="@+id/addContainerBtn"
-        android:layout_width="65dp"
-        android:layout_height="62dp"
-        android:background="@drawable/shape_circle"
-        android:backgroundTintMode="src_over"
-        android:elevation="2dp"
-        android:textAlignment="center"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.907"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.904" />
 </androidx.constraintlayout.widget.ConstraintLayout>

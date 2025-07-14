@@ -11,34 +11,11 @@
     android:foregroundGravity="top"
     android:gravity="top"
     android:orientation="vertical"
-    app:layout_anchorGravity="top"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    app:layout_anchorGravity="top">
 
-    <TextView
-        android:id="@+id/headerTitle_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/forest_green"
-        android:elevation="1dp"
-        android:fontFamily="@font/poppins_semibold"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:text="@string/my_container"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <include
-        android:id="@+id/searchbar"
-        layout="@layout/base_searchbar"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="32dp"
-        android:visibility="visible" />
+    <FrameLayout android:id="@+id/headerFrameLayout" android:layout_width="match_parent" android:layout_height="140dp" android:background="@drawable/header_rounded_corners" android:elevation="6dp" android:padding="16dp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
+        <TextView android:id="@+id/containerHeaderTv" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:fontFamily="@font/poppins_semibold" android:text="@string/container_header" android:textAlignment="center" android:textColor="@color/white" android:textSize="28sp" android:shadowColor="#80000000" android:shadowDx="0" android:shadowDy="2" android:shadowRadius="4"/>
+        <EditText android:id="@+id/searchBarEt" android:layout_width="match_parent" android:layout_height="35dp" android:layout_gravity="top" android:layout_marginStart="40dp" android:layout_marginTop="70dp" android:layout_marginEnd="40dp" android:background="@color/gray_white" android:drawableEnd="@mipmap/magnifying_glass" android:hint="Search" android:textColorHint="@color/forest_green" android:paddingEnd="8dp" android:textSize="16sp" android:fontFamily="@font/poppins_regular" android:inputType="text" android:paddingStart="8dp"/>
+    </FrameLayout>
 
 </LinearLayout>

@@ -1,0 +1,10 @@
+<!-- Welcome Page rounded corners button-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Transparent fill -->
+    <solid android:color="@color/forest_green" />
+
+    <!-- Rounded corners -->
+    <corners android:radius="20dp" />
+</shape>
