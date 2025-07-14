@@ -120,7 +120,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@android:drawable/btn_radio" />
+                android:src="@mipmap/container_white" />
 
             <ImageButton
                 android:id="@+id/groceriesBtn"
@@ -129,18 +129,16 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@android:drawable/btn_radio" />
+                android:src="@mipmap/ingredient_white" />
 
             <ImageButton
                 android:id="@+id/recipesBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                app:srcCompat="@mipmap/recipe_white" />
+                android:src="@mipmap/recipe_white" />
 
             <ImageButton
                 android:id="@+id/profileBtn"
@@ -149,7 +147,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@android:drawable/btn_radio" />
+                android:src="@mipmap/profile_white" />
         </LinearLayout>
 
         <!-- Labels Row -->

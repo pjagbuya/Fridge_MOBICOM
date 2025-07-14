@@ -28,4 +28,20 @@
     <string name="navigation">navigation</string>
     <string name="recipe_header">MY RECIPE</string>
     <string name="add_recipe">Add Recipe</string>
+    <string name="recipe_name_et">Enter name of Recipe</string>
+    <string name="recipe_description">Description</string>
+    <string name="recipe_ingredient_label">Ingredients</string>
+    <string name="recipe_add_ingredient_btn">+ Add/Edit Ingredient</string>
+    <string name="recipe_cancel_btn">Cancel</string>
+    <string name="recipe_save_btn">Save</string>
+    <string name="add_ingredient_in_recipe_label">Add Ingredients to Your Recipe</string>
+    <string name="add_ingredient_not_found_btn">+Add Ingredient Not Found</string>
+    <string name="recipe_done_btn">Done</string>
+    <string name="recipe_name">Recipe Name Here</string>
+    <string name="recipe_info_edit_btn">Edit</string>
+    <string name="recipe_info_delete_btn">Delete</string>
+    <string name="ingredient_amount">11</string>
+    <string name="ingredient_piece_etc">pieces</string>
+    <string name="ingredient_name">Tomatoes</string>
+    <string name="unit">pieces</string>
 </resources>
