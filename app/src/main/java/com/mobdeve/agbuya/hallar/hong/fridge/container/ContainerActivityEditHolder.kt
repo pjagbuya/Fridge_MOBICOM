@@ -17,8 +17,7 @@ class ContainerActivityEditHolder(private val binding: ContainerComponentEditBin
     fun bindData(cont: ContainerModel){
 
         cont.imageContainer.loadImageView(binding.containerIv)
-        binding.containerNameEt.setText(cont.name)
-        containerNameEt = binding.containerNameEt
+
         okBtn = binding.okBtn
         cancelBtn = binding.cancelBtn
 
