@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/searchBarContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="top"
+    android:background="@drawable/shape_big_rounder_corners_half"
+    android:backgroundTint="@color/forest_green"
+    android:backgroundTintMode="src_over"
+    android:foregroundGravity="top"
+    android:gravity="top"
+    android:orientation="vertical"
+    app:layout_anchorGravity="top"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+        android:id="@+id/headerTitle_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/forest_green"
+        android:elevation="1dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="@string/my_container"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <include
+        android:id="@+id/searchbar"
+        layout="@layout/base_searchbar"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
+        android:visibility="visible" />
+
+</LinearLayout>

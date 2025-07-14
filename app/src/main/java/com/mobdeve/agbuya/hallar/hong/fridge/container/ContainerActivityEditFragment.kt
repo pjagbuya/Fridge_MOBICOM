@@ -9,24 +9,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityEditAdapter
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityEditBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityMainBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 
-
-class ContainerActivityFragment : Fragment() {
+class ContainerActivityEditFragment : Fragment(){
     companion object{
         val CONTAINERS_KEY : String = "CONTAINER_DATA_KEY"
 
     }
-    private var _binding:ContainerActivityMainBinding? = null
+    private var _binding:ContainerActivityEditBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var postList:ArrayList<ContainerModel>
+    private lateinit var containerList:ArrayList<ContainerModel>
 
 
     // These two inlines suppresses deprecation errors
@@ -39,40 +40,28 @@ class ContainerActivityFragment : Fragment() {
         else -> @Suppress("DEPRECATION") getParcelableArrayList(key)
     }
 
-    fun loadFunnyData(){
-        postList= ContainerDataHelper.initializeContainers(requireContext())
 
+    fun getcontainerList():ArrayList<ContainerModel>{
+        return containerList
     }
-    fun getPostList():ArrayList<ContainerModel>{
-        return postList
-    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View?{
-        _binding = ContainerActivityMainBinding.inflate(inflater, container, false)
+        _binding = ContainerActivityEditBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        if(savedInstanceState!= null){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                postList = savedInstanceState.getParcelableArrayList<ContainerModel>(CONTAINERS_KEY, ContainerModel::class.java) ?: run {
-                    ContainerDataHelper.initializeContainers(requireContext())
-                }
-            }
 
-        }else{
-            loadFunnyData()
-        }
+        containerList= ContainerDataHelper.containerModelsSelection
 
 
         binding.apply {
-            containerRecyclerView.adapter = ContainerActivityAdapter(postList){
-                findNavController().navigate(R.id.gotoContainerEdit)
+            containerRecyclerView.adapter = ContainerActivityEditAdapter(containerList){
+                findNavController().navigate(R.id.gotoContainerMain)
             }
             containerRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-            addContainerBtn.setOnClickListener {
-                findNavController().navigate(R.id.gotoContainerEdit)
-            }
+
         }
 
 
@@ -85,13 +74,8 @@ class ContainerActivityFragment : Fragment() {
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(CONTAINERS_KEY, postList)
+        outState.putParcelableArrayList(CONTAINERS_KEY, containerList)
 
     }
 
-//    private fun clickListener() = with(binding){
-//        goSecondFragment.setOnClickListener{
-//            findNavController().navigate(R.id.action_global_secondFragment)
-//        }
-//    }
 }
