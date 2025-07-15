@@ -1,0 +1,137 @@
+package com.mobdeve.agbuya.hallar.hong.fridge.container
+
+import android.content.Intent
+import android.os.Build.VERSION.SDK_INT
+import android.os.Bundle
+import android.os.Parcelable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.mobdeve.agbuya.hallar.hong.fridge.R
+import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityEditAdapter
+import com.mobdeve.agbuya.hallar.hong.fridge.customInterface.ContainerEditActionListener
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityEditBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+enum class EditType{
+    ADD,
+    EDIT
+}
+class ContainerActivityFragmentEdit : Fragment(){
+    companion object{
+        val CONTAINERS_KEY : String = "CONTAINER_DATA_KEY"
+
+    }
+    private var _binding:ContainerActivityEditBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var containerList:ArrayList<ContainerModel>
+
+
+    // These two inlines suppresses deprecation errors
+    inline fun <reified T : Parcelable> Intent.parcelableArrayList(key: String): ArrayList<T>? = when {
+        SDK_INT >= 33 -> getParcelableArrayListExtra(key, T::class.java)
+        else -> @Suppress("DEPRECATION") getParcelableArrayListExtra(key)
+    }
+    inline fun <reified T : Parcelable> Bundle.parcelableArrayList(key: String): ArrayList<T>? = when {
+        SDK_INT >= 33 -> getParcelableArrayList(key, T::class.java)
+        else -> @Suppress("DEPRECATION") getParcelableArrayList(key)
+    }
+
+
+    fun getcontainerList():ArrayList<ContainerModel>{
+        return containerList
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View?{
+        _binding = ContainerActivityEditBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+
+        containerList= ContainerDataHelper.containerModelsSelection
+
+
+        return view
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupTopBar()
+        setupRecycler()
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(CONTAINERS_KEY, containerList)
+
+    }
+    private fun setupTopBar() {
+        val activity = activity ?: return
+
+
+        val editType = arguments?.getInt("EDIT_TYPE", -1) ?: -1
+        if(editType == EditType.ADD.ordinal){
+            binding.baseContainerTitleTopBar.containerHeaderTv.setText(R.string.add_container)
+        }else{
+            binding.baseContainerTitleTopBar.containerHeaderTv.setText(R.string.edit_container)
+
+        }
+    }
+
+    private fun setupRecycler() {
+
+        val snapHelper: LinearSnapHelper = object : LinearSnapHelper() {
+            override fun findTargetSnapPosition(
+                layoutManager: RecyclerView.LayoutManager,
+                velocityX: Int,
+                velocityY: Int
+            ): Int {
+                val centerView = findSnapView(layoutManager) ?: return RecyclerView.NO_POSITION
+                val position = layoutManager.getPosition(centerView)
+                var targetPosition = -1
+                if (layoutManager.canScrollHorizontally()) {
+                    targetPosition = if (velocityX < 0) {
+                        position - 1
+                    } else {
+                        position + 1
+                    }
+                }
+
+                val firstItem = 0
+                val lastItem = layoutManager.itemCount - 1
+                targetPosition = Math.min(lastItem, Math.max(targetPosition, firstItem))
+
+                return targetPosition
+            }
+        }
+        snapHelper.attachToRecyclerView(binding.containerRecyclerView)
+
+        binding.containerRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter =
+                ContainerActivityEditAdapter(containerList, object : ContainerEditActionListener {
+                    override fun onOkClick(position: Int) {
+                        findNavController().navigateUp() // goes back to previous fragment
+                    }
+
+                    override fun onCancelClick(position: Int) {
+                        findNavController().navigateUp()
+                    }
+                })
+        }
+
+    }
+
+}

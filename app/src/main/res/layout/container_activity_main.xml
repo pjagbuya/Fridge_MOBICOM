@@ -7,13 +7,32 @@
     android:layout_height="match_parent"
     tools:ignore="MergeRootFrame">
 
+    <FrameLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <include
+            android:id="@+id/searchBarContainer"
+            layout="@layout/base_searchbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="4dp" />
+    </FrameLayout>
+
     <ImageButton
         android:id="@+id/addContainerBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@android:color/transparent"
-        android:elevation="10dp"
         android:contentDescription="@string/add_container"
+        android:elevation="10dp"
         android:scaleType="fitCenter"
         android:src="@mipmap/add_btn"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,8 +46,8 @@
         android:id="@+id/addContainerTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_semibold"
         android:elevation="10dp"
+        android:fontFamily="@font/poppins_semibold"
         android:text="@string/add_container"
         android:textAlignment="center"
         android:textColor="@color/brown"
@@ -42,10 +61,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/containerRecyclerView"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="125dp"
         android:elevation="0dp"
         android:layoutDirection="ltr"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/topBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
