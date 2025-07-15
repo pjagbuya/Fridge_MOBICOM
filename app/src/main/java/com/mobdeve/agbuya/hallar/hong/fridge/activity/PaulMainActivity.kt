@@ -2,18 +2,15 @@ package com.mobdeve.agbuya.hallar.hong.fridge.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils.replace
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.R
-import com.mobdeve.agbuya.hallar.hong.fridge.R.id.container_activity_main_fragment
-import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityAdapter
-import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityEditAdapter
-import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerActivityEditFragment
-import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerActivityFragment
+import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityMainAdapter
+import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerActivityFragmentMain
 import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
@@ -43,47 +40,13 @@ class PaulMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        containerModels = ContainerDataHelper.initializeContainers(this@PaulMainActivity)
         setContentView(activityMainBinding.root)
 
-        activityMainBinding.apply {
-
-            // Get binding of the content to change
-            val contentBinding = ContainerActivityMainBinding.inflate(layoutInflater)
-            // Set view
-            dynamicContent.addView(contentBinding.root)
-
-            // Setup of Behaviors
-            contentBinding.containerRecyclerView.adapter = ContainerActivityAdapter(containerModels){
-                val intent: Intent = Intent(this@PaulMainActivity, ContainerActivityEdit::class.java)
-
-                intent.putExtra(ContainerActivityEdit.EDIT_TYPE_KEY, EditType.EDIT.ordinal)
-
-                newContainerResultLauncher.launch(intent)
-            }
-            contentBinding.addContainerBtn.setOnClickListener {
-                val intent: Intent = Intent(this@PaulMainActivity, ContainerActivityEdit::class.java)
-
-                intent.putExtra(ContainerActivityEdit.EDIT_TYPE_KEY, EditType.ADD.ordinal)
-
-                newContainerResultLauncher.launch(intent)
-            }
-            contentBinding.containerRecyclerView.layoutManager = LinearLayoutManager(this@PaulMainActivity)
-
-
-            topBar.removeAllViews()
-            val topBarContent = BaseSearchbarContainerBinding.inflate(layoutInflater)
-            topBar.addView(topBarContent.root)
-
-
-            // TODO: Must be the name of fridge collection of the user ie. containerHeaderTv text = ???
-            topBarContent.containerHeaderTv.setText(R.string.my_container)
-
-            // TODO: Do the similar logic connection with the navigation bar to have new intents on other screen. Set behavior of the buttons
-        }
 
 
     }
+
+
 
 
 

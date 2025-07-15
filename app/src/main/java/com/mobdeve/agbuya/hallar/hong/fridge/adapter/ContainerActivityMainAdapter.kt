@@ -7,7 +7,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerViewHolder
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerComponentBinding
 
-class ContainerActivityAdapter(
+class ContainerActivityMainAdapter(
     private val data: ArrayList<ContainerModel>,
     private val onClick: () -> Unit
 ) : RecyclerView.Adapter<ContainerViewHolder>() {
