@@ -24,6 +24,12 @@ class MainActivity : ComponentActivity() {
         binding.recipesBtn.setOnClickListener({
             startActivity(Intent(this, RecipeActivity::class.java))
         })
+        binding.groceriesBtn.setOnClickListener({
+            startActivity(Intent(this, GroceryActivity::class.java))
+        })
+        binding.addContainerBtn.setOnClickListener({
+            startActivity(Intent(this, AddContainerActivity::class.java))
+        })
 
         initContainer()
     }

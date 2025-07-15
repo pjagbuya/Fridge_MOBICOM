@@ -30,7 +30,7 @@ class ContainerAdapter(private val data: MutableList<ContainerModel>) :
         val outputFormat = SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault())
 
         val formattedDate = try {
-            val parsedDate = rawDate?.let { inputFormat.parse(it) }
+            val parsedDate = rawDate.let { inputFormat.parse(it) }
             parsedDate?.let { outputFormat.format(it) } ?: "No date"
         } catch (e: Exception) {
             "Invalid date"

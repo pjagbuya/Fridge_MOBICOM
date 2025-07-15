@@ -47,7 +47,7 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editAmountEt2"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/groceryDateBoughtLabel" />
 
     <EditText
         android:id="@+id/editAmountEt2"
@@ -65,10 +65,10 @@
         android:text="Name"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/groceryDateBoughtLabel" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/groceryDateBoughtLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"

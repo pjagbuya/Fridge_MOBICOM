@@ -34,7 +34,7 @@
             android:textSize="28sp" />
 
         <EditText
-            android:id="@+id/searchBarEt"
+            android:id="@+id/grocerySearchBarEt"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_gravity="top"
@@ -54,7 +54,7 @@
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RecipeRecyclerView"
+        android:id="@+id/groceryRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
@@ -78,18 +78,18 @@
         android:contentDescription="@string/add_recipe"
         android:scaleType="fitCenter"
         android:src="@mipmap/add_btn"
-        app:layout_constraintBottom_toTopOf="@+id/addContainerTv"
+        app:layout_constraintBottom_toTopOf="@+id/addGroceryLabel"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Add Container Text -->
 
     <TextView
-        android:id="@+id/addContainerTv"
+        android:id="@+id/addGroceryLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="36dp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="@string/add_recipe"
+        android:text="@string/add_grocery_btn_label"
         android:textAlignment="center"
         android:textColor="@color/brown"
         app:layout_constraintBottom_toTopOf="@id/navBarLayout"

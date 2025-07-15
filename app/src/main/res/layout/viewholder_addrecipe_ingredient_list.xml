@@ -42,7 +42,7 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintEnd_toStartOf="@+id/addContainerLeftBtn"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/ingredient_piece_etc" />
 
@@ -62,7 +62,7 @@
         tools:text="@string/ingredient_amount" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/addContainerLeftBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"

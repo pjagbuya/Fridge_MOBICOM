@@ -10,7 +10,7 @@
     <FrameLayout
         android:id="@+id/headerFrameLayout"
         android:layout_width="0dp"
-        android:layout_height="140dp"
+        android:layout_height="101dp"
         android:background="@color/forest_green"
         android:elevation="6dp"
         android:padding="16dp"
@@ -22,29 +22,12 @@
             android:id="@+id/containerHeaderTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif"
-            android:text="ADD A CONTAINER"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/add_container_header"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="28sp" />
-
-        <EditText
-            android:id="@+id/searchBarEt"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_gravity="top"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="70dp"
-            android:layout_marginEnd="40dp"
-            android:background="@color/gray_white"
-            android:fontFamily="sans-serif"
-            android:hint="Search"
-            android:inputType="text"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:textColorHint="@color/forest_green"
-            android:textSize="16sp" />
 
     </FrameLayout>
 
@@ -67,16 +50,17 @@
             android:id="@+id/addContainerFormLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="70dp"
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/editTextText"
+                android:id="@+id/editContainerNameEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:background="@color/gray_white"
                 android:ems="10"
+                android:fontFamily="@font/poppins_medium"
                 android:hint="Enter container name"
                 android:inputType="text"
                 android:padding="10dp" />
@@ -88,10 +72,11 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/addContainerLeftBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:layout_marginTop="50dp"
                     android:layout_weight="1"
                     app:srcCompat="@android:drawable/ic_media_rew" />
 
@@ -103,9 +88,10 @@
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <ImageButton
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/addContainerRightBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     app:srcCompat="@android:drawable/ic_media_ff" />
@@ -117,23 +103,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="4dp">
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/containerCancelBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:text="Cancel" />
-
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
-                    android:text="SAVE" />
+                    android:background="@drawable/recipe_cancel_btn"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/add_container_cancel_btn_text"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/containerSaveBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/recipe_add_ingredient_btn"
+                    android:text="SAVE"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
         </LinearLayout>
@@ -162,7 +156,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@android:drawable/btn_radio" />
+                android:src="@mipmap/container_dark" />
 
             <ImageButton
                 android:id="@+id/groceriesBtn"
@@ -171,18 +165,16 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@android:drawable/btn_radio" />
+                android:src="@mipmap/ingredient_white" />
 
             <ImageButton
                 android:id="@+id/recipesBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                app:srcCompat="@mipmap/recipe_white" />
+                android:src="@mipmap/recipe_white" />
 
             <ImageButton
                 android:id="@+id/profileBtn"
@@ -191,7 +183,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@android:drawable/btn_radio" />
+                android:src="@mipmap/profile_white" />
         </LinearLayout>
 
         <!-- Labels Row -->

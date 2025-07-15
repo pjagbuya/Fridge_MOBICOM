@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:contentDescription="@string/login_back_btn_desc"
-    tools:context=".activity.LoginActivity">
+    tools:context=".activity.SignUpActivity">
 
     <!-- Back Button -->
     <ImageButton
@@ -20,19 +19,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/login_back_btn" />
 
-    <!-- Login Header -->
-
-    <!-- Form Container to Center -->
+    <!-- Sign Up Header -->
     <TextView
-        android:id="@+id/loginHeaderTv"
+        android:id="@+id/signUpHeaderTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="@string/login_header"
+        android:text="Sign Up"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/backBtn" />
 
@@ -44,21 +40,47 @@
         android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginHeaderTv"
-        app:layout_constraintVertical_bias="0.286">
+        app:layout_constraintTop_toBottomOf="@id/signUpHeaderTv"
+        app:layout_constraintVertical_bias="0.0">
+
+        <!-- Username Label -->
+        <TextView
+            android:id="@+id/usernameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/username_text"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Username Input -->
+        <EditText
+            android:id="@+id/usernameEt"
+            android:layout_width="0dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/lp_rounded_et"
+            android:hint="Letters and underscore, max 10)"
+            android:inputType="text"
+            android:maxLength="10"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/usernameTv" />
 
         <!-- Email Label -->
         <TextView
             android:id="@+id/emailTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/poppins_semibold"
             android:text="@string/email_text"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/usernameEt" />
 
         <!-- Email Input -->
         <EditText
@@ -98,37 +120,60 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passwordTv" />
 
-        <!-- Login Button -->
-        <Button
-            android:id="@+id/containerCancelBtn"
-            android:layout_width="341dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="32dp"
-            android:background="@color/forest_green"
+        <!-- Confirm Password Label -->
+        <TextView
+            android:id="@+id/confirmPasswordTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/poppins_semibold"
-            android:padding="10dp"
-            android:text="@string/login_header"
-            android:textColor="@color/white"
+            android:text="@string/confirm_password_text"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passwordEt" />
 
-        <!-- Sign Up with Google Button -->
-        <Button
-            android:id="@+id/loginSignUpWithGoogleBtn"
-            android:layout_width="349dp"
-            android:layout_height="65dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/dark_blue"
-            android:fontFamily="@font/poppins_semibold"
+        <!-- Confirm Password Input -->
+        <EditText
+            android:id="@+id/confirmPasswordEt"
+            android:layout_width="0dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/lp_rounded_et"
+            android:inputType="textPassword"
             android:padding="10dp"
-            android:text="@string/signin_google_btn_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/confirmPasswordTv" />
+
+        <!-- Sign Up Button -->
+        <Button
+            android:id="@+id/signUpBtn"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="32dp"
+            android:background="@color/forest_green"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/signup_btn_text"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/containerCancelBtn" />
+            app:layout_constraintTop_toBottomOf="@id/confirmPasswordEt" />
+
+        <!-- Sign Up with Google Button -->
+        <Button
+            android:id="@+id/signUpWithGoogleBtn"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/dark_blue"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/signup_google_btn_text"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signUpBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

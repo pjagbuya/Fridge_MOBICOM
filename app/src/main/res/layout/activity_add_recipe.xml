@@ -252,7 +252,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:fontFamily="@font/poppins_regular"
+        android:fontFamily="@font/poppins_semibold"
         android:text="Add a Recipe"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"

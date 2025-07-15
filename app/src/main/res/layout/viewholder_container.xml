@@ -54,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="Capacity: 20 items"
+                    android:text="Capacity:"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 

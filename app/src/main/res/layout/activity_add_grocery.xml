@@ -2,49 +2,34 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/g"
+    android:id="@+id/groceryConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
     <!-- Header -->
-    <FrameLayout
-        android:id="@+id/headerFrameLayout"
-        android:layout_width="0dp"
-        android:layout_height="110dp"
-        android:background="@color/forest_green"
-        android:elevation="6dp"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/groceryHeaderTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif"
-            android:text="ADD A GROCERY"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="28sp" />
-
-    </FrameLayout>
+    <TextView
+        android:id="@+id/groceryHeaderTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/add_grocery_header"
+        android:textAlignment="center"
+        android:textColor="@color/brown"
+        android:textSize="28sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="36dp" />
 
     <FrameLayout
         android:id="@+id/mainAddContainerLayout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="20dp"
+        android:layout_height="676dp"
         android:background="@color/light_green_50"
         android:paddingTop="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/navBarLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerFrameLayout"
-        app:layout_constraintVertical_bias="0.85">
+        tools:layout_editor_absoluteY="96dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,7 +42,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/groceryIconImg"
+                    android:id="@+id/addGroceryIconImg"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
@@ -69,7 +54,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:layout_weight="1"
-                    android:text="+ Edit Icon" />
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@string/add_grocery_item_icon" />
             </LinearLayout>
 
             <LinearLayout
@@ -78,11 +64,12 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/groceryItemNameEt"
+                    android:id="@+id/addGroceryItemNameEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Item Name"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="@string/add_grocery_item_name"
                     android:inputType="text" />
 
                 <LinearLayout
@@ -92,15 +79,16 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:id="@+id/groceryQuantityEt"
+                        android:id="@+id/addGroceryQuantityEt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Quantity"
                         android:inputType="text" />
 
                     <Spinner
-                        android:id="@+id/groceryUnitSpinner"
+                        android:id="@+id/addGroceryUnitSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
@@ -108,44 +96,48 @@
                 </LinearLayout>
 
                 <Spinner
-                    android:id="@+id/groceryCategorySpinner"
+                    android:id="@+id/addGroceryCategorySpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <EditText
-                    android:id="@+id/groceryItemPriceEt"
+                    android:id="@+id/addGroceryItemPriceEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Price (optional)"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="@string/add_grocery_item_price"
                     android:inputType="text" />
 
                 <EditText
-                    android:id="@+id/groceryDateBoughtEt"
+                    android:id="@+id/addGroceryDateBoughtEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Date Bought"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="@string/add_grocery_item_date_bought"
                     android:inputType="text" />
 
                 <EditText
-                    android:id="@+id/groceryChooseContainerEt"
+                    android:id="@+id/addGroceryExpirationDateEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Expiration Date"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="@string/add_grocery_item_expiration"
                     android:inputType="text" />
 
                 <Spinner
-                    android:id="@+id/groceryChooseContainerSpinner"
+                    android:id="@+id/addGroceryChooseContainerSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:id="@+id/groceryItemConditionEt"
+                    android:id="@+id/addGroceryItemConditionTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Choose Item Condition"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@string/add_grocery_item_condition_text"
                     android:textSize="16sp" />
 
                 <LinearLayout
@@ -155,40 +147,51 @@
                     android:orientation="vertical">
 
                     <RadioButton
-                        android:id="@+id/radioButton"
+                        android:id="@+id/addGroceryNewConditionBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="New / Sealed" />
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/add_grocery_item_condition_new" />
 
                     <RadioButton
-                        android:id="@+id/radioButton2"
+                        android:id="@+id/addGroceryOpenedConditionBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Opened" />
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/add_grocery_item_condition_opened" />
 
                     <RadioButton
-                        android:id="@+id/radioButton3"
+                        android:id="@+id/addGroceryUsedConditionBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Used" />
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/add_grocery_item_condition_used" />
 
                     <RadioButton
-                        android:id="@+id/radioButton4"
+                        android:id="@+id/addGroceryExpiredConditionBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Expired" />
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/add_grocery_item_condition_expired" />
 
                     <Button
-                        android:id="@+id/groceryAddPhotoBtn"
+                        android:id="@+id/addGroceryAddPhotoBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="+ Add a Photo" />
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@string/add_grocery_add_photo_btn_text" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/addGroceryImagesRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp" />
 
                     <Button
-                        android:id="@+id/button5"
+                        android:id="@+id/addGrocerySaveBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Save" />
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@string/add_grocery_save_btn" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -220,7 +223,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@android:drawable/btn_radio" />
+                android:src="@mipmap/container_white" />
 
             <ImageButton
                 android:id="@+id/groceriesBtn"
@@ -229,18 +232,16 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@android:drawable/btn_radio" />
+                android:src="@mipmap/ingredients_dark" />
 
             <ImageButton
                 android:id="@+id/recipesBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                app:srcCompat="@mipmap/recipe_white" />
+                android:src="@mipmap/recipe_white" />
 
             <ImageButton
                 android:id="@+id/profileBtn"
@@ -249,7 +250,7 @@
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/navigation"
-                app:srcCompat="@android:drawable/btn_radio" />
+                android:src="@mipmap/profile_white" />
         </LinearLayout>
 
         <!-- Labels Row -->

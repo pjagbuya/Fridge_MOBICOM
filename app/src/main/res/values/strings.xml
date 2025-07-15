@@ -1,35 +1,57 @@
 <resources>
     <string name="app_name">Fridge</string>
 
+    <!-- Welcome Page -->
     <string name="app_mobicom_name">Whats In My Fridge?</string>
     <string name="app_loading_text">A kitchen helper that organizes your groceries</string>
     <string name="get_started">Get Started</string>
 
+    <!-- Page Headers -->
     <string name="container_header">My Containers</string>
     <string name="profile_header">My Profile</string>
+    <string name="recipe_header">My Recipe</string>
+    <string name="grocery_header">My Groceries</string>
     <string name="login_header">Log In</string>
 
+    <!-- Navigation Names -->
     <string name="container_nav">Containers</string>
     <string name="groceries_nav">Groceries</string>
     <string name="recipes_nav">Recipes</string>
     <string name="profile_nav">Profile</string>
+
     <string name="add_container">Add Container</string>
+
+    <!-- Profile -->
     <string name="shared_acc_header">What is a shared account?</string>
-    <string name="shared_acc_desc">
+    <string name="shared_acc_desc_text">
         A shared account lets multiple users (like family members or housemates) manage a common kitchen inventory. Everyone added to the account can view, and update items, so all members see one combined list of what’s in the kitchen.
         It helps coordinate shopping, reduce waste, and keep everyone on the same page.</string>
+    <string name="signup_now_text">SIGN UP NOW</string>
+    <string name="add_members_text">Add members and share your kitchen inventory!</string>
+    <string name="email_text">Email Address*</string>
+    <string name="password_text">Password*</string>
+    <string name="confirm_password_text">Confirm Password*</string>
+    <string name="username_text">Username*</string>
 
-    <string name="email">Email Address*</string>
-    <string name="password">Password*</string>
+    <string name="login_btn_text">Log In</string>
+    <string name="signup_btn_text">Sign Up</string>
+    <string name="login_back_btn_desc">Login Back Button</string>
+    <string name="signup_google_btn_text"> Sign Up with Google</string>
+    <string name="signin_google_btn_text"> Sign In with Google</string>
+
+    <!-- -->
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
-    <string name="backBtn">backBtn</string>
     <string name="EditText">EditText</string>
     <string name="navigation">navigation</string>
-    <string name="recipe_header">MY RECIPE</string>
 
+    <!-- Container -->
+    <string name="add_container_header">Add a Container</string>
+    <string name="add_container_cancel_btn_text">Cancel</string>
+
+    <!-- Recipe -->
     <string name="add_recipe">Add Recipe</string>
-    <string name="recipe_name_et">Enter name of Recipe</string>
+    <string name="recipe_name_et">Recipe Name</string>
     <string name="recipe_description">Description</string>
     <string name="recipe_ingredient_label">Ingredients</string>
     <string name="recipe_add_ingredient_btn">+ Add/Edit Ingredient</string>
@@ -42,13 +64,34 @@
     <string name="recipe_info_edit_btn">Edit</string>
     <string name="recipe_info_delete_btn">Delete</string>
     <string name="ingredient_amount">11</string>
-    <string name="ingredient_piece_etc">pieces</string>
+    <string name="ingredient_piece_etc">Pieces</string>
     <string name="ingredient_name">Tomatoes</string>
-    <string name="unit">pieces</string>
+    <string name="unit">Pieces</string>
 
-    <string name="grocery_header">MY GROCERIES</string>
+    <!-- Grocery -->
+    <string name="add_grocery_header">Add a Grocery</string>
+    <string name="add_grocery_btn_label">Add Grocery</string>
+    <string name="add_grocery_item_icon">+ Edit Item Icon</string>
+    <string name="add_grocery_item_name">Item Name</string>
+    <string name="add_grocery_item_price">Price (optional)</string>
+    <string name="add_grocery_item_date_bought">Date Bought</string>
+    <string name="add_grocery_item_expiration">Expiration Date</string>
+    <string name="add_grocery_item_condition_text">Choose Item Condition</string>
+    <string name="add_grocery_item_condition_new">New / Sealed</string>
+    <string name="add_grocery_item_condition_opened">Opened</string>
+    <string name="add_grocery_item_condition_used">Used</string>
+    <string name="add_grocery_item_condition_expired">Expired</string>
+    <string name="add_grocery_add_photo_btn_text">+ Add a Photo</string>
+    <string name="add_grocery_save_btn"> Save </string>
 
-    <string-array name="gocery_category_dropdown_options">
+    <!-- View Holder Grocery Item Container -->
+    <string name="grocery_item_name_text">Item Name: </string>
+    <string name="grocery_item_quantity_text">Quantity: </string>
+    <string name="grocery_date_bought_text">Date Bought: </string>
+    <string name="grocery_expiration_text">Expiration Date: </string>
+    <string name="grocery_stored_in_text">Stored In: </string>
+
+    <string-array name="grocery_category_dropdown_options">
         <item> Fresh Meat / Seafood </item>
         <item> Vegetables </item>
         <item> Fruits </item>
@@ -69,4 +112,12 @@
         <item> Sack </item>
         <item> Box </item>
     </string-array>
+
+    <!-- View Grocery Item -->
+    <string name="view_grocery_quantity_text">Quantity:</string>
+    <string name="view_grocery_date_bought_text">Date Bought:</string>
+    <string name="view_grocery_expiration_date_text">Expiration Date:</string>
+    <string name="view_grocery_stored_in_text">Stored In:</string>
+    <string name="view_grocery_category_text">Category:</string>
+    <string name="view_grocery_condition_text">Condition:</string>
 </resources>
