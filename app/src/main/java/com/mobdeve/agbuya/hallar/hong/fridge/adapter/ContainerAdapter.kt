@@ -3,40 +3,36 @@ package com.mobdeve.agbuya.hallar.hong.fridge.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ViewholderContainerBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ItemContainerBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.model.ContainerModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ContainerAdapter(private val data: MutableList<ContainerModel>) :
-    RecyclerView.Adapter<ContainerAdapter.Viewholder>() {
+class ContainerAdapter(private val data: List<ContainerModel>) :
+    RecyclerView.Adapter<ContainerAdapter.ViewHolder>() {
 
-    inner class Viewholder(val binding: ViewholderContainerBinding) :
+    inner class ViewHolder(val binding: ItemContainerBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Viewholder {
-        val binding = ViewholderContainerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return Viewholder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemContainerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: Viewholder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val container = data[position]
         holder.binding.containerNameTv.text = container.containerName
-        holder.binding.capacityTv.text = container.capacity
+        holder.binding.containerCapacityTv.text = container.capacity
 
-        // formatting date and time
-        val rawDate = container.lastUpdated
+        // Date formatting
         val inputFormat = SimpleDateFormat("yyyy-MM-dd|HH:mm", Locale.getDefault())
         val outputFormat = SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault())
-
-        val formattedDate = try {
-            val parsedDate = rawDate.let { inputFormat.parse(it) }
-            parsedDate?.let { outputFormat.format(it) } ?: "No date"
+        holder.binding.containerUpdatedTv.text = try {
+            val date = inputFormat.parse(container.lastUpdated)
+            "Last Updated: ${date?.let { outputFormat.format(it) }}"
         } catch (e: Exception) {
             "Invalid date"
         }
-
-        holder.binding.lastUpdatedTv.text = "Last Updated: $formattedDate"
     }
 
     override fun getItemCount(): Int = data.size

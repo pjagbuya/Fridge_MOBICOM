@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemContainerConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:background="@color/form_green"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/containerIconIv"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/containerNameTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Container Name"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/containerIconIv"
+        app:layout_constraintTop_toTopOf="@id/containerIconIv" />
+
+    <TextView
+        android:id="@+id/containerCapacityTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Capacity"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/containerNameTv"
+        app:layout_constraintTop_toBottomOf="@id/containerNameTv" />
+
+    <TextView
+        android:id="@+id/containerUpdatedTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Last Updated"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/containerNameTv"
+        app:layout_constraintTop_toBottomOf="@id/containerCapacityTv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

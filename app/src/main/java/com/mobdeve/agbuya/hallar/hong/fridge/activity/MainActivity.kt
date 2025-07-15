@@ -1,46 +1,45 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.activity
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import android.content.Intent
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityMainBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.MainViewModel
-import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerAdapter
+import com.mobdeve.agbuya.hallar.hong.fridge.fragments.ContainerFragment
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val viewModel = MainViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //activities
-        binding.profileBtn.setOnClickListener({
-            startActivity(Intent(this, ProfileActivity::class.java))
-        })
-        binding.recipesBtn.setOnClickListener({
-            startActivity(Intent(this, RecipeActivity::class.java))
-        })
-        binding.groceriesBtn.setOnClickListener({
-            startActivity(Intent(this, GroceryActivity::class.java))
-        })
-        binding.addContainerBtn.setOnClickListener({
-            startActivity(Intent(this, AddContainerActivity::class.java))
-        })
+        // Default: Show container
+        if (savedInstanceState == null) {
+            replaceFragment(ContainerFragment())
+        }
 
-        initContainer()
+        // Clicks: Show other fragments
+        binding.containersBtn.setOnClickListener {
+            replaceFragment(ContainerFragment())
+        }
+
+        binding.groceriesBtn.setOnClickListener {
+            replaceFragment(GroceriesFragment())
+        }
+
+        binding.recipesBtn.setOnClickListener {
+            replaceFragment(RecipesFragment())
+        }
+
+        binding.profileBtn.setOnClickListener {
+            replaceFragment(ProfileFragment())
+        }
     }
 
-    private fun initContainer() {
-        viewModel.loadContainer().observe(this) { containerList ->
-            binding.containerRecyclerView.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-            val adapter = ContainerAdapter(containerList)
-            binding.containerRecyclerView.adapter = adapter
-        }
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(binding.fragmentContainer.id, fragment)
+            .commit()
     }
 }

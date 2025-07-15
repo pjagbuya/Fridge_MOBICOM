@@ -1,103 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <!-- Header -->
+    <!-- The container for Fragments -->
     <FrameLayout
-        android:id="@+id/headerFrameLayout"
-        android:layout_width="0dp"
-        android:layout_height="140dp"
-        android:background="@drawable/header_rounded_corners"
-        android:elevation="6dp"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/containerHeaderTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="@string/container_header"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="28sp"
-            android:shadowColor="#80000000"
-            android:shadowDx="0"
-            android:shadowDy="2"
-            android:shadowRadius="4" />
-
-        <EditText
-            android:id="@+id/containerSearchBarEt"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_gravity="top"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="70dp"
-            android:layout_marginEnd="40dp"
-            android:background="@color/gray_white"
-            android:drawableEnd="@mipmap/magnifying_glass"
-            android:hint="Search"
-            android:textColorHint="@color/forest_green"
-            android:paddingEnd="8dp"
-            android:textSize="16sp"
-            android:fontFamily="@font/poppins_regular"
-            android:inputType="text"
-            android:paddingStart="8dp" />
-    </FrameLayout>
-
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/containerRecyclerView"
+        android:id="@+id/fragmentContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/navBarLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerFrameLayout"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <!-- Add Container Button -->
-
-    <!-- Add Container Text -->
-
-    <ImageButton
-        android:id="@+id/addContainerBtn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginBottom="10dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/add_container"
-        android:scaleType="fitCenter"
-        android:src="@mipmap/add_btn"
-        app:layout_constraintBottom_toTopOf="@+id/addContainerLabel"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/addContainerLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="48dp"
-        android:fontFamily="@font/poppins_semibold"
-        android:text="@string/add_container"
-        android:textAlignment="center"
-        android:textColor="@color/brown"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/navBarLayout"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Navigation Bar (unchanged) -->
     <LinearLayout
         android:id="@+id/navBarLayout"
         android:layout_width="0dp"
@@ -105,8 +25,8 @@
         android:background="@color/light_green"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <!-- Icons Row -->
         <LinearLayout

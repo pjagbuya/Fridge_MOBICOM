@@ -28,29 +28,13 @@
             android:exported="true"
             android:theme="@style/Theme.Fridge" />
         <activity
-            android:name=".activity.ProfileActivity"
+            android:name=".activity.SignupActivity"
             android:exported="false"
             android:theme="@style/Theme.Fridge" />
         <activity
             android:name=".activity.LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.Fridge" />
-        <activity
-            android:name=".activity.RecipeActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Fridge"/>
-        <activity
-            android:name=".activity.GroceryActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Fridge"/>
-        <activity
-            android:name=".activity.AddContainerActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Fridge"/>
-        <activity
-            android:name=".activity.AddRecipeActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Fridge"/>
     </application>
 
 </manifest>

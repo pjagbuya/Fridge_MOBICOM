@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity">
+
+    <!-- Header -->
+
+    <TextView
+        android:id="@+id/addContainerHeaderTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/add_container_header"
+        android:textAlignment="center"
+        android:textColor="@color/brown"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/addContainerFormLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addContainerHeaderTv">
+
+        <EditText
+            android:id="@+id/editContainerNameEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@color/gray_white"
+            android:ems="10"
+            android:fontFamily="@font/poppins_medium"
+            android:hint="@string/container_et_hint"
+            android:inputType="text"
+            android:padding="10dp" />
+
+        <LinearLayout
+            android:id="@+id/chooseContainerLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/addContainerLeftBtn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="50dp"
+                android:background="@null"
+                android:contentDescription="@string/left_arrow_desc"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/left_arrow_btn" />
+
+            <ImageView
+                android:id="@+id/addContainerOptionIcon"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@string/option_icon_desc"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/fridge_option_icon" />
+
+            <ImageButton
+                android:id="@+id/addContainerRightBtn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="10dp"
+                android:background="@null"
+                android:contentDescription="@string/right_arrow_desc"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/right_arrow_btn" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <Button
+                android:id="@+id/containerCancelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/recipe_cancel_btn"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/add_container_cancel_btn_text"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/containerSaveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/recipe_add_ingredient_btn"
+                android:text="@string/add_container_save_btn_text"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

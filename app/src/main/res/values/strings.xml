@@ -39,15 +39,15 @@
     <string name="signup_google_btn_text"> Sign Up with Google</string>
     <string name="signin_google_btn_text"> Sign In with Google</string>
 
-    <!-- -->
-    <string name="edit">Edit</string>
-    <string name="delete">Delete</string>
-    <string name="EditText">EditText</string>
-    <string name="navigation">navigation</string>
-
     <!-- Container -->
     <string name="add_container_header">Add a Container</string>
     <string name="add_container_cancel_btn_text">Cancel</string>
+    <string name="add_container_save_btn_text">Save</string>
+    <string name="container_et_hint">Enter container name</string>
+    <string name="navigation">Navigation</string>
+    <string name="left_arrow_desc">Left arrow</string>
+    <string name="option_icon_desc">Container option icon</string>
+    <string name="right_arrow_desc">Right arrow</string>
 
     <!-- Recipe -->
     <string name="add_recipe">Add Recipe</string>
@@ -90,28 +90,6 @@
     <string name="grocery_date_bought_text">Date Bought: </string>
     <string name="grocery_expiration_text">Expiration Date: </string>
     <string name="grocery_stored_in_text">Stored In: </string>
-
-    <string-array name="grocery_category_dropdown_options">
-        <item> Fresh Meat / Seafood </item>
-        <item> Vegetables </item>
-        <item> Fruits </item>
-        <item> Pantry Staples / Dried </item>
-        <item> Dairy Products </item>
-        <item> Seasoning and Spices </item>
-        <item> Beverages </item>
-        <item> Snacks </item>
-        <item> Bakery Goods / Sweets </item>
-    </string-array>
-
-    <string-array name="grocery_unit_dropdown_options">
-        <item> Pack </item>
-        <item> Can </item>
-        <item> Piece </item>
-        <item> Bottle </item>
-        <item> Jar </item>
-        <item> Sack </item>
-        <item> Box </item>
-    </string-array>
 
     <!-- View Grocery Item -->
     <string name="view_grocery_quantity_text">Quantity:</string>

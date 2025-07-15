@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Header -->
+
+    <!-- RecyclerView -->
+
+    <!-- Add Container Button -->
+
+    <!-- Add Container Text -->
+
+    <TextView
+        android:id="@+id/addIngredientInRecipeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Add a Recipe"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recipeForm"
+        android:layout_width="match_parent"
+        android:layout_height="672dp"
+        android:background="@drawable/round_corner_forms"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addIngredientInRecipeLabel"
+        app:layout_constraintVertical_bias="0.076">
+
+        <EditText
+            android:id="@+id/addRecipeNameEt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/form_field_corner"
+            android:ems="10"
+            android:hint="Enter recipe name"
+            android:inputType="text"
+            android:padding="10dp"
+            android:textColor="@color/brown"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/recipe_name_et" />
+
+        <EditText
+            android:id="@+id/recipeDescriptionEt"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/form_field_corner"
+            android:ems="10"
+            android:hint="Enter recipe description"
+            android:inputType="text"
+            android:padding="10dp"
+            android:textColor="@color/brown"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addRecipeNameEt"
+            tools:text="@string/recipe_description" />
+
+        <TextView
+            android:id="@+id/recipeIngredientLabelTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/recipe_ingredient_label"
+            android:textColor="@color/forest_green"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recipeDescriptionEt" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/addRecipeIngredientListRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="302dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/form_field_corner"
+            android:padding="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recipeIngredientLabelTv" />
+
+        <Button
+            android:id="@+id/recipeAddIngredientBtn"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_margin="0dp"
+            android:layout_marginBottom="44dp"
+            android:background="@drawable/recipe_add_ingredient_btn"
+            android:fontFamily="@font/poppins_regular"
+            android:includeFontPadding="false"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/recipe_add_ingredient_btn"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/addRecipeIngredientListRecyclerView"
+            app:layout_constraintEnd_toEndOf="@+id/addRecipeIngredientListRecyclerView"
+            app:layout_constraintStart_toStartOf="@+id/addRecipeIngredientListRecyclerView" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/recipeCancelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/recipe_cancel_btn"
+                android:fontFamily="@font/poppins_regular"
+                android:text="@string/recipe_cancel_btn"
+                android:textColor="@color/white" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="50dp" />
+
+            <Button
+                android:id="@+id/recipeSaveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/recipe_save_btn"
+                android:fontFamily="@font/poppins_regular"
+                android:text="@string/recipe_save_btn"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

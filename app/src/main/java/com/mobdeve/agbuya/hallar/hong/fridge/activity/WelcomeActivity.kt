@@ -4,16 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.mobdeve.agbuya.hallar.hong.fridge.activity.MainActivity
-import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.MainViewModel
-import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityWelcomePageBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityWelcomeBinding
 
 class WelcomeActivity : ComponentActivity() {
-    private lateinit var binding: ActivityWelcomePageBinding
-    private val viewModel = MainViewModel()
+    private lateinit var binding: ActivityWelcomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityWelcomePageBinding.inflate(layoutInflater)
+        binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.getStartedBtn.setOnClickListener({

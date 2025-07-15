@@ -4,11 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.*
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+import com.mobdeve.agbuya.hallar.hong.fridge.model.ContainerModel
 
 // connects the android app to the FireBase Realtime Database and retrieves the list of objects
 class MainRepository {
-//    private val db = FirebaseDatabase.getInstance()
     private val firebaseDatabase by lazy { FirebaseDatabase.getInstance() }
 
     fun loadContainer(): LiveData<MutableList<ContainerModel>> { // updates UI reactively when data changes in FireBase
