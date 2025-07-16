@@ -1,20 +1,10 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.activity
 
-import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils.replace
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.commit
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.mobdeve.agbuya.hallar.hong.fridge.R
-import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityMainAdapter
-import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerActivityFragmentMain
-import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityMainBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 
 class PaulMainActivity : AppCompatActivity() {
