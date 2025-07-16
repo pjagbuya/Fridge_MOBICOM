@@ -6,24 +6,37 @@
     app:startDestination="@+id/containerMain">
     <fragment
         android:id="@+id/containerMain"
-        android:name="com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerActivityFragment"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityMainFragment"
         android:label="fragment_container_main"
         tools:layout="@layout/container_activity_main" />
 
     <fragment
         android:id="@+id/containerEdit"
-        android:name="com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerActivityFragment"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentEdit"
         android:label="fragment_second"
         tools:layout="@layout/container_activity_edit" />
 
+    <!--This section are arguments that EDIT_TYPE can be passed towards -->
+    <argument
+        android:name="EDIT_TYPE"
+        app:argType="integer" />
 
+    <!-- Actions Regarding how to transition -->
     <action
         android:id="@+id/gotoContainerMain"
         app:destination="@id/containerMain"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"
         />
     <action
         android:id="@+id/gotoContainerEdit"
         app:destination="@id/containerEdit"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"
         />
 
 
