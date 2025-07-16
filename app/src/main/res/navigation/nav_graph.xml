@@ -6,13 +6,13 @@
     app:startDestination="@+id/containerMain">
     <fragment
         android:id="@+id/containerMain"
-        android:name="com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerActivityFragmentMain"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityMainFragment"
         android:label="fragment_container_main"
         tools:layout="@layout/container_activity_main" />
 
     <fragment
         android:id="@+id/containerEdit"
-        android:name="com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerActivityFragmentEdit"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentEdit"
         android:label="fragment_second"
         tools:layout="@layout/container_activity_edit" />
 

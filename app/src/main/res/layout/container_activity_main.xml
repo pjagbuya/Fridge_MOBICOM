@@ -36,10 +36,10 @@
         android:scaleType="fitCenter"
         android:src="@mipmap/add_btn"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/containerRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/containerFrame"
         app:layout_constraintHorizontal_bias="0.867"
-        app:layout_constraintStart_toStartOf="@+id/containerRecyclerView"
-        app:layout_constraintTop_toTopOf="@+id/containerRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/containerFrame"
+        app:layout_constraintTop_toTopOf="@+id/containerFrame"
         app:layout_constraintVertical_bias="0.913" />
 
     <TextView
@@ -52,27 +52,41 @@
         android:textAlignment="center"
         android:textColor="@color/brown"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/containerRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/containerFrame"
         app:layout_constraintHorizontal_bias="0.929"
-        app:layout_constraintStart_toStartOf="@+id/containerRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/containerFrame"
         app:layout_constraintTop_toBottomOf="@+id/addContainerBtn"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/containerRecyclerView"
+
+    <FrameLayout
+
+        android:id="@+id/containerFrame"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="125dp"
-        android:elevation="0dp"
-        android:layoutDirection="ltr"
-        app:layout_constraintBottom_toBottomOf="@+id/topBar"
+        android:layout_marginTop="-15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topBar"
         app:layout_constraintVertical_bias="0.0">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/containerRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:layoutDirection="ltr"
+            app:layout_constraintBottom_toBottomOf="@+id/containerFrame"
+            app:layout_constraintEnd_toEndOf="@+id/containerFrame"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/containerFrame"
+            app:layout_constraintTop_toTopOf="@+id/containerFrame"
+            app:layout_constraintVertical_bias="0.0">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

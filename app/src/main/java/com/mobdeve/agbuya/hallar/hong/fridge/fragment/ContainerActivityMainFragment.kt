@@ -1,4 +1,4 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.container
+package com.mobdeve.agbuya.hallar.hong.fridge.fragment
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -9,7 +9,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -18,15 +17,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityMainAdapter
-import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityMainBinding
 
 
-class ContainerActivityFragmentMain : Fragment() {
+class ContainerActivityMainFragment : Fragment() {
     companion object{
         val CONTAINERS_KEY : String = "CONTAINER_DATA_KEY"
-
+        val CONTAINER_EDIT_NAME_KEY: String  = "CONTAINER_EDIT_NAME_KEY"
+        val CONTAINER_ISCANCELED: String  = "CONTAINER_ISCANCELED"
+        val ADD_RESULT : String = "ADD_RESULT"
+        val EDIT_RESULT : String = "EDIT_RESULT"
     }
     private var _binding:ContainerActivityMainBinding? = null
     private val binding get() = _binding!!
@@ -50,8 +52,8 @@ class ContainerActivityFragmentMain : Fragment() {
         else -> @Suppress("DEPRECATION") getParcelableArrayList(key)
     }
 
-    fun loadFunnyData(){
-        containerList= ContainerDataHelper.initializeContainers(requireContext())
+    fun loadHelperData(){
+        containerList= ContainerDataHelper.Companion.initializeContainers(requireContext())
 
     }
     fun getContainerList():ArrayList<ContainerModel>{
@@ -65,22 +67,18 @@ class ContainerActivityFragmentMain : Fragment() {
         val view = binding.root
 
         if(savedInstanceState!= null){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            // Loads up the onDestroy of the parcelable ArrayList of the given sets of container
+            if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 containerList = savedInstanceState.getParcelableArrayList<ContainerModel>(CONTAINERS_KEY, ContainerModel::class.java) ?: run {
-                    ContainerDataHelper.initializeContainers(requireContext())
+                    ContainerDataHelper.Companion.initializeContainers(requireContext())
                 }
             }
 
         }else{
-            loadFunnyData()
+            loadHelperData()
         }
 
-
-        binding.apply {
-            addContainerBtn.setOnClickListener {
-
-            }
-        }
 
 
         return view
@@ -91,7 +89,43 @@ class ContainerActivityFragmentMain : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupTopBar()
-        setupRecycler()
+        //TODO: delete clear() Testing if data empty
+        containerList.clear()
+        if(containerList.isEmpty()){
+            binding.containerRecyclerView.visibility = View.GONE
+            val emptyFragment = EmptyActivityFragment.newInstance("Add your \nContainers")
+            childFragmentManager.beginTransaction()
+                .replace(R.id.containerFrame, emptyFragment)
+                .commit()
+        }else{
+            setupRecycler()
+
+        }
+        // Receives if it is cancelled, may need to change this
+
+        //TODO: delete clear() Testing if data empty, utilize shared viewholders in the activity
+        parentFragmentManager.setFragmentResultListener(ADD_RESULT, viewLifecycleOwner) { _, bundle ->
+            val isCancelled = bundle.getBoolean(CONTAINER_ISCANCELED)
+            if(!isCancelled){
+                loadHelperData()
+                setupRecycler()
+            }
+        }
+
+        // Add button logic
+        binding.addContainerBtn.setOnClickListener {
+            val action = R.id.gotoContainerEdit
+            val bundle = Bundle().apply {
+                putInt("EDIT_TYPE", EditType.ADD.ordinal)
+            }
+            findNavController().navigate(action, bundle)
+            loadHelperData()
+
+        }
+    }
+
+    private fun showEmptyUI() {
+
     }
     override fun onDestroyView() {
         super.onDestroyView()
@@ -108,9 +142,22 @@ class ContainerActivityFragmentMain : Fragment() {
         binding.searchBarContainer.containerHeaderTv.setText(R.string.add_container)
     }
 
+    private fun checkAndPlaceRecyclerViewSpot(){
+
+        // If empty activity is still hogging
+        val existingEmptyFragment = childFragmentManager.findFragmentById(R.id.containerFrame)
+        if (existingEmptyFragment is EmptyActivityFragment) {
+            childFragmentManager.beginTransaction()
+                .remove(existingEmptyFragment)
+                .commit()
+        }
+    }
     private fun setupRecycler() {
 
+        // If empty activity is still hogging
+        checkAndPlaceRecyclerViewSpot()
 
+        binding.containerRecyclerView.visibility = View.VISIBLE
         binding.containerRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = ContainerActivityMainAdapter(containerList) {
@@ -122,13 +169,7 @@ class ContainerActivityFragmentMain : Fragment() {
             }
         }
 
-        binding.addContainerBtn.setOnClickListener {
-            val action = R.id.gotoContainerEdit
-            val bundle = Bundle().apply {
-                putInt("EDIT_TYPE", EditType.ADD.ordinal)
-            }
-            findNavController().navigate(action, bundle)
-        }
+
     }
 
 }
