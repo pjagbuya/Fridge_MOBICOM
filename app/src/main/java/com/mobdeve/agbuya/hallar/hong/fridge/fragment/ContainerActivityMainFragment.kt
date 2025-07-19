@@ -139,7 +139,7 @@ class ContainerActivityMainFragment : Fragment() {
 
     private fun setupTopBar() {
 
-        binding.searchBarContainer.containerHeaderTv.setText(R.string.add_container)
+        binding.searchBarContainer.headerTitleTv.setText(R.string.add_container)
     }
 
     private fun checkAndPlaceRecyclerViewSpot(){
