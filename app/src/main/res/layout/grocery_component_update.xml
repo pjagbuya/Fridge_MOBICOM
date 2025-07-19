@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dirty_white"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/update_item_label_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Update Item"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.047" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/light_green_50"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/update_item_label_tv">
+
+
+        <!--The Icon Image and Edit Icon button-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="1dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iconImage_iv"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/shape_circle_thinstroke"
+                    android:backgroundTint="@color/white"
+                    android:backgroundTintMode="multiply"
+                    android:scaleType="centerInside"
+                    android:src="@android:drawable/btn_star_big_on" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+
+                <Button
+                    android:id="@+id/editIcon_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:background="@drawable/lp_rounded_layout_bg"
+                    android:backgroundTintMode="src_over"
+                    android:fontFamily="@font/poppins"
+                    android:includeFontPadding="true"
+                    android:paddingLeft="0dp"
+                    android:paddingTop="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingBottom="0dp"
+                    android:text="+ Edit Icon"
+                    android:textAllCaps="false"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    app:iconPadding="0dp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/itemName_et"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="17dp"
+                android:background="@drawable/form_field_corner"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="Enter name of item"
+                android:inputType="text"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColorHint="@color/brown"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/itemNumber_et"
+                    android:layout_width="281dp"
+                    android:layout_height="48dp"
+
+
+                    android:background="@drawable/form_field_corner"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="Enter number of item"
+                    android:inputType="text"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:textColorHint="@color/brown"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/unitTypeDropDown_hint">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/unitTypeDropDown_actv"
+                        android:layout_width="115dp"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="0dp"
+                        android:background="@drawable/form_field_corner_dropdown"
+                        android:completionThreshold="0"
+                        android:contentDescription="unit type selection"
+                        android:dropDownHeight="wrap_content"
+                        android:inputType="none"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:text="Type unit type" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="5dp"
+                android:hint="Select an item type">
+
+                <AutoCompleteTextView
+                    android:id="@+id/itemTypeDropDown_actv"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/form_field_corner_dropdown"
+                    android:completionThreshold="0"
+                    android:contentDescription="item drop down"
+                    android:dropDownHeight="wrap_content"
+                    android:inputType="none"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Type item type" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!--Price optional below-->
+            <EditText
+                android:id="@+id/price_et"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+
+
+                android:layout_marginTop="17dp"
+                android:background="@drawable/form_field_corner"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="Price (optional)"
+                android:inputType="text"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColorHint="@color/brown"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/date_bought_et"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+
+
+                android:layout_marginTop="17dp"
+                android:background="@drawable/form_field_corner"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="Date bought"
+                android:inputType="text"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColorHint="@color/brown"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/expirationDate_et"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+
+
+                android:layout_marginTop="17dp"
+                android:background="@drawable/form_field_corner"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="Expiration Date"
+                android:inputType="text"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColorHint="@color/brown"
+                android:textSize="16sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="5dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/containerTypeDropDown_actv"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/form_field_corner_dropdown"
+                    android:completionThreshold="0"
+                    android:dropDownHeight="wrap_content"
+                    android:hint="Select Container"
+                    android:inputType="none"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="type container" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:id="@+id/itemConditionLabel_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Choose item Condition"
+                android:textColor="@color/dirty_white"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <GridLayout
+                    android:id="@+id/itemStatusGrid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:alignmentMode="alignMargins"
+                    android:columnCount="3"
+                    android:columnOrderPreserved="false"
+                    android:foregroundGravity="center"
+                    android:padding="8dp"
+                    android:rowCount="2">
+
+                    <RadioButton
+                        android:id="@+id/radioVeryOk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/shape_circle_thinstroke"
+                        android:buttonTint="@color/radio_button_tint"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="5dp"
+                        android:text="Very ok"
+                        android:textSize="12sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioStillOk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/shape_circle_thinstroke"
+                        android:buttonTint="@color/radio_button_tint"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="5dp"
+                        android:text="Still ok"
+                        android:textSize="12sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioSlightlyNotOk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/shape_circle_thinstroke"
+                        android:buttonTint="@color/radio_button_tint"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="5dp"
+                        android:text="Slightly not ok"
+                        android:textSize="12sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioNotOk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/shape_circle_thinstroke"
+                        android:buttonTint="@color/radio_button_tint"
+                        android:drawablePadding="0dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="5dp"
+                        android:text="Not ok"
+                        android:textSize="12sp" />
+
+                    <!-- Add empty views to balance layout if fewer than 6 options -->
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_columnSpan="1" />
+
+
+                </GridLayout>
+
+                <Button
+                    android:id="@+id/AddImage_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.01"
+                    android:background="@drawable/lp_rounded_layout_bg"
+                    android:backgroundTintMode="src_over"
+                    android:fontFamily="@font/poppins"
+                    android:includeFontPadding="true"
+                    android:paddingLeft="0dp"
+                    android:paddingTop="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingBottom="0dp"
+                    android:text="Add Image"
+                    android:textAllCaps="false"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    app:iconPadding="0dp" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ImagesRecyclerView_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/lp_rounded_layout_bg" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="40dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/save_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/recipe_save_btn"
+                    android:text="Save" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/scanQR_btn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/shape_circle_basewhite"
+                    android:backgroundTint="@color/white"
+                    android:backgroundTintMode="src_over"
+                    android:contentDescription="Scan QR"
+                    android:cropToPadding="true"
+                    android:elevation="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/qr_icon" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

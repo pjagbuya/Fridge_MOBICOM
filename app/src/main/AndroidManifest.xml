@@ -30,6 +30,19 @@
         <activity
             android:name=".activity.PaulMainActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustNothing"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Fridge">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ContainerActivityEdit"
+            android:windowSoftInputMode="adjustNothing"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Fridge">
             <intent-filter>
