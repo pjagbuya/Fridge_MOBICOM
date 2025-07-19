@@ -87,10 +87,10 @@ class ContainerActivityFragmentEdit : Fragment(){
 
         editType = arguments?.getInt("EDIT_TYPE", -1) ?: -1
         if(editType == EditType.ADD.ordinal){
-            binding.baseContainerTitleTopBar.containerHeaderTv.setText(R.string.add_container)
+            binding.baseContainerTitleTopBar.headerTitleTv.setText(R.string.add_container)
             isEdit = false
         }else{
-            binding.baseContainerTitleTopBar.containerHeaderTv.setText(R.string.edit_container)
+            binding.baseContainerTitleTopBar.headerTitleTv.setText(R.string.edit_container)
             isEdit = true
         }
     }
