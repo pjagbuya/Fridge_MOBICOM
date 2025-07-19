@@ -1,4 +1,115 @@
 <resources>
+    <string name="title_activity_container">container_activity</string>
+    <string name="title_activity_main2">Leanback MainActivity2</string>
+    <string name="browse_title">Videos by Your Company</string>
+    <string name="related_movies">Related Videos</string>
+    <string name="grid_view">Grid View</string>
+    <string name="error_fragment">Error Fragment</string>
+    <string name="personal_settings">Personal Settings</string>
+    <string name="watch_trailer_1">Watch trailer</string>
+    <string name="watch_trailer_2">FREE</string>
+    <string name="rent_1">Rent By Day</string>
+    <string name="rent_2">From $1.99</string>
+    <string name="buy_1">Buy and Own</string>
+    <string name="buy_2">AT $9.99</string>
+    <string name="movie">Movie</string>
+
+    <!-- Error messages -->
+    <string name="error_fragment_message">An error occurred</string>
+    <string name="dismiss_error">Dismiss</string>
+
+    <!-- Paul's Container Strings -->
+
+    <string name="capacity_format">%1$d/%2$d</string>
+    <string name="container_name_label">Container Name</string>
+    <string name="cancel_text">Cancel</string>
+    <string name="ok_text">OK</string>
+    <string name="empty">Empty</string>
+    <string name="my_container">MY CONTAINER</string>
+
+
+    <!-- Letty's Branch Strings -->
     <string name="app_name">Fridge</string>
+
+    <string name="app_mobicom_name">Whats In My Fridge?</string>
+    <string name="app_loading_text">A kitchen helper that organizes your groceries</string>
+    <string name="get_started">Get Started</string>
+
+    <string name="container_header">My Containers</string>
+    <string name="profile_header">My Profile</string>
+    <string name="login_header">Log In</string>
+
+    <string name="container_nav">Containers</string>
+    <string name="groceries_nav">Groceries</string>
+    <string name="recipes_nav">Recipes</string>
+    <string name="profile_nav">Profile</string>
+    <string name="edit_container">Edit Container</string>
+    <string name="add_container">Add Container</string>
+    <string name="shared_acc_header">What is a shared account?</string>
+    <string name="shared_acc_desc">
+        A shared account lets multiple users (like family members or housemates) manage a common kitchen inventory. Everyone added to the account can view, and update items, so all members see one combined list of what’s in the kitchen.
+        It helps coordinate shopping, reduce waste, and keep everyone on the same page.</string>
+
+    <string name="email">Email Address*</string>
+    <string name="password">Password*</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="backBtn">backBtn</string>
+    <string name="EditText">EditText</string>
+    <string name="navigation">navigation</string>
+    <string name="recipe_header">MY RECIPE</string>
+    <string name="add_recipe">Add Recipe</string>
+    <string name="recipe_name_et">Enter name of Recipe</string>
+    <string name="recipe_description">Description</string>
+    <string name="recipe_ingredient_label">Ingredients</string>
+    <string name="recipe_add_ingredient_btn">+ Add/Edit Ingredient</string>
+    <string name="recipe_cancel_btn">Cancel</string>
+    <string name="recipe_save_btn">Save</string>
+    <string name="add_ingredient_in_recipe_label">Add Ingredients to Your Recipe</string>
+    <string name="add_ingredient_not_found_btn">+Add Ingredient Not Found</string>
+    <string name="recipe_done_btn">Done</string>
+    <string name="recipe_name">Recipe Name Here</string>
+    <string name="recipe_info_edit_btn">Edit</string>
+    <string name="recipe_info_delete_btn">Delete</string>
+    <string name="ingredient_amount">11</string>
+    <string name="ingredient_piece_etc">pieces</string>
+    <string name="ingredient_name">Tomatoes</string>
+    <string name="unit">pieces</string>
+
+
+
+    <string name="unitTypeDropDown_hint">Select Unit</string>
+    <string name="itemTypeDropDown_hint">Select Item Type</string>
+    <string name="containerTypeDropDown_hint">Select Container</string>
+
+    <string-array name="unit_types">
+        <item>Select unit</item>
+
+        <!-- Volume -->
+        <item>tsp</item>
+        <item>tbsp</item>
+        <item>cup</item>
+        <item>ml</item>
+        <item>L</item>
+        <item>fluid oz</item>
+
+        <!-- Weight -->
+        <item>gram</item>
+        <item>kg</item>
+        <item>oz</item>
+        <item>lbs</item>
+
+        <!-- Pieces & common grocery units -->
+        <item>piece/s</item>
+        <item>slice/s</item>
+        <item>pack/s</item>
+        <item>bottle/s</item>
+        <item>can/s</item>
+        <item>jar/s</item>
+        <item>box/es</item>
+        <item>bag/s</item>
+        <item>tube/s</item>
+        <item>dozen</item>
+    </string-array>
 
 </resources>
