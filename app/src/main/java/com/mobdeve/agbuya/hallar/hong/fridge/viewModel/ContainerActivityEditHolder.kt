@@ -10,6 +10,7 @@ class ContainerActivityEditHolder(private val binding: ContainerComponentEditBin
 
      lateinit var okBtn : Button
      lateinit var cancelBtn : Button
+
     fun bindData(cont: ContainerModel){
 
         cont.imageContainer.loadImageView(binding.containerIv)
