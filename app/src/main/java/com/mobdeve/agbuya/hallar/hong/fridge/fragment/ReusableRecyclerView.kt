@@ -1,7 +1,6 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,15 @@ import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeMainAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
 
 class ReusableRecyclerView : Fragment() {
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecipeMainAdapter
     private var recipeList = ArrayList<RecipeModel>()
+    private var listener: OnRecipeClickListener? = null
+
+    interface OnRecipeClickListener {
+        fun onRecipeSelected(recipe: RecipeModel)
+    }
 
     companion object {
         private const val ARG_RECIPES = "ARG_RECIPES"
@@ -33,8 +38,8 @@ class ReusableRecyclerView : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             recipeList = it.getParcelableArrayList(ARG_RECIPES) ?: ArrayList()
-            Log.d("ReusableRecyclerView", "Received ${recipeList.size} recipes")
         }
+        listener = activity as? OnRecipeClickListener
     }
 
     override fun onCreateView(
@@ -42,15 +47,12 @@ class ReusableRecyclerView : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_reusable_recycler_view, container, false)
-
-        Log.d("Reusable----recipe", "Recipe List Size: ${recipeList.size}")
-        recipeList.forEach { Log.d("RecipeActivity", "Recipe: ${it.name}") }
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        recipeList = arguments?.getParcelableArrayList(ARG_RECIPES) ?: arrayListOf()
-        Log.d("ReusableRecyclerView", "Received recipeList size: ${recipeList.size}")
-        adapter = RecipeMainAdapter(recipeList)
+        adapter = RecipeMainAdapter(recipeList) { selectedRecipe ->
+            listener?.onRecipeSelected(selectedRecipe)
+        }
         recyclerView.adapter = adapter
 
         return view

@@ -1,27 +1,60 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.domain
 
-import android.os.Parcel
 import android.os.Parcelable
+import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
+import kotlinx.parcelize.Parcelize
 
-class RecipeModel(
+@Parcelize
+data class RecipeModel(
     var id: Int,
-    var name: String
+    var name: String,
+    var description: String = "",
+    var ingredients: ArrayList<RecipeIngredient> = ArrayList()
 ) : Parcelable {
 
-    constructor(parcel: Parcel) : this(
-        parcel.readInt(),
-        parcel.readString() ?: ""
-    )
+    /**
+     * Inner class for recipe-specific ingredients
+     * (Can be custom or from Ingredient model)
+     */
+    @Parcelize
+    data class RecipeIngredient(
+        val ingredientID: String? = null, // If null, this means custom ingredient
+        val name: String,
+        var amount: Double,
+        var unit: RecipeUnit = RecipeUnit.UNSPECIFIED,
+        val isCustom: Boolean = false // True if added manually
+    ) : Parcelable
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
-        parcel.writeString(name)
+    /**
+     * Enum for units specific to recipes
+     */
+    enum class RecipeUnit(val displayName: String) {
+        TSP("tsp"),
+        TBSP("tbsp"),
+        CUP("cup"),
+        ML("ml"),
+        L("L"),
+        PIECE("piece"),
+        GRAM("gram"),
+        KG("kg"),
+        UNSPECIFIED("");
+
+        override fun toString(): String = displayName
     }
 
-    override fun describeContents(): Int = 0
-
-    companion object CREATOR : Parcelable.Creator<RecipeModel> {
-        override fun createFromParcel(parcel: Parcel): RecipeModel = RecipeModel(parcel)
-        override fun newArray(size: Int): Array<RecipeModel?> = arrayOfNulls(size)
+    //to list the ingredients to RecipeIngredients but only the name
+    companion object {
+        fun fromIngredient(
+            ingredient: Ingredient,
+            amount: Double,
+            unit: RecipeUnit
+        ): RecipeIngredient {
+            return RecipeIngredient(
+                ingredientID = ingredient.ingredientID,
+                name = ingredient.name,
+                amount = amount,
+                unit = unit
+            )
+        }
     }
 }

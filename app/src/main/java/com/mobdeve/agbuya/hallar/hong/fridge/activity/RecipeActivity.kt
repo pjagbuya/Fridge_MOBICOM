@@ -12,16 +12,43 @@ import com.mobdeve.agbuya.hallar.hong.fridge.fragment.ReusableRecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityRecipeBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.EmptyActivityFragment
+import com.mobdeve.agbuya.hallar.hong.fridge.fragment.RecipeDetails
 
-class RecipeActivity : AppCompatActivity() {
+class RecipeActivity : AppCompatActivity(), ReusableRecyclerView.OnRecipeClickListener {
     private lateinit var binding : ActivityRecipeBinding
 //    private val recipeList = ArrayList<RecipeModel>()
 
-    private val recipeList = arrayListOf(
-        RecipeModel(1, "Pancakes"),
-        RecipeModel(2, "Adobo"),
-        RecipeModel(3, "Fried Rice")
+    private val recipeList = arrayListOf(   //dummy
+        RecipeModel(
+            id = 1,
+            name = "Pancakes",
+            description = "Fluffy homemade pancakes",
+            ingredients = arrayListOf(
+                RecipeModel.RecipeIngredient(name = "Flour", amount = 2.0, unit = RecipeModel.RecipeUnit.CUP),
+                RecipeModel.RecipeIngredient(name = "Eggs", amount = 2.0, unit = RecipeModel.RecipeUnit.PIECE)
+            )
+        ),
+        RecipeModel(
+            id = 2,
+            name = "Adobo",
+            description = "Classic Filipino dish",
+            ingredients = arrayListOf(
+                RecipeModel.RecipeIngredient(name = "Chicken", amount = 1.0, unit = RecipeModel.RecipeUnit.KG),
+                RecipeModel.RecipeIngredient(name = "Soy Sauce", amount = 1.0, unit = RecipeModel.RecipeUnit.CUP)
+            )
+        ),
+        RecipeModel(
+            id = 3,
+            name = "Fried Rice",
+            description = "Quick and easy fried rice",
+            ingredients = arrayListOf(
+                RecipeModel.RecipeIngredient(name = "Cooked Rice", amount = 2.0, unit = RecipeModel.RecipeUnit.CUP),
+                RecipeModel.RecipeIngredient(name = "Carrots", amount = 1.0, unit = RecipeModel.RecipeUnit.PIECE)
+            )
+        )
     )
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +120,22 @@ class RecipeActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onRecipeSelected(recipe: RecipeModel) {
+        // hide header and add button
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.headerContainer, Fragment()) // Empty Fragment
+            .commit()
+        binding.headerContainer.visibility = View.GONE
+        binding.addRecipeBtn.visibility = View.GONE
+        binding.addContainerTv.visibility = View.GONE
+
+        // open Recipe Details
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, RecipeDetails.newInstance(recipe))
+            .addToBackStack(null)
+            .commit()
     }
 }
 
