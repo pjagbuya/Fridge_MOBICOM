@@ -29,7 +29,7 @@ class ContainerDataHelper {
 
         fun getRandomColorGenerator() : Int{
 
-            val color = colorGen.getRandomColor(ColorGenerator.DARK_RGB_RANGE)
+            val color = colorGen.getRandomColor()
             if(color == null){
                 return 0
             }
@@ -46,13 +46,13 @@ class ContainerDataHelper {
             ),
             ContainerModel(
                 name = "My Fridge2",
-                imageContainer = ImageContainer(R.drawable.container_type_2_cabinet, getRandomColorGenerator()),
+                imageContainer = ImageContainer(R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                 currCap = 5,
                 maxCap = 10
             ),
             ContainerModel(
                 name = "My Fridge3",
-                imageContainer = ImageContainer(R.drawable.container_type_3_freezer, getRandomColorGenerator()),
+                imageContainer = ImageContainer(R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                 currCap = 5,
                 maxCap = 10
             )

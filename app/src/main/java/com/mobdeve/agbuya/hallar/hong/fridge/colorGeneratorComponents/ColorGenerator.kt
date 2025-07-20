@@ -79,12 +79,6 @@ class ColorGenerator(private val initialExcludedColorsHex: List<String>) {
     companion object {
         // A default RgbColorRange representing the full spectrum (0-255 for all components)
         val FULL_RGB_RANGE = RgbColorRange(
-            red = ComponentColorRange(0, 255),
-            green = ComponentColorRange(0, 255),
-            blue = ComponentColorRange(0, 255)
-        )
-
-        val DARK_RGB_RANGE = RgbColorRange(
             red = ComponentColorRange(0, 155),
             green = ComponentColorRange(0, 155),
             blue = ComponentColorRange(0, 155)

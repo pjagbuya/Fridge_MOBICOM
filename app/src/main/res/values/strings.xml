@@ -75,6 +75,41 @@
     <string name="ingredient_piece_etc">pieces</string>
     <string name="ingredient_name">Tomatoes</string>
     <string name="unit">pieces</string>
+
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+<!--     <string name="hello_blank_fragment">Hello blank fragment</string> -->
+
+    <string name="unitTypeDropDown_hint">Select Unit</string>
+    <string name="itemTypeDropDown_hint">Select Item Type</string>
+    <string name="containerTypeDropDown_hint">Select Container</string>
+
+    <string-array name="unit_types">
+        <item>Select unit</item>
+
+        <!-- Volume -->
+        <item>tsp</item>
+        <item>tbsp</item>
+        <item>cup</item>
+        <item>ml</item>
+        <item>L</item>
+        <item>fluid oz</item>
+
+        <!-- Weight -->
+        <item>gram</item>
+        <item>kg</item>
+        <item>oz</item>
+        <item>lbs</item>
+
+        <!-- Pieces & common grocery units -->
+        <item>piece/s</item>
+        <item>slice/s</item>
+        <item>pack/s</item>
+        <item>bottle/s</item>
+        <item>can/s</item>
+        <item>jar/s</item>
+        <item>box/es</item>
+        <item>bag/s</item>
+        <item>tube/s</item>
+        <item>dozen</item>
+    </string-array>
 </resources>
