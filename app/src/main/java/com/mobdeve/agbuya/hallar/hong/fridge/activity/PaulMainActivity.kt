@@ -1,5 +1,6 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,6 +34,9 @@ class PaulMainActivity : AppCompatActivity() {
         setContentView(activityMainBinding.root)
 
 
+        activityMainBinding.navigationBar.recipesBtn.setOnClickListener {
+            startActivity(Intent(this, RecipeActivity::class.java))
+        }
 
     }
 
