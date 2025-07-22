@@ -23,26 +23,6 @@
         android:textSize="16sp" />
 
     <!-- Edit and Delete Buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end"
-        android:layout_marginTop="8dp">
-
-        <Button
-            android:id="@+id/editRecipeBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit" />
-
-        <Button
-            android:id="@+id/deleteRecipeBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete"
-            android:layout_marginStart="8dp" />
-    </LinearLayout>
 
     <!-- Ingredients List -->
     <TextView
@@ -60,5 +40,26 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/editRecipeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit" />
+
+        <Button
+            android:id="@+id/deleteRecipeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Delete" />
+    </LinearLayout>
 
 </LinearLayout>

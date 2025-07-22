@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="8dp">
 
@@ -30,5 +31,14 @@
         android:text="CUP"
         android:gravity="center"
         android:textSize="16sp" />
+
+    <!-- trashcan for delete -->
+    <ImageButton
+        android:id="@+id/deleteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/delete_trashcan"
+        android:background="@null"
+        android:contentDescription="@string/delete"/>
 
 </LinearLayout>

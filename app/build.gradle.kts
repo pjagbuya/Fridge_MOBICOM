@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("kotlin-parcelize")
-
+    id("androidx.navigation.safeargs")
 }
 
 android {

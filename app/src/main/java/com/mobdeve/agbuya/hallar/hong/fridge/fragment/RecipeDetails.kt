@@ -4,69 +4,72 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeIngredientAdapter
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentRecipeDetailsBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
 
 class RecipeDetails : Fragment() {
 
-    private var recipe: RecipeModel? = null
+    private var _binding: FragmentRecipeDetailsBinding? = null
+    private val binding get() = _binding!!
 
-    companion object {
-        private const val ARG_RECIPE = "recipe"
-
-        fun newInstance(recipe: RecipeModel): RecipeDetails {
-            val fragment = RecipeDetails()
-            val bundle = Bundle()
-            bundle.putParcelable(ARG_RECIPE, recipe)
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
+    // Use Safe Args delegate
+    private val args: RecipeDetailsArgs by navArgs()
+    private lateinit var recipe: RecipeModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            recipe = it.getParcelable(ARG_RECIPE)
-        }
+        recipe = args.recipe // Retrieve recipe using Safe Args
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_recipe_details, container, false)
+    ): View {
+        _binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        val titleTv: TextView = view.findViewById(R.id.recipeTitle)
-        val descTv: TextView = view.findViewById(R.id.recipeDescription)
-        val editBtn: Button = view.findViewById(R.id.editRecipeBtn)
-        val deleteBtn: Button = view.findViewById(R.id.deleteRecipeBtn)
-        val ingredientsRv: RecyclerView = view.findViewById(R.id.ingredientListRv)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        titleTv.text = recipe?.name
-        descTv.text = recipe?.description
+        binding.recipeTitle.text = recipe.name
+        binding.recipeDescription.text = recipe.description
 
+        setupRecyclerView()
+        setupButtons()
+    }
 
-        val ingredients = recipe?.ingredients ?: arrayListOf()
-        ingredientsRv.adapter = RecipeIngredientAdapter(ingredients)
-        ingredientsRv.layoutManager = LinearLayoutManager(requireContext())
+    private fun setupRecyclerView() {
+        binding.ingredientListRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.ingredientListRv.adapter = RecipeIngredientAdapter(
+            recipe.ingredients,
+            onDeleteClick = {},
+            showDeleteButton = false // hide trash button in detail view
+        )
+    }
 
-        editBtn.setOnClickListener {
-            Toast.makeText(requireContext(), "Edit ${recipe?.name}", Toast.LENGTH_SHORT).show()
-            // TODO: Navigate to edit form
+    private fun setupButtons() {
+        binding.editRecipeBtn.setOnClickListener {
+            // Navigate to AddRecipeFragment, passing the recipe to edit
+            val action = RecipeDetailsDirections
+                .actionRecipeDetailsToAddRecipeFragment(recipe)
+            findNavController().navigate(action)
         }
 
-        deleteBtn.setOnClickListener {
-            Toast.makeText(requireContext(), "Delete ${recipe?.name}", Toast.LENGTH_SHORT).show()
-            // TODO: Implement deletion
+        binding.deleteRecipeBtn.setOnClickListener {
+            Toast.makeText(requireContext(), "Delete ${recipe.name}", Toast.LENGTH_SHORT).show()
+            // TODO: Implement deletion logic
         }
+    }
 
-        return view
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
