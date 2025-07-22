@@ -1,22 +1,28 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses
 
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+@Parcelize
 class Ingredient(
     val ingredientID : Int,
-    val icon : ImageIngredient,
+    val icon : ImageRaw,
     val name : String,
-    val amount : Double,
+    val quantity: Double,
+    val price : Double,
     val dateAdded : String,
     val expirationDate : String,
-    val unit : UnitOfMeasurement = UnitOfMeasurement.PIECE,
-    val conditionType: ConditionType = ConditionType.VERY_OK,
-    val itemType: ItemType = ItemType.OTHER,
-    val imageContainerLists : ArrayList<ImageIngredient> = ArrayList<ImageIngredient>()
+    val unit : String = UnitOfMeasurement.PIECE.displayName,
+    val conditionType: String = ConditionType.VERY_OK.displayName,
+    val itemType: String = ItemType.OTHER.displayName,
+    val imageContainerLists : ArrayList<ImageRaw> = ArrayList<ImageRaw>()
 //    val attachedContainerName: String <- Singleton needed to access list of containermodel and list of ingredient model
-) {
+): Parcelable {
     companion object{
         var TOTAL_NUM = 0
+
+
         enum class ItemType(val displayName: String) {
             // Produce
             VEGETABLE("Vegetable"),

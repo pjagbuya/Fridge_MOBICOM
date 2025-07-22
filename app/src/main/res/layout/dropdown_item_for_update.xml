@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dropwDown_tv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/form_field_corner"
+    android:backgroundTint="@color/gray_white"
+    android:backgroundTintMode="multiply"
+    android:fontFamily="@font/dongle"
+    android:padding="10dp"
+    android:text="TextView"
+    android:textColor="@color/black"
+    android:textSize="16sp"
+    android:textStyle="bold"
+    app:cardCornerRadius="5dp">
+
+</TextView>

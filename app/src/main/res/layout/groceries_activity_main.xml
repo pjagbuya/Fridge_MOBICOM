@@ -25,36 +25,78 @@
             android:elevation="4dp" />
     </FrameLayout>
 
-    <Spinner
-        android:id="@+id/ItemTypeSp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/itemTypeDropDowmContainer"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="150dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:minHeight="48dp"
-        android:spinnerMode="dropdown"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:endIconDrawable="@drawable/down_arrow_icon_small"
+        app:endIconMode="dropdown_menu"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/sortBySp"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/sortByDropdownContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topBar"
-        app:layout_constraintVertical_bias="0.007" />
+        app:layout_constraintVertical_bias="0.007">
 
-    <Spinner
-        android:id="@+id/sortBySp"
-        android:layout_width="140dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
+        <AutoCompleteTextView
+            android:id="@+id/itemTypeDropDowm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToOutline="true"
+            android:background="@drawable/lp_rounded_et"
+            android:completionThreshold="0"
+            android:drawableEnd="@drawable/down_arrow_icon_small"
+            android:dropDownHeight="150dp"
+            android:fontFamily="@font/dongle"
+            android:hint="Item type"
+            android:maxHeight="48dp"
+            android:minHeight="48dp"
+            android:padding="5dp"
+            android:paddingStart="10dp"
+            android:textSize="20sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/sortByDropdownContainer"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:endIconDrawable="@drawable/down_arrow_icon_small"
+        app:endIconMode="dropdown_menu"
         app:layout_constraintBottom_toTopOf="@+id/displayFrame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.963"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topBar"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0">
 
+
+        <AutoCompleteTextView
+            android:id="@+id/sortByDropdown"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:background="@drawable/lp_rounded_et"
+            android:clipToOutline="true"
+            android:fontFamily="@font/dongle"
+            android:hint="Select sort"
+            android:inputType="none"
+            android:padding="5dp"
+            android:paddingStart="10dp"
+            android:textSize="20sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
     <FrameLayout
 
         android:id="@+id/displayFrame"
@@ -65,7 +107,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ItemTypeSp"
+        app:layout_constraintTop_toBottomOf="@+id/itemTypeDropDowmContainer"
         app:layout_constraintVertical_bias="0.0">
 
         <androidx.recyclerview.widget.RecyclerView

@@ -23,9 +23,10 @@
 
 
         <activity
-            android:name=".container_activity"
+            android:name=".activity.GroceryMainActivity"
             android:exported="false"
-            android:label="@string/title_activity_container"
+            android:launchMode="singleTop"
+            android:label="@string/grocery_activity_label"
             android:theme="@style/Theme.Fridge" />
         <activity
             android:name=".activity.PaulMainActivity"

@@ -48,11 +48,11 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iconImage_iv"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-
+                    app:shapeAppearanceOverlay="@style/CircleImage"
                     android:adjustViewBounds="true"
                     android:background="@drawable/shape_circle_thinstroke"
                     android:backgroundTint="@color/white"
@@ -70,20 +70,13 @@
                     android:id="@+id/editIcon_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-                    android:background="@drawable/lp_rounded_layout_bg"
-                    android:backgroundTintMode="src_over"
+                    android:background="@drawable/form_field_corner"
+                    android:backgroundTint="#CDDC39"
                     android:fontFamily="@font/poppins"
-                    android:includeFontPadding="true"
-                    android:paddingLeft="0dp"
-                    android:paddingTop="0dp"
-                    android:paddingRight="0dp"
-                    android:paddingBottom="0dp"
                     android:text="+ Edit Icon"
                     android:textAllCaps="false"
                     android:textColor="#000000"
-                    android:textSize="12sp"
-                    app:iconPadding="0dp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <EditText
@@ -98,12 +91,14 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:textColorHint="@color/brown"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="10">
 
                 <EditText
                     android:id="@+id/itemNumber_et"
@@ -111,6 +106,7 @@
                     android:layout_height="48dp"
 
 
+                    android:layout_weight="6"
                     android:background="@drawable/form_field_corner"
                     android:fontFamily="@font/poppins_regular"
                     android:hint="Enter number of item"
@@ -125,22 +121,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_weight="4"
+                    android:gravity="center"
                     android:hint="@string/unitTypeDropDown_hint">
 
                     <AutoCompleteTextView
                         android:id="@+id/unitTypeDropDown_actv"
                         android:layout_width="115dp"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
                         android:background="@drawable/form_field_corner_dropdown"
                         android:completionThreshold="0"
                         android:contentDescription="unit type selection"
-                        android:dropDownHeight="wrap_content"
-                        android:inputType="none"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp"
-                        android:text="Type unit type" />
+                        android:inputType="text"
+                        android:text="Type unit type"
+                        android:textSize="14sp"
+                        android:dropDownHeight="150dp"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -156,16 +152,16 @@
                 <AutoCompleteTextView
                     android:id="@+id/itemTypeDropDown_actv"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
                     android:background="@drawable/form_field_corner_dropdown"
                     android:completionThreshold="0"
                     android:contentDescription="item drop down"
-                    android:dropDownHeight="wrap_content"
-                    android:inputType="none"
+                    android:inputType="text"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    android:text="Type item type" />
+                    android:text="Type item type"
+                    android:dropDownHeight="150dp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -228,16 +224,17 @@
                 <AutoCompleteTextView
                     android:id="@+id/containerTypeDropDown_actv"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
                     android:background="@drawable/form_field_corner_dropdown"
                     android:completionThreshold="0"
-                    android:dropDownHeight="wrap_content"
                     android:hint="Select Container"
-                    android:inputType="none"
+                    android:inputType="text"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    android:text="type container" />
+                    android:text="type container"
+                    android:dropDownHeight="150dp"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -344,11 +341,13 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/ImagesRecyclerView_rv"
+                android:id="@+id/imagesRecyclerView_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/lp_rounded_layout_bg" />
+                android:background="@drawable/lp_rounded_layout_bg"
+                android:minHeight="150dp"
+                android:padding="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

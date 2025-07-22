@@ -1,22 +1,31 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.fragment
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.GroceryActivityMainAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceriesActivityMainBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
 
 
 class GroceryActivityFragmentMain : Fragment() {
-
+    companion object{
+        const val SELECTED_INGREDIENT_KEY= "SELECTED_INGREDIENT_KEY"
+        const val EDIT_INGREDIENT_KEY= "EDIT_INGREDIENT_KEY"
+    }
     private var _binding: GroceriesActivityMainBinding? = null
     private val binding get() = _binding!!
-
+    private val groceryViewModel: GrocerySharedViewModel by activityViewModels()
     private lateinit var groceryList: ArrayList<Ingredient>
 
     override fun onCreateView(
@@ -29,7 +38,15 @@ class GroceryActivityFragmentMain : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        groceryList = GroceryDataHelper.getSampleIngredients(requireContext()) // Fill with actual data from helper or ViewModel
+        Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
+
+        groceryList = groceryViewModel.groceryList // Fill with actual data from helper or ViewModel
+        val topBarBinding : BaseSearchbarContainerBinding = binding.searchBarContainer
+
+        topBarBinding.headerTitleTv.setText(R.string.my_groceries)
+
+        setupSortTypeDropDown()
+        setupSortItemType()
 
         setupRecycler()
         // TODO: setup button transition
@@ -38,12 +55,49 @@ class GroceryActivityFragmentMain : Fragment() {
 //        }
     }
 
+    private fun setupSortTypeDropDown()
+    {
+        val sortOptions = resources.getStringArray(R.array.sort_by_array)
+        val sortAdapter =
+            ArrayAdapter(requireContext(), R.layout.dropdown_item, sortOptions)
+        binding.sortByDropdown.setAdapter(sortAdapter)
+
+        // TODO: Setup sorting algos for SortType
+//        binding.sortByDropdown.setOnItemClickListener { _, _, position, _ ->
+//            val selected = sortOptions[position]
+//            // Handle sorting logic
+//        }
+    }
+    private fun setupSortItemType()
+    {
+        val sortOptions = resources.getStringArray(R.array.item_type_array)
+        val sortAdapter =
+            ArrayAdapter(requireContext(), R.layout.dropdown_item, sortOptions)
+        binding.itemTypeDropDowm.setAdapter(sortAdapter)
+
+        // TODO: Setup sorting algos for SortItemType
+//        binding.sortByDropdown.setOnItemClickListener { _, _, position, _ ->
+//            val selected = sortOptions[position]
+//            // Handle sorting logic
+//        }
+    }
+
+    private fun onComponentClickBehavior()
+    {
+
+    }
     private fun setupRecycler() {
 
-        binding.containerRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = GroceryActivityMainAdapter(groceryList)
+        val adapter = GroceryActivityMainAdapter(groceryList) { selectedIngredient ->
+            val bundle = Bundle().apply {
+                putParcelable(SELECTED_INGREDIENT_KEY, selectedIngredient)
+                putBoolean(EDIT_INGREDIENT_KEY, false)
+            }
+            findNavController().navigate(R.id.groceriesView, bundle)
         }
+
+        binding.containerRecyclerView.adapter = adapter
+        binding.containerRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun onDestroyView() {

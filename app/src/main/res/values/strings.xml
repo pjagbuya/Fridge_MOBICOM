@@ -28,6 +28,12 @@
     <string name="my_container">MY CONTAINER</string>
 
 
+    <!-- Paul's Grocery Strings -->
+    <string name="my_groceries">MY GROCERIES</string>
+    <string name="grocery_activity_label">grocery_activity</string>
+    <string name="all_items_label">grocery_activity</string>
+    <string name="sort_by_label">grocery_activity</string>
+
     <!-- Letty's Branch Strings -->
     <string name="app_name">Fridge</string>
 
@@ -111,5 +117,54 @@
         <item>tube/s</item>
         <item>dozen</item>
     </string-array>
+    <string-array name="sort_by_array">
+        <item>A-Z</item>
+        <item>Quantity ↑</item>
+        <item>Quantity ↓</item>
+        <item>Date Added</item>
+        <item>Expiry</item>
+    </string-array>
 
+    <string-array name="item_type_array">
+        <!-- Produce -->
+        <item>Vegetable</item>
+        <item>Fruit</item>
+
+        <!-- Proteins -->
+        <item>Meat</item>
+        <item>Egg</item>
+
+        <!-- Dairy -->
+        <item>Milk</item>
+
+        <!-- Grains & Breads -->
+        <item>Rice</item>
+        <item>Pasta</item>
+        <item>Bread</item>
+        <item>Grain</item>
+        <item>Cereal</item>
+        <item>Flour</item>
+
+        <!-- Baking & Sweets -->
+        <item>Sugar</item>
+        <item>Sweetener</item>
+
+        <!-- Condiments & Seasoning -->
+        <item>Spice</item>
+        <item>Seasoning</item>
+        <item>Sauce</item>
+        <item>Oil</item>
+        <item>Vinegar</item>
+        <item>Salt</item>
+
+        <!-- Canned & Jarred -->
+        <item>Canned Good</item>
+        <item>Jarred Item</item>
+
+        <!-- Beverages -->
+        <item>Beverage</item>
+
+        <!-- Misc -->
+        <item>Other</item>
+    </string-array>
 </resources>
