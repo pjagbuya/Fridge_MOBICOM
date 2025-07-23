@@ -1,17 +1,27 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.fragment
 
+import android.app.AlertDialog
+import android.content.ContentValues
 import android.content.Intent
+import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Parcelable
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.GroceryViewImageGridAdapter
+import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentUpdateBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentViewBinding
@@ -21,8 +31,13 @@ class GroceryActivityFragmentEdit: Fragment() {
     private var _binding: GroceryComponentUpdateBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var groceryList: ArrayList<Ingredient>
+    private lateinit var imagesList: ArrayList<ImageRaw>
     private lateinit var selectedIngredient: Ingredient
+
+    // Camera setup
+    private lateinit var pickImageLauncher: ActivityResultLauncher<String>
+    private lateinit var takePhotoLauncher: ActivityResultLauncher<Uri>
+    private var tempCameraImageUri: Uri? = null
 
     inline fun <reified T : Parcelable> Intent.parcelableArrayList(key: String): ArrayList<T>? =
         when {
@@ -47,39 +62,105 @@ class GroceryActivityFragmentEdit: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupIngredientView()
+        // Setup camera launcher states
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let {
+                val bitmap =
+                    MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, uri)
+                selectedIngredient.imageContainerLists.add(ImageRaw(bitmap))
+                binding.imagesRecyclerViewRv.adapter?.notifyItemInserted(selectedIngredient.imageContainerLists.size - 1)
+            }
+        }
+
+        takePhotoLauncher =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                if (success && tempCameraImageUri != null) {
+                    val bitmap = MediaStore.Images.Media.getBitmap(
+                        requireActivity().contentResolver,
+                        tempCameraImageUri
+                    )
+                    selectedIngredient.imageContainerLists.add(ImageRaw(bitmap))
+                    binding.imagesRecyclerViewRv.adapter?.notifyItemInserted(selectedIngredient.imageContainerLists.size - 1)
+                }
+            }
+
+        val isAddable = arguments?.getBoolean(GroceryActivityFragmentMain.ADD_INGREDIENT_KEY)!!
+        if (isAddable) {
+            // create default/empty ingredient
+            selectedIngredient = Ingredient(
+                icon = ImageRaw(ImageRaw.getDefaultBitmap(requireContext())), // You must define a default/fallback icon in ImageRaw
+                name = "",
+                quantity = 0.0,
+                price = 0.0,
+                dateAdded = "", // or current date
+                expirationDate = "",
+                imageContainerLists = ArrayList<ImageRaw>()
+            )
+            binding.headerActionItemLabelTv.text = "Add Grocery"
+        } else {
+
+            selectedIngredient =
+                arguments?.getParcelable(GroceryActivityFragmentMain.SELECTED_INGREDIENT_KEY)!!
+            binding.headerActionItemLabelTv.text = "Update Item"
+            selectedIngredient?.let { setupIngredientView(it) }
+        }
         setupDropdowns()
         setupRecycler()
         setupConditionRadios()
 
+        // Setup add image button
+        binding.AddImageBtn.setOnClickListener {
+            val dialogView = layoutInflater.inflate(R.layout.photo_method_choice_layout, null)
 
-    }
+            val dialog = AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .create()
 
-    private fun setupIngredientView() {
-        selectedIngredient =
-            arguments?.getParcelable<Ingredient>(GroceryActivityFragmentMain.SELECTED_INGREDIENT_KEY)!!
-        selectedIngredient.let {
-            binding.itemNameEt.setText(it.name)
-            binding.itemNumberEt.setText(it.quantity.toString())
-            binding.unitTypeDropDownActv.setText(it.unit)
-            binding.itemTypeDropDownActv.setText(it.itemType)
-            binding.priceEt.setText("Php ${it.price}")
-            binding.dateBoughtEt.setText(it.dateAdded)
-            binding.expirationDateEt.setText(it.expirationDate)
-
-            // TODO: must be able to have Container's id or name
-            binding.containerTypeDropDownActv.setText("DEFAULT CONTAINER")
-
-            when (it.conditionType.lowercase()) {
-                "very ok" -> binding.radioVeryOk.isChecked = true
-                "still ok" -> binding.radioStillOk.isChecked = true
-                "slightly not ok" -> binding.radioSlightlyNotOk.isChecked = true
-                "not ok" -> binding.radioNotOk.isChecked = true
+            dialogView.findViewById<Button>(R.id.gotoGalleryBtn).setOnClickListener {
+                pickImageLauncher.launch("image/*")
+                dialog.dismiss()
             }
-            binding.iconImageIv.setImageBitmap(it.icon.getBitmap())
 
+            dialogView.findViewById<Button>(R.id.takePhotoBtn).setOnClickListener {
+                tempCameraImageUri = createTempImageUri()
+                tempCameraImageUri?.let { uri ->
+                    takePhotoLauncher.launch(uri)
+                }
+                dialog.dismiss()
+            }
+
+            dialog.show()
         }
     }
+
+    private fun createTempImageUri(): Uri {
+        val resolver = requireContext().contentResolver
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "photo_${System.currentTimeMillis()}.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+        }
+        return resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
+    }
+    private fun setupIngredientView(ingredient: Ingredient) {
+        binding.itemNameEt.setText(ingredient.name)
+        binding.itemNumberEt.setText(ingredient.quantity.toString())
+        binding.unitTypeDropDownActv.setText(ingredient.unit)
+        binding.itemTypeDropDownActv.setText(ingredient.itemType)
+        binding.priceEt.setText("Php ${ingredient.price}")
+        binding.dateBoughtEt.setText(ingredient.dateAdded)
+        binding.expirationDateEt.setText(ingredient.expirationDate)
+        binding.containerTypeDropDownActv.setText("DEFAULT CONTAINER")
+
+        when (ingredient.conditionType.lowercase()) {
+            "very ok" -> binding.radioVeryOk.isChecked = true
+            "still ok" -> binding.radioStillOk.isChecked = true
+            "slightly not ok" -> binding.radioSlightlyNotOk.isChecked = true
+            "not ok" -> binding.radioNotOk.isChecked = true
+        }
+
+        binding.iconImageIv.setImageBitmap(ingredient.icon.getBitmap())
+    }
+
     private fun setupConditionRadios() {
         val allButtons = listOf(
             binding.radioVeryOk,
@@ -118,12 +199,13 @@ class GroceryActivityFragmentEdit: Fragment() {
     private fun setupRecycler() {
 
         val isEditable = arguments?.getBoolean(GroceryActivityFragmentMain.EDIT_INGREDIENT_KEY)!!
-
         selectedIngredient.let {
             binding.imagesRecyclerViewRv.adapter =
                 GroceryViewImageGridAdapter(it.imageContainerLists, isEditable)
         }
-        binding.imagesRecyclerViewRv.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.imagesRecyclerViewRv.layoutManager = GridLayoutManager(requireContext(), 2)
+
+
 
     }
 

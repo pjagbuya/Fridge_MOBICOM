@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
@@ -20,6 +21,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityMainAdapte
 import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityMainBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 
 
 class ContainerActivityMainFragment : Fragment() {
@@ -32,7 +34,7 @@ class ContainerActivityMainFragment : Fragment() {
     }
     private var _binding:ContainerActivityMainBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var viewModel: ContainerSharedViewModel
     private lateinit var containerList:ArrayList<ContainerModel>
 
     private val newContainerResultLauncher = registerForActivityResult(
@@ -87,16 +89,12 @@ class ContainerActivityMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setupTopBar()
+        viewModel = ViewModelProvider(requireActivity())[ContainerSharedViewModel::class.java]
+        viewModel.loadInitialData(requireContext())
         //TODO: delete clear() Testing if data empty
-        containerList.clear()
+//        containerList.clear()
         if(containerList.isEmpty()){
-            binding.containerRecyclerView.visibility = View.GONE
-            val emptyFragment = EmptyActivityFragment.newInstance("Add your \nContainers")
-            childFragmentManager.beginTransaction()
-                .replace(R.id.containerFrame, emptyFragment)
-                .commit()
+            showEmptyState()
         }else{
             setupRecycler()
 
@@ -113,7 +111,7 @@ class ContainerActivityMainFragment : Fragment() {
         }
 
         // Add button logic
-        binding.addContainerBtn.setOnClickListener {
+        binding.addGroceriesBtn.setOnClickListener {
             val action = R.id.gotoContainerEdit
             val bundle = Bundle().apply {
                 putInt("EDIT_TYPE", EditType.ADD.ordinal)
@@ -124,8 +122,13 @@ class ContainerActivityMainFragment : Fragment() {
         }
     }
 
-    private fun showEmptyUI() {
-
+    private fun showEmptyState() {
+        // Loads the empty fragment
+        binding.containerRecyclerView.visibility = View.GONE
+        val emptyFragment = EmptyActivityFragment.newInstance("Add your \nContainers")
+        childFragmentManager.beginTransaction()
+            .replace(R.id.containerFrame, emptyFragment)
+            .commit()
     }
     override fun onDestroyView() {
         super.onDestroyView()

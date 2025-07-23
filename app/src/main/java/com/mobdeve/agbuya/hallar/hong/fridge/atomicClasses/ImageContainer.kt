@@ -20,7 +20,10 @@ class ImageContainer(
     private var colorId : Int
 ) : Parcelable {
 
+    fun setColorId(id : Int){
+        colorId = id
 
+    }
 
     fun getResId(): Int {
         return resId

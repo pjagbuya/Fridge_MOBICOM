@@ -126,7 +126,7 @@
         </androidx.recyclerview.widget.RecyclerView>
     </FrameLayout>
     <ImageButton
-        android:id="@+id/addContainerBtn"
+        android:id="@+id/addGroceriesBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@android:color/transparent"
@@ -154,6 +154,6 @@
         app:layout_constraintEnd_toEndOf="@+id/displayFrame"
         app:layout_constraintHorizontal_bias="0.929"
         app:layout_constraintStart_toStartOf="@+id/displayFrame"
-        app:layout_constraintTop_toBottomOf="@+id/addContainerBtn"
+        app:layout_constraintTop_toBottomOf="@+id/addGroceriesBtn"
         app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

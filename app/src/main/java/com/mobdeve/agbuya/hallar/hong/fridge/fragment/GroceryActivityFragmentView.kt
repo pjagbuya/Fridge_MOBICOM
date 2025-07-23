@@ -20,6 +20,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceriesActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentViewBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.ADD_INGREDIENT_KEY
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.EDIT_INGREDIENT_KEY
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.SELECTED_INGREDIENT_KEY
 
@@ -58,8 +59,10 @@ class GroceryActivityFragmentView : Fragment() {
             val bundle = Bundle().apply {
                 putParcelable(SELECTED_INGREDIENT_KEY, selectedIngredient)
                 putBoolean(EDIT_INGREDIENT_KEY, true)
+                putBoolean(ADD_INGREDIENT_KEY, false)
+
             }
-            findNavController().navigate(R.id.groceriesEdit, bundle)
+            findNavController().navigate(R.id.gotoGroceriesEdit, bundle)
         }
 
 

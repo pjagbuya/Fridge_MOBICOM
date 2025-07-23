@@ -1,9 +1,9 @@
 plugins {
+    id("kotlin-kapt")
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("kotlin-parcelize")
-
 }
 
 android {
@@ -54,6 +54,10 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-runtime:2.7.2")
+    implementation("com.google.code.gson:gson:2.13.1")
+    kapt("androidx.room:room-compiler:2.7.2")
+    testImplementation("androidx.room:room-testing:2.6.1")
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.9.1")

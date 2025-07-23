@@ -26,4 +26,13 @@
     <!--Shades of light_green-->
     <color name="light_green_set_transparency_light">#12768A4E</color>
 
+
+    <!--Additional colors top pick from-->
+    <color name="blue">#2B81CD</color>
+    <color name="purple">#462BCD</color>
+    <color name="magenta">#C22BCD</color>
+    <color name="pink">#CD2B9C</color>
+    <color name="yellow">#CDAD2B</color>
+
+
 </resources>

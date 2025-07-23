@@ -102,11 +102,11 @@
 
                 <EditText
                     android:id="@+id/itemNumber_et"
-                    android:layout_width="281dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="48dp"
 
 
-                    android:layout_weight="6"
+                    android:layout_weight="5"
                     android:background="@drawable/form_field_corner"
                     android:fontFamily="@font/poppins_regular"
                     android:hint="Enter number of item"
@@ -121,22 +121,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:gravity="center"
                     android:hint="@string/unitTypeDropDown_hint">
 
                     <AutoCompleteTextView
                         android:id="@+id/unitTypeDropDown_actv"
-                        android:layout_width="115dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
                         android:background="@drawable/form_field_corner_dropdown"
                         android:completionThreshold="0"
                         android:contentDescription="unit type selection"
+                        android:dropDownHeight="150dp"
                         android:inputType="text"
                         android:text="Type unit type"
-                        android:textSize="14sp"
-                        android:dropDownHeight="150dp"/>
+                        android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -321,11 +321,11 @@
 
                 <Button
                     android:id="@+id/AddImage_btn"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.01"
-                    android:background="@drawable/lp_rounded_layout_bg"
-                    android:backgroundTintMode="src_over"
+                    app:background="@drawable/lp_rounded_layout_bg"
+                    app:backgroundTintMode="src_in"
                     android:fontFamily="@font/poppins"
                     android:includeFontPadding="true"
                     android:paddingLeft="0dp"

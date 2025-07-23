@@ -89,7 +89,6 @@
     <string name="containerTypeDropDown_hint">Select Container</string>
 
     <string-array name="unit_types">
-        <item>Select unit</item>
 
         <!-- Volume -->
         <item>tsp</item>

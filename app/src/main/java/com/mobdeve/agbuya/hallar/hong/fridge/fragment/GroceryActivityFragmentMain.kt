@@ -22,6 +22,7 @@ class GroceryActivityFragmentMain : Fragment() {
     companion object{
         const val SELECTED_INGREDIENT_KEY= "SELECTED_INGREDIENT_KEY"
         const val EDIT_INGREDIENT_KEY= "EDIT_INGREDIENT_KEY"
+        const val ADD_INGREDIENT_KEY = "ADD_INGREDIENT_KEY"
     }
     private var _binding: GroceriesActivityMainBinding? = null
     private val binding get() = _binding!!
@@ -47,12 +48,30 @@ class GroceryActivityFragmentMain : Fragment() {
 
         setupSortTypeDropDown()
         setupSortItemType()
+        if(groceryList.isEmpty()){
+            showEmptyState()
+        }else{
+            setupRecycler()
 
+        }
         setupRecycler()
         // TODO: setup button transition
-//        binding.addGroceryBtn.setOnClickListener {
-//            findNavController().navigate(R.id.gotoGroceryEdit)
-//        }
+        binding.addGroceriesBtn.setOnClickListener {
+            val action = R.id.gotoGroceriesEdit
+            val bundle = Bundle().apply {
+                putBoolean(EDIT_INGREDIENT_KEY, true)
+                putBoolean(ADD_INGREDIENT_KEY, true)
+            }
+            findNavController().navigate(action, bundle)
+        }
+    }
+
+    private fun showEmptyState(){
+        binding.containerRecyclerView.visibility = View.GONE
+        val emptyFragment = EmptyActivityFragment.newInstance("Add your \nGroceries")
+        childFragmentManager.beginTransaction()
+            .replace(R.id.containerFrame, emptyFragment)
+            .commit()
     }
 
     private fun setupSortTypeDropDown()
@@ -89,11 +108,12 @@ class GroceryActivityFragmentMain : Fragment() {
     private fun setupRecycler() {
 
         val adapter = GroceryActivityMainAdapter(groceryList) { selectedIngredient ->
+            val action = R.id.gotoGroceriesView
             val bundle = Bundle().apply {
                 putParcelable(SELECTED_INGREDIENT_KEY, selectedIngredient)
                 putBoolean(EDIT_INGREDIENT_KEY, false)
             }
-            findNavController().navigate(R.id.groceriesView, bundle)
+            findNavController().navigate(action, bundle)
         }
 
         binding.containerRecyclerView.adapter = adapter

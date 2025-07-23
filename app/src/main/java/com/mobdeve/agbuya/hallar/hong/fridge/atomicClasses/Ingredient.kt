@@ -6,19 +6,20 @@ import kotlinx.serialization.Serializable
 
 @Parcelize
 class Ingredient(
-    val ingredientID : Int,
-    val icon : ImageRaw,
-    val name : String,
-    val quantity: Double,
-    val price : Double,
-    val dateAdded : String,
-    val expirationDate : String,
-    val unit : String = UnitOfMeasurement.PIECE.displayName,
-    val conditionType: String = ConditionType.VERY_OK.displayName,
-    val itemType: String = ItemType.OTHER.displayName,
-    val imageContainerLists : ArrayList<ImageRaw> = ArrayList<ImageRaw>()
+    val ingredientID : Int = TOTAL_NUM++,
+    var icon : ImageRaw,
+    var name : String,
+    var quantity: Double,
+    var price : Double,
+    var dateAdded : String,
+    var expirationDate : String,
+    var unit : String = UnitOfMeasurement.PIECE.displayName,
+    var conditionType: String = ConditionType.VERY_OK.displayName,
+    var itemType: String = ItemType.OTHER.displayName,
+    val imageContainerLists : ArrayList<ImageRaw> = ArrayList<ImageRaw>(),
 //    val attachedContainerName: String <- Singleton needed to access list of containermodel and list of ingredient model
 ): Parcelable {
+
     companion object{
         var TOTAL_NUM = 0
 

@@ -128,7 +128,7 @@ class ContainerActivityFragmentEdit : Fragment(){
         binding.containerRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter =
-                ContainerActivityEditAdapter(containerList, object : ContainerEditActionListener {
+                ContainerActivityEditAdapter(containerList, requireActivity(), object : ContainerEditActionListener {
                     override fun onOkClick(position: Int) {
                         val result = Bundle().apply {
                             // TODO: Finish fragments to also pass color of container based on adapter position

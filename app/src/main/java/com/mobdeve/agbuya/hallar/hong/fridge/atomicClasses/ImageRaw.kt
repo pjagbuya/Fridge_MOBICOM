@@ -10,12 +10,16 @@ import android.os.Parcelable
 import android.provider.MediaStore
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.mobdeve.agbuya.hallar.hong.fridge.R
 import kotlinx.parcelize.Parcelize
 import java.io.ByteArrayOutputStream
 @Parcelize
 class ImageRaw(private val bitmap: Bitmap): Parcelable {
 
     companion object{
+        fun getDefaultBitmap(context: Context):Bitmap {
+            return BitmapFactory.decodeResource(context.resources, R.mipmap.chef_hat_icon)
+        }
         fun extractBitmap(context: Context, uri: Uri): Bitmap? {
             return try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
