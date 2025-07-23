@@ -14,7 +14,7 @@
         android:textSize="28sp" />
 
     <EditText
-        android:id="@+id/searchBarEt"
+        android:id="@+id/searchRecipeEt"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_gravity="bottom"

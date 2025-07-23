@@ -19,7 +19,7 @@ class RecipeIngredientAdapter(
         val nameTv: TextView = view.findViewById(R.id.ingredientNameTv)
         val amountTv: TextView = view.findViewById(R.id.ingredientAmountTv)
         val unitTv: TextView = view.findViewById(R.id.ingredientUnitTv)
-        val deleteBtn: ImageButton = view.findViewById(R.id.deleteBtn)
+        val deleteBtn: ImageButton = view.findViewById(R.id.deleteImb)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {

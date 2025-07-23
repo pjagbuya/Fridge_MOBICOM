@@ -6,7 +6,7 @@
 
     <!-- Recipe Name -->
     <TextView
-        android:id="@+id/recipeTitle"
+        android:id="@+id/recipeTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Recipe Title"
@@ -15,7 +15,7 @@
 
     <!-- Description -->
     <TextView
-        android:id="@+id/recipeDescription"
+        android:id="@+id/recipeDescriptionTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

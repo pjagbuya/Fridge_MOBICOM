@@ -47,7 +47,7 @@ class ReusableRecyclerView : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_reusable_recycler_view, container, false)
-        recyclerView = view.findViewById(R.id.recyclerView)
+        recyclerView = view.findViewById(R.id.addedIngredientsRv)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter = RecipeMainAdapter(recipeList) { selectedRecipe ->

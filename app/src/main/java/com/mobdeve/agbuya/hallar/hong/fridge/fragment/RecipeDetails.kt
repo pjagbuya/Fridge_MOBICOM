@@ -38,8 +38,8 @@ class RecipeDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recipeTitle.text = recipe.name
-        binding.recipeDescription.text = recipe.description
+        binding.recipeTitleTv.text = recipe.name
+        binding.recipeDescriptionTv.text = recipe.description
 
         setupRecyclerView()
         setupButtons()
