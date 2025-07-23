@@ -41,5 +41,11 @@ class RecipeMainAdapter(
         }
     }
 
+    fun updateData(newRecipes: List<RecipeModel>) {
+        this.recipeList.clear()
+        this.recipeList.addAll(newRecipes)
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int = recipeList.size
 }

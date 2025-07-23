@@ -4,6 +4,9 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs")
+
+    id("com.google.devtools.ksp")
+//    id("kotlin-kapt")
 }
 
 android {
@@ -54,6 +57,12 @@ android {
 }
 
 dependencies {
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
+
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.9.1")
     implementation("com.google.android.material:material:1.12.0")
