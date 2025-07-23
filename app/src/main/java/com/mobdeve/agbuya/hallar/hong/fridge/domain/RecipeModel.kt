@@ -6,28 +6,21 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RecipeModel(
-    var id: Int,
+    var id: Int = generateRecipeId(),
     var name: String,
     var description: String = "",
     var ingredients: ArrayList<RecipeIngredient> = ArrayList()
 ) : Parcelable {
 
-    /**
-     * Inner class for recipe-specific ingredients
-     * (Can be custom or from Ingredient model)
-     */
     @Parcelize
     data class RecipeIngredient(
-        val ingredientID: String? = null, // If null, this means custom ingredient
+        val ingredientID: Int = generateIngredientId(), // Auto-increment ID
         val name: String,
         var amount: Double,
         var unit: RecipeUnit = RecipeUnit.UNSPECIFIED,
-        val isCustom: Boolean = false // True if added manually
+        val isCustom: Boolean = false
     ) : Parcelable
 
-    /**
-     * Enum for units specific to recipes
-     */
     enum class RecipeUnit(val displayName: String) {
         TSP("tsp"),
         TBSP("tbsp"),
@@ -42,15 +35,27 @@ data class RecipeModel(
         override fun toString(): String = displayName
     }
 
-    //to list the ingredients to RecipeIngredients but only the name
     companion object {
+        // Counters for auto-increment
+        private var recipeCounter = 0
+        private var ingredientCounter = 0
+
+        private fun generateRecipeId(): Int {
+            recipeCounter += 1
+            return recipeCounter
+        }
+
+        private fun generateIngredientId(): Int {
+            ingredientCounter += 1
+            return ingredientCounter
+        }
+
         fun fromIngredient(
             ingredient: Ingredient,
             amount: Double,
             unit: RecipeUnit
         ): RecipeIngredient {
             return RecipeIngredient(
-                ingredientID = ingredient.ingredientID,
                 name = ingredient.name,
                 amount = amount,
                 unit = unit

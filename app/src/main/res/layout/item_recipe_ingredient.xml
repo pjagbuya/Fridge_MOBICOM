@@ -34,7 +34,7 @@
 
     <!-- trashcan for delete -->
     <ImageButton
-        android:id="@+id/deleteBtn"
+        android:id="@+id/deleteImb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/delete_trashcan"

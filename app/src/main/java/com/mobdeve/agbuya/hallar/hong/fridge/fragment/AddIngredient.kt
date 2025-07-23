@@ -49,8 +49,8 @@ class AddIngredient : Fragment() {
             },
             true
         )
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView.adapter = adapter
+        binding.addedIngredientsRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.addedIngredientsRv.adapter = adapter
     }
 
     private fun setupButtons() {
@@ -73,12 +73,12 @@ class AddIngredient : Fragment() {
 
         val nameEt = dialogView.findViewById<EditText>(R.id.customIngredientNameEt)
         val amountEt = dialogView.findViewById<EditText>(R.id.customIngredientAmountEt)
-        val unitSpinner = dialogView.findViewById<Spinner>(R.id.unitSp)
-        val cancelBtn = dialogView.findViewById<Button>(R.id.cancelBtn)
-        val addBtn = dialogView.findViewById<Button>(R.id.addBtn)
+        val unitSpinner = dialogView.findViewById<Spinner>(R.id.customIngredientUnitSp)
+        val cancelBtn = dialogView.findViewById<Button>(R.id.customeIngredientCancelBtn)
+        val addBtn = dialogView.findViewById<Button>(R.id.customIngredientAddBtn)
 
         // Populate the spinner with RecipeUnit values
-        val units = RecipeModel.RecipeUnit.values().map { it.displayName }
+        val units = RecipeModel.RecipeUnit.entries.map { it.displayName }
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item, units
@@ -96,7 +96,7 @@ class AddIngredient : Fragment() {
         addBtn.setOnClickListener {
             val name = nameEt.text.toString().trim()
             val amount = amountEt.text.toString().toDoubleOrNull()
-            val unit = RecipeModel.RecipeUnit.values()[unitSpinner.selectedItemPosition]
+            val unit = RecipeModel.RecipeUnit.entries[unitSpinner.selectedItemPosition]
 
             if (name.isEmpty() || amount == null) {
                 Toast.makeText(requireContext(),

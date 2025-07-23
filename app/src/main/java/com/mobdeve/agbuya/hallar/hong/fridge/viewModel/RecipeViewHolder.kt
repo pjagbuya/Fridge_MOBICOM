@@ -8,6 +8,6 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 
 class RecipeViewHolder (view: View) : RecyclerView.ViewHolder(view) {
     val recipeNameTv: TextView = itemView.findViewById(R.id.recipeNameTv)
-    val editButton: Button = itemView.findViewById(R.id.recipeEditBt)
-    val deleteButton: Button = itemView.findViewById(R.id.recipeDeleteBt)
+    val editButton: Button = itemView.findViewById(R.id.recipeEditBtn)
+    val deleteButton: Button = itemView.findViewById(R.id.recipeDeleteBtn)
 }

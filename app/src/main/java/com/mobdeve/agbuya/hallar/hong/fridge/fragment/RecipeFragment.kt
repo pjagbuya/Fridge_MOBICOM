@@ -25,8 +25,8 @@ class RecipeMainFragment : Fragment() {
             name = "Pancakes",
             description = "Fluffy homemade pancakes",
             ingredients = arrayListOf(
-                RecipeModel.RecipeIngredient("1","Flour", 2.0, RecipeModel.RecipeUnit.CUP),
-                RecipeModel.RecipeIngredient("2","Eggs", 2.0, RecipeModel.RecipeUnit.PIECE)
+                RecipeModel.RecipeIngredient(1,"Flour", 2.0, RecipeModel.RecipeUnit.CUP),
+                RecipeModel.RecipeIngredient(2,"Eggs", 2.0, RecipeModel.RecipeUnit.PIECE)
             )
         ),
         RecipeModel(
@@ -34,8 +34,8 @@ class RecipeMainFragment : Fragment() {
             name = "Adobo",
             description = "Classic Filipino dish",
             ingredients = arrayListOf(
-                RecipeModel.RecipeIngredient("1","Chicken", 1.0, RecipeModel.RecipeUnit.KG),
-                RecipeModel.RecipeIngredient("2","Soy Sauce", 1.0, RecipeModel.RecipeUnit.CUP)
+                RecipeModel.RecipeIngredient(3,"Chicken", 1.0, RecipeModel.RecipeUnit.KG),
+                RecipeModel.RecipeIngredient(4,"Soy Sauce", 1.0, RecipeModel.RecipeUnit.CUP)
             )
         )
     )
@@ -59,8 +59,8 @@ class RecipeMainFragment : Fragment() {
         recipeAdapter = RecipeMainAdapter(recipeList) { recipe ->
             onRecipeSelected(recipe)
         }
-        binding.RecipeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.RecipeRecyclerView.adapter = recipeAdapter
+        binding.recipeListRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.recipeListRv.adapter = recipeAdapter
     }
 
     private fun setupAddRecipeButton() {
