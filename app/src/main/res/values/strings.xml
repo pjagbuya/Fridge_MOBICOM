@@ -76,7 +76,8 @@
     <string name="ingredient_name">Tomatoes</string>
     <string name="unit">pieces</string>
 
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <!--     <string name="hello_blank_fragment">Hello blank fragment</string> -->
 
     <string name="unitTypeDropDown_hint">Select Unit</string>
     <string name="itemTypeDropDown_hint">Select Item Type</string>
@@ -111,5 +112,7 @@
         <item>tube/s</item>
         <item>dozen</item>
     </string-array>
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_recipe_label">Add Recipe</string>
 </resources>

@@ -44,6 +44,54 @@
         app:popExitAnim="@anim/slide_out_right"
         />
 
+<!--    for recipe-->
+    <fragment
+        android:id="@+id/recipeMainFragment"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.RecipeMainFragment"
+        android:label="Recipes"
+        tools:layout="@layout/fragment_recipe_main">
+        <action
+            android:id="@+id/action_recipeMainFragment_to_addRecipeFragment"
+            app:destination="@id/addRecipeFragment" />
+        <action
+            android:id="@+id/action_recipeMainFragment_to_recipeDetails"
+            app:destination="@id/recipeDetails" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addRecipeFragment"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.AddRecipeFragment"
+        android:label="Add Recipe"
+        tools:layout="@layout/fragment_add_recipe_form">
+        <argument
+            android:name="recipeToEdit"
+            app:argType="com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_addRecipeFragment_to_addIngredient"
+            app:destination="@id/addIngredientFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addIngredientFragment"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.AddIngredient"
+        android:label="Add Ingredient"
+        tools:layout="@layout/fragment_add_ingredient" />
+
+
+    <fragment
+        android:id="@+id/recipeDetails"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.RecipeDetails"
+        android:label="Recipe Details"
+        tools:layout="@layout/fragment_recipe_details">
+        <argument
+            android:name="recipe"
+            app:argType="com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel" />
+        <action
+            android:id="@+id/action_recipeDetails_to_addRecipeFragment"
+            app:destination="@id/addRecipeFragment" />
+    </fragment>
+
 
 
 </navigation>
