@@ -1,12 +1,14 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.domain
 
 import android.os.Parcelable
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RecipeModel(
-    var id: Int = generateRecipeId(),
+    var id: Int = 0,  // Room auto-generates this if 0
     var name: String,
     var description: String = "",
     var ingredients: ArrayList<RecipeIngredient> = ArrayList()
@@ -14,7 +16,7 @@ data class RecipeModel(
 
     @Parcelize
     data class RecipeIngredient(
-        val ingredientID: Int = generateIngredientId(), // Auto-increment ID
+        val ingredientID: Int = 0, // Room auto-generates this if 0
         val name: String,
         var amount: Double,
         var unit: RecipeUnit = RecipeUnit.UNSPECIFIED,
@@ -36,20 +38,8 @@ data class RecipeModel(
     }
 
     companion object {
-        // Counters for auto-increment
-        private var recipeCounter = 0
-        private var ingredientCounter = 0
 
-        private fun generateRecipeId(): Int {
-            recipeCounter += 1
-            return recipeCounter
-        }
-
-        private fun generateIngredientId(): Int {
-            ingredientCounter += 1
-            return ingredientCounter
-        }
-
+        // if the added ingredient is available in any containers
         fun fromIngredient(
             ingredient: Ingredient,
             amount: Double,
@@ -61,5 +51,6 @@ data class RecipeModel(
                 unit = unit
             )
         }
+
     }
 }

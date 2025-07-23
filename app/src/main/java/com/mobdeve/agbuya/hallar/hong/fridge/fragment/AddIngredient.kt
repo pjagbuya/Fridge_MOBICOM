@@ -11,20 +11,21 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeIngredientAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentAddIngredientBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
-import androidx.navigation.fragment.findNavController
+import com.mobdeve.agbuya.hallar.hong.fridge.viewmodel.SharedRecipeViewModel
 
 class AddIngredient : Fragment() {
 
     private var _binding: FragmentAddIngredientBinding? = null
     private val binding get() = _binding!!
 
-    private val ingredientList = arrayListOf<RecipeModel.RecipeIngredient>()
     private lateinit var adapter: RecipeIngredientAdapter
+    private val sharedViewModel: SharedRecipeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,15 +39,16 @@ class AddIngredient : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupButtons()
+
+        sharedViewModel.ingredients.observe(viewLifecycleOwner) { updatedList ->
+            adapter.updateData(updatedList)
+        }
     }
 
     private fun setupRecyclerView() {
         adapter = RecipeIngredientAdapter(
-            ingredientList,
-            { position ->
-                ingredientList.removeAt(position)
-                adapter.notifyItemRemoved(position)
-            },
+            arrayListOf(),
+            { position -> sharedViewModel.removeIngredient(position) },
             true
         )
         binding.addedIngredientsRv.layoutManager = LinearLayoutManager(requireContext())
@@ -54,14 +56,15 @@ class AddIngredient : Fragment() {
     }
 
     private fun setupButtons() {
-        // Done button: send ingredient list back to AddRecipeFragment
         binding.doneBtn.setOnClickListener {
-            findNavController().previousBackStackEntry?.savedStateHandle
-                ?.set("ingredients", ArrayList(ingredientList))
-            findNavController().popBackStack()
+            if (sharedViewModel.ingredients.value.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "No ingredients added!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Ingredients added to recipe", Toast.LENGTH_SHORT).show()
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
         }
 
-        // Add ingredient not found button
         binding.addIngredientNotFoundBtn.setOnClickListener {
             showAddIngredientModal()
         }
@@ -77,7 +80,6 @@ class AddIngredient : Fragment() {
         val cancelBtn = dialogView.findViewById<Button>(R.id.customeIngredientCancelBtn)
         val addBtn = dialogView.findViewById<Button>(R.id.customIngredientAddBtn)
 
-        // Populate the spinner with RecipeUnit values
         val units = RecipeModel.RecipeUnit.entries.map { it.displayName }
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
@@ -108,8 +110,9 @@ class AddIngredient : Fragment() {
                     unit = unit,
                     isCustom = true
                 )
-                ingredientList.add(newIngredient)
-                adapter.notifyItemInserted(ingredientList.size - 1)
+                sharedViewModel.addIngredient(newIngredient)
+                Toast.makeText(requireContext(), "Ingredient added", Toast.LENGTH_SHORT).show()
+                adapter.updateData(sharedViewModel.ingredients.value ?: arrayListOf())
                 dialog.dismiss()
             }
         }

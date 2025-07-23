@@ -10,9 +10,9 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
 
 class RecipeIngredientAdapter(
-    private val ingredientList: List<RecipeModel.RecipeIngredient>,
+    private val ingredientList: ArrayList<RecipeModel.RecipeIngredient>,
     private val onDeleteClick: (Int) -> Unit,
-    private val showDeleteButton: Boolean = true // default true
+    private val showDeleteButton: Boolean = true
 ) : RecyclerView.Adapter<RecipeIngredientAdapter.IngredientViewHolder>() {
 
     class IngredientViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -45,4 +45,10 @@ class RecipeIngredientAdapter(
     }
 
     override fun getItemCount(): Int = ingredientList.size
+
+    fun updateData(newList: List<RecipeModel.RecipeIngredient>) {
+        ingredientList.clear()
+        ingredientList.addAll(newList)
+        notifyDataSetChanged()
+    }
 }
