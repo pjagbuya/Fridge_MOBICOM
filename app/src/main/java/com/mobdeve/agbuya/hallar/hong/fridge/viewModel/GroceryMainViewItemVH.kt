@@ -8,7 +8,7 @@ class GroceryMainViewItemVH(private val binding: GroceriesComponentBinding) : Re
 
     fun bindData(item: Ingredient) {
 
-        item.icon.loadImageView(binding.containerIv)
+        binding.containerIv.setImageResource(item.icon)
         binding.groceryTitleTv.setText(item.name.toString())
         val details: String ="Quantity: ${item.quantity} ${item.unit}\n" +
                 "Date bought: ${item.dateAdded}\n" +

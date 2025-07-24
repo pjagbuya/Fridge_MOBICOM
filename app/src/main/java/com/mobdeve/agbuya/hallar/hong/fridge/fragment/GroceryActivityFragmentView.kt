@@ -84,7 +84,7 @@ class GroceryActivityFragmentView : Fragment() {
             binding.expirationDateLabelTv.text = "Expiration date: ${it.expirationDate}"
             binding.storedInLabelTv.text = "Stored in: DEFAULT CONTAINER"
             binding.categoryLabelTv.text = "Category: ${it.itemType}"
-            binding.imageView.setImageBitmap(it.icon.getBitmap())
+            binding.imageView.setImageResource(it.icon)
         }
     }
     private fun setupRecycler() {

@@ -9,7 +9,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 interface ContainerDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertContainer(container: ContainerEntity)
+    suspend fun insertContainer(container: ContainerEntity) : Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(containers: List<ContainerEntity>)

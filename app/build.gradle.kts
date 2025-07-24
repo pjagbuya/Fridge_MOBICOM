@@ -54,6 +54,11 @@ android {
 }
 
 dependencies {
+    // For viewModelScoping
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2")
+
+    // For parsing uints to ints
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.0")
     implementation("androidx.room:room-runtime:2.7.2")
     implementation("com.google.code.gson:gson:2.13.1")
     kapt("androidx.room:room-compiler:2.7.2")

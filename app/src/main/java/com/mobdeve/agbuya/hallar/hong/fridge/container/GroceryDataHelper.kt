@@ -30,14 +30,13 @@ class GroceryDataHelper {
                 return list
             }
 
-            fun createImageIngredient(context: Context): ImageRaw {
+            fun createImageIngredient(context: Context): Int {
                 val uri = Uri.parse("android.resource://${context.packageName}/${R.drawable.hutao_only}")
-                val dummy_image = ImageRaw.extractBitmap(context, uri)
+                val dummy_image = R.mipmap.chef_hat_icon
                     ?: throw IllegalArgumentException("Drawable not found: qr_icon")
-                return ImageRaw(
-                    dummy_image
-                )
+                return dummy_image
             }
+
 
             ingredients.add(
                 Ingredient(
@@ -50,7 +49,9 @@ class GroceryDataHelper {
                     expirationDate = "2025-07-07",
                     unit = UnitOfMeasurement.PIECE.displayName,
                     conditionType = ConditionType.VERY_OK.displayName,
-                    itemType = ItemType.VEGETABLE.displayName
+                    itemType = ItemType.VEGETABLE.displayName,
+                    imageContainerLists = createImageList(context),
+                    attachedContainerID = 0
                 )
             )
 
@@ -66,7 +67,8 @@ class GroceryDataHelper {
                     unit = UnitOfMeasurement.DOZEN.displayName,
                     conditionType = ConditionType.STILL_OK.displayName,
                     itemType = ItemType.EGG.displayName,
-                    imageContainerLists = createImageList(context)
+                    imageContainerLists = createImageList(context),
+                    attachedContainerID = 0
                 )
             )
 
@@ -82,7 +84,8 @@ class GroceryDataHelper {
                     unit = UnitOfMeasurement.LITER.displayName,
                     conditionType = ConditionType.SLIGHTLY_NOT_OK.displayName,
                     itemType = ItemType.MILK.displayName,
-                    imageContainerLists = createImageList(context)
+                    imageContainerLists = createImageList(context),
+                    attachedContainerID = 0
 
                 )
             )
@@ -99,7 +102,8 @@ class GroceryDataHelper {
                     unit = UnitOfMeasurement.KILOGRAM.displayName,
                     conditionType = ConditionType.VERY_OK.displayName,
                     itemType = ItemType.RICE.displayName,
-                    imageContainerLists = createImageList(context)
+                    imageContainerLists = createImageList(context),
+                    attachedContainerID = 0
                 )
             )
 
@@ -115,7 +119,8 @@ class GroceryDataHelper {
                     unit = UnitOfMeasurement.KILOGRAM.displayName,
                     conditionType = ConditionType.STILL_OK.displayName,
                     itemType = ItemType.MEAT.displayName,
-                    imageContainerLists = createImageList(context)
+                    imageContainerLists = createImageList(context),
+                    attachedContainerID = 0
                 )
             )
 
@@ -131,7 +136,8 @@ class GroceryDataHelper {
                     unit = UnitOfMeasurement.BOX.displayName,
                     conditionType = ConditionType.VERY_OK.displayName,
                     itemType = ItemType.PASTA.displayName,
-                    imageContainerLists = createImageList(context)
+                    imageContainerLists = createImageList(context),
+                    attachedContainerID = 0
                 )
             )
 
@@ -147,7 +153,8 @@ class GroceryDataHelper {
                     unit = UnitOfMeasurement.LITER.displayName,
                     conditionType = ConditionType.VERY_OK.displayName,
                     itemType = ItemType.OIL.displayName,
-                    imageContainerLists = createImageList(context)
+                    imageContainerLists = createImageList(context),
+                    attachedContainerID = 0
                 )
             )
 
@@ -163,7 +170,8 @@ class GroceryDataHelper {
                     unit = UnitOfMeasurement.BOTTLE.displayName,
                     conditionType = ConditionType.VERY_OK.displayName,
                     itemType = ItemType.SAUCE.displayName,
-                    imageContainerLists = createImageList(context)
+                    imageContainerLists = createImageList(context),
+                    attachedContainerID = 0
                 )
             )
 
@@ -179,7 +187,8 @@ class GroceryDataHelper {
                     unit = UnitOfMeasurement.GRAM.displayName,
                     conditionType = ConditionType.VERY_OK.displayName,
                     itemType = ItemType.SALT.displayName,
-                    imageContainerLists = createImageList(context)
+                    imageContainerLists = createImageList(context),
+                    attachedContainerID = 0
                 )
             )
 
@@ -195,7 +204,8 @@ class GroceryDataHelper {
                     unit = UnitOfMeasurement.PIECE.displayName,
                     conditionType = ConditionType.STILL_OK.displayName,
                     itemType = ItemType.FRUIT.displayName,
-                    imageContainerLists = createImageList(context)
+                    imageContainerLists = createImageList(context),
+                    attachedContainerID = 0
                 )
             )
 

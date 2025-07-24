@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Parcelize
 class Ingredient(
     val ingredientID : Int = TOTAL_NUM++,
-    var icon : ImageRaw,
+    var icon : Int,
     var name : String,
     var quantity: Double,
     var price : Double,
@@ -17,7 +17,7 @@ class Ingredient(
     var conditionType: String = ConditionType.VERY_OK.displayName,
     var itemType: String = ItemType.OTHER.displayName,
     val imageContainerLists : ArrayList<ImageRaw> = ArrayList<ImageRaw>(),
-//    val attachedContainerName: String <- Singleton needed to access list of containermodel and list of ingredient model
+    val attachedContainerID: Int
 ): Parcelable {
 
     companion object{

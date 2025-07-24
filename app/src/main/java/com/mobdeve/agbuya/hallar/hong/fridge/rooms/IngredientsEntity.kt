@@ -14,10 +14,11 @@ import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
     )]
 )
 data class IngredientEntity(
-    @PrimaryKey(autoGenerate = true) val ingredientId: Int = 0,
+    @PrimaryKey(autoGenerate = true) val ingredientID: Int = 0,
     val name: String,
     val iconResId: Int,
-    val amount: Double,
+    val quantity: Double,
+    val price: Double,
     val unit: String,
     val conditionType: String,
     val itemType: String,

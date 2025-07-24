@@ -1,5 +1,6 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,12 +12,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.mobdeve.agbuya.hallar.hong.fridge.R
+import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
+import com.mobdeve.agbuya.hallar.hong.fridge.database.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.NavigationbarBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.UserEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PaulMainActivity : AppCompatActivity() {
     companion object{
@@ -45,13 +54,61 @@ class PaulMainActivity : AppCompatActivity() {
             setContentView(activityMainBinding.root)
             Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
 
-            groceryViewModel.groceryList  = GroceryDataHelper.getSampleIngredients(applicationContext)
+            initSampleData(applicationContext)
+            groceryViewModel.loadGroceryList(applicationContext)
+            groceryViewModel.groceryList.observe(this) { list ->
+                groceryModels = ArrayList(list)
+            }
             navBarBinding = activityMainBinding.navigationBar
 
             setupNavigation()
     }
 
+    private fun initSampleData(context: Context) {
+        val db = AppDatabase.getInstance(context)
+        val userDao = db.userDao()
+        val containerDao = db.containerDao()
+        val ingredientDao = db.ingredientDao()
 
+        CoroutineScope(Dispatchers.IO).launch {
+            // Insert one user
+            val userIdLong = userDao.insertUser(UserEntity(username = "Paul"))
+            val userId = userIdLong.toInt() // Works safely now
+            // Insert 5 containers
+            val containerIds = (1..5).map {
+                val container = ContainerEntity(
+                    name = "Container $it",
+                    imageContainer = ImageContainer(
+                        resId = R.drawable.container_type_1_fridge,
+                        colorId = R.color.black
+                    ),
+                    currCap = 0,
+                    maxCap = 10,
+                    timeStamp = System.currentTimeMillis().toString(),
+                    ownerUserId = userId
+                )
+                containerDao.insertContainer(container)
+            }
+
+            // Insert 5 ingredients (1 each container)
+            containerIds.forEachIndexed { index, containerId ->
+                val ingredient = IngredientEntity(
+                    name = "Ingredient ${index + 1}",
+                    iconResId = R.drawable.ic_launcher_foreground,
+                    price = 10.0,
+                    quantity = 10.0,
+                    unit = "kg",
+                    conditionType = "Fresh",
+                    itemType = "VEGETABLE",
+                    dateAdded = "2025-07-15",
+                    expirationDate = "2025-08-15",
+                    attachedContainerId = containerId.toInt(),
+                    imageList = arrayListOf() // Or dummy ImageRaw
+                )
+                ingredientDao.insertIngredient(ingredient)
+            }
+        }
+    }
 
 
     private fun setupNavigation() {

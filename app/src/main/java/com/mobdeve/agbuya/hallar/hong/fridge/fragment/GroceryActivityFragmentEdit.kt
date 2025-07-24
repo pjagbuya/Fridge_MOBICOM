@@ -88,13 +88,14 @@ class GroceryActivityFragmentEdit: Fragment() {
         if (isAddable) {
             // create default/empty ingredient
             selectedIngredient = Ingredient(
-                icon = ImageRaw(ImageRaw.getDefaultBitmap(requireContext())), // You must define a default/fallback icon in ImageRaw
+                icon = R.mipmap.chef_hat_icon, // You must define a default/fallback icon in ImageRaw
                 name = "",
                 quantity = 0.0,
                 price = 0.0,
                 dateAdded = "", // or current date
                 expirationDate = "",
-                imageContainerLists = ArrayList<ImageRaw>()
+                imageContainerLists = ArrayList<ImageRaw>(),
+                attachedContainerID = -1
             )
             binding.headerActionItemLabelTv.text = "Add Grocery"
         } else {
@@ -158,7 +159,7 @@ class GroceryActivityFragmentEdit: Fragment() {
             "not ok" -> binding.radioNotOk.isChecked = true
         }
 
-        binding.iconImageIv.setImageBitmap(ingredient.icon.getBitmap())
+        binding.iconImageIv.setImageResource(ingredient.icon)
     }
 
     private fun setupConditionRadios() {

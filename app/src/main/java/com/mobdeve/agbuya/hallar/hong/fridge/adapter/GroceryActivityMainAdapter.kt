@@ -8,7 +8,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceriesComponentBindi
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.GroceryMainViewItemVH
 
 class GroceryActivityMainAdapter(
-    private val data: ArrayList<Ingredient>,
+    private val data: MutableList<Ingredient>,
     private val onClick: (Ingredient) -> Unit
 ) : RecyclerView.Adapter<GroceryMainViewItemVH>() {
 

@@ -1,4 +1,5 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.fragment
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,8 +28,8 @@ class GroceryActivityFragmentMain : Fragment() {
     private var _binding: GroceriesActivityMainBinding? = null
     private val binding get() = _binding!!
     private val groceryViewModel: GrocerySharedViewModel by activityViewModels()
-    private lateinit var groceryList: ArrayList<Ingredient>
-
+    private val groceryList = mutableListOf<Ingredient>()
+    private lateinit var adapter: GroceryActivityMainAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,25 +38,31 @@ class GroceryActivityFragmentMain : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
 
-        groceryList = groceryViewModel.groceryList // Fill with actual data from helper or ViewModel
-        val topBarBinding : BaseSearchbarContainerBinding = binding.searchBarContainer
-
+        val topBarBinding: BaseSearchbarContainerBinding = binding.searchBarContainer
         topBarBinding.headerTitleTv.setText(R.string.my_groceries)
 
         setupSortTypeDropDown()
         setupSortItemType()
-        if(groceryList.isEmpty()){
-            showEmptyState()
-        }else{
-            setupRecycler()
-
-        }
         setupRecycler()
-        // TODO: setup button transition
+
+        groceryViewModel.groceryList.observe(viewLifecycleOwner) { newList ->
+            groceryList.clear()
+            groceryList.addAll(newList)
+
+            if (groceryList.isEmpty()) {
+                showEmptyState()
+            } else {
+                binding.containerRecyclerView.visibility = View.VISIBLE
+            }
+
+            adapter.notifyDataSetChanged()
+        }
+
         binding.addGroceriesBtn.setOnClickListener {
             val action = R.id.gotoGroceriesEdit
             val bundle = Bundle().apply {
@@ -107,7 +114,7 @@ class GroceryActivityFragmentMain : Fragment() {
     }
     private fun setupRecycler() {
 
-        val adapter = GroceryActivityMainAdapter(groceryList) { selectedIngredient ->
+        adapter = GroceryActivityMainAdapter(groceryList) { selectedIngredient ->
             val action = R.id.gotoGroceriesView
             val bundle = Bundle().apply {
                 putParcelable(SELECTED_INGREDIENT_KEY, selectedIngredient)
