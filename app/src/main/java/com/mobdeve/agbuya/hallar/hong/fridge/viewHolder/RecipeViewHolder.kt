@@ -1,4 +1,4 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.viewModel
+package com.mobdeve.agbuya.hallar.hong.fridge.viewHolder
 
 import android.view.View
 import android.widget.Button

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
-import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.ContainerViewHolder
+import com.mobdeve.agbuya.hallar.hong.fridge.viewHolder.ContainerViewHolder
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerComponentBinding
 
 class ContainerActivityMainAdapter(

@@ -1,14 +1,12 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.adapter
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.R
-import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityRecipeBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
-import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.RecipeViewHolder
+import com.mobdeve.agbuya.hallar.hong.fridge.viewHolder.RecipeViewHolder
 
 class RecipeMainAdapter(
     private val recipeList: ArrayList<RecipeModel>,

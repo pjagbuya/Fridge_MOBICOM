@@ -5,15 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-
 //this is the database, put all entities here
 @Database(
-    entities = [RecipeEntity::class, RecipeIngredientEntity::class],
-    version = 1,
+    entities = [RecipeEntity::class, RecipeIngredientEntity::class, UserEntity::class],
+    version = 2,
     exportSchema = false
 )
+
 abstract class AppDatabase : RoomDatabase(){
     abstract fun recipeDao(): RecipeDao
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile

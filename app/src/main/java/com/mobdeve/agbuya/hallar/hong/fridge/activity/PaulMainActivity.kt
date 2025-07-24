@@ -68,7 +68,7 @@ class PaulMainActivity : AppCompatActivity() {
         navBarBinding.profileBtn.setOnClickListener {
             resetAllIcons()
             navBarBinding.profileBtn.setImageResource(R.mipmap.profile_dark)
-//            navController.navigate(R.id.profileActivityFragmentMain)
+            navController.navigate(R.id.profileMain)
         }
     }
 

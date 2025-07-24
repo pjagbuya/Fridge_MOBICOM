@@ -17,7 +17,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeIngredientAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentAddIngredientBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
-import com.mobdeve.agbuya.hallar.hong.fridge.viewmodel.SharedRecipeViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.SharedRecipeViewModel
 
 class AddIngredient : Fragment() {
 

@@ -16,7 +16,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeIngredientAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentAddRecipeFormBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
-import com.mobdeve.agbuya.hallar.hong.fridge.viewmodel.SharedRecipeViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.SharedRecipeViewModel
 import kotlinx.coroutines.launch
 
 class AddRecipeFragment : Fragment() {

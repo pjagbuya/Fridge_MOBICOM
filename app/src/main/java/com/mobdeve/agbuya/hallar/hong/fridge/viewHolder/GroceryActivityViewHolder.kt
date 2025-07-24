@@ -1,4 +1,4 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.viewModel
+package com.mobdeve.agbuya.hallar.hong.fridge.viewHolder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
@@ -7,7 +7,6 @@ import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceriesComponentBindi
 class GroceryActivityViewHolder(private val binding: GroceriesComponentBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bindData(item: Ingredient) {
-
         item.icon.loadImageView(binding.containerIv)
         binding.groceryTitleTv.setText(item.name.toString())
         val details: String ="Quantity: ${item.amount} ${item.unit}\n" +

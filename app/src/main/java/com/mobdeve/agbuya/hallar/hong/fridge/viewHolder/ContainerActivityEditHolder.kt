@@ -1,7 +1,6 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.viewModel
+package com.mobdeve.agbuya.hallar.hong.fridge.viewHolder
 
 import android.widget.Button
-import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerComponentEditBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
@@ -16,8 +15,5 @@ class ContainerActivityEditHolder(private val binding: ContainerComponentEditBin
         cont.imageContainer.loadImageView(binding.containerIv)
         okBtn = binding.okBtn
         cancelBtn = binding.cancelBtn
-
-
     }
-
 }

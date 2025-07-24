@@ -92,6 +92,44 @@
             app:destination="@id/addRecipeFragment" />
     </fragment>
 
+    <!--- For Profile -->
+    <fragment
+        android:id="@+id/profileMain"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ProfileFragment"
+        android:label="Profile Main"
+        tools:layout="@layout/fragment_profile_main">
+        <action
+            android:id="@+id/loginBtn"
+            app:destination="@id/loginMain" />
+        <action
+            android:id="@+id/signUpBtn"
+            app:destination="@id/signupMain" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/loginMain"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.LoginFragment"
+        android:label="Profile Login Main"
+        tools:layout="@layout/fragment_profile_login_main">
+        <action
+            android:id="@+id/loginBtn"
+            app:destination="@id/loginUserMain" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/signupMain"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.SignupFragment"
+        android:label="Profile Signup Main"
+        tools:layout="@layout/fragment_profile_signup_main">
+        <action
+            android:id="@+id/signUpBtn"
+            app:destination="@id/loginMain" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginUserMain"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.LoginUserFragment"
+        android:label="Login User Main"
+        tools:layout="@layout/fragment_profile_user">
+    </fragment>
 </navigation>
