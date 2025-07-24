@@ -121,9 +121,6 @@
         android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.SignupFragment"
         android:label="Profile Signup Main"
         tools:layout="@layout/fragment_profile_signup_main">
-        <action
-            android:id="@+id/signUpBtn"
-            app:destination="@id/loginMain" />
     </fragment>
 
     <fragment
@@ -131,5 +128,25 @@
         android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.LoginUserFragment"
         android:label="Login User Main"
         tools:layout="@layout/fragment_profile_user">
+        <action
+            android:id="@+id/addMembersButton"
+            app:destination="@id/userAddMember" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userAddMember"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.AddMemberFragment"
+        android:label="User Add Member Main"
+        tools:layout="@layout/fragment_profile_add_member">
+        <action
+            android:id="@+id/inviteBtn"
+            app:destination="@id/userMemberInvitation"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/userMemberInvitation"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.MemberInvitationFragment"
+        android:label="User Member Invitation"
+        tools:layout="@layout/fragment_profile_member_invitation">
     </fragment>
 </navigation>

@@ -155,7 +155,7 @@
             android:id="@+id/signUpBtn"
             android:layout_width="0dp"
             android:layout_height="58dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="20dp"
             android:background="@color/forest_green"
             android:fontFamily="@font/poppins_semibold"
             android:text="SIGN UP"
@@ -164,6 +164,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/confirmPasswordEt" />
+
+        <Button
+            android:id="@+id/signUpGoogleBtn"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:padding="10dp"
+            android:text="SIGN IN WITH GOOGLE"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:background="@color/dark_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signUpBtn" />
 
         <!-- Sign Up with Google Button -->
 

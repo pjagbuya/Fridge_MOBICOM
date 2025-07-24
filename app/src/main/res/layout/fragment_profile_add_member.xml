@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="24dp"
         android:paddingTop="24dp"
-        android:text="Welcome,\nMary Jane"
+        android:text="Name"
         android:textColor="@android:color/black"
         android:textSize="34sp"
         android:textStyle="bold" />
@@ -103,11 +103,23 @@
             android:inputType="textPersonName"
             android:padding="10dp"
             android:textColor="@android:color/black" />
+
     </LinearLayout>
 
     <!-- Add Member Button -->
 
     <!-- Cancel and Invite Buttons -->
+    <TextView
+        android:id="@+id/addMemberErrorTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/add_member_error_msg"
+        android:textColor="@color/red"
+        android:textSize="16sp"
+        android:visibility="invisible" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

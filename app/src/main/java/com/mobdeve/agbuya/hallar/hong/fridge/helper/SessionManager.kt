@@ -1,6 +1,7 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.helper
 
 import android.content.Context
+import androidx.core.content.edit
 
 class SessionManager(context: Context) {
     private val prefs = context.getSharedPreferences("user_session", Context.MODE_PRIVATE)
@@ -18,9 +19,10 @@ class SessionManager(context: Context) {
         }
     }
 
-    fun getUserName(): String? = prefs.getString(KEY_NAME, "")
+    fun getUserName(): String? = prefs.getString(KEY_NAME, null)
+    fun getUserEmail(): String? = prefs.getString(KEY_EMAIL, null)
 
     fun clearSession() {
-        prefs.edit().clear().apply()
+        prefs.edit { clear() }
     }
 }

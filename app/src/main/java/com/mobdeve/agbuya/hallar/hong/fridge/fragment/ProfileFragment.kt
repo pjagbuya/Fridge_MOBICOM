@@ -8,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.fragment.app.Fragment
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentProfileMainBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.helper.SessionManager
 
 class ProfileFragment: Fragment() {
     private var _binding: FragmentProfileMainBinding? = null
@@ -21,15 +22,22 @@ class ProfileFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val session = SessionManager(requireContext())
+        val isLoggedIn = session.getUserEmail() != null
 
-        // Set up login button
-        binding.loginBtn.setOnClickListener {
-            findNavController().navigate(R.id.loginBtn)
-        }
+        if (isLoggedIn) {
+            // when user is logged in, redirect to login user main layout instead
+            findNavController().navigate(R.id.loginUserMain)
+        } else {
+            // set up login button
+            binding.loginBtn.setOnClickListener {
+                findNavController().navigate(R.id.loginBtn)
+            }
 
-        // Set up sign up button
-        binding.signUpBtn.setOnClickListener {
-            findNavController().navigate(R.id.signUpBtn)
+            // set up sign up button
+            binding.signUpBtn.setOnClickListener {
+                findNavController().navigate(R.id.signUpBtn)
+            }
         }
     }
 

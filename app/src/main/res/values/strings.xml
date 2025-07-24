@@ -54,7 +54,7 @@
     <string name="signup_now_text">Sign Up Now</string>
     <string name="add_members_text">Add Members</string>
     <string name="shared_acc_desc_text">Shared account description</string>
-    <string name="member_invite_confirmation">Member invited successfully</string>
+    <string name="member_invite_confirmation">Member, %1$s, invited successfully!</string>
 
     <string name="email_text">Email Address*</string>
     <string name="password_text">Password*</string>
@@ -68,8 +68,9 @@
     <string name="login_error_msg">Incorrect email or password</string>
     <string name="welcome_user">Welcome, %1$s!</string>
 
-    <!-- Recipe -->
+    <string name="add_member_error_msg">User email address does not exist</string>
 
+    <!-- Recipe -->
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="backBtn">backBtn</string>
