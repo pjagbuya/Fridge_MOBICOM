@@ -13,4 +13,11 @@ interface UserDao {
 
     @Query("SELECT * FROM UserEntity LIMIT 1")
     suspend fun getFirstUser(): UserEntity?
+
+
+    @Query("SELECT * FROM UserEntity")
+    suspend fun getAllUsers(): List<UserEntity>
+
+    @Query("DELETE FROM UserEntity")
+    suspend fun deleteAll()
 }

@@ -3,6 +3,7 @@ package com.mobdeve.agbuya.hallar.hong.fridge.fragment
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
@@ -14,17 +15,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.common.InputImage
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.GroceryViewImageGridAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
+import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.OpenFoodFactsResponse
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentUpdateBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentViewBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.retrofitCall.RetrofitInstanceOPF
+import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.OpenFoodFactsApi
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class GroceryActivityFragmentEdit: Fragment() {
 
@@ -37,6 +50,10 @@ class GroceryActivityFragmentEdit: Fragment() {
     // Camera setup
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Uri>
+
+    // QR setup
+    private lateinit var barcodeLauncher: ActivityResultLauncher<Intent>
+
     private var tempCameraImageUri: Uri? = null
 
     inline fun <reified T : Parcelable> Intent.parcelableArrayList(key: String): ArrayList<T>? =
@@ -50,7 +67,29 @@ class GroceryActivityFragmentEdit: Fragment() {
             SDK_INT >= 33 -> getParcelableArrayList(key, T::class.java)
             else -> @Suppress("DEPRECATION") getParcelableArrayList(key)
         }
+    private fun readyForNew(){
+        // create default/empty ingredient
+        val newDate = Ingredient.getTimeStamp()
+        selectedIngredient = Ingredient(
+            icon = R.mipmap.chef_hat_icon, // You must define a default/fallback icon in ImageRaw
+            name = "",
+            quantity = 0.0,
+            price = 0.0,
+            dateAdded = newDate, // or current date
+            expirationDate = "",
+            imageContainerLists = ArrayList<ImageRaw>(),
+            attachedContainerID = -1
+        )
+        binding.headerActionItemLabelTv.text = "Add Grocery"
+        binding.dateBoughtEt.setText(newDate)
+    }
 
+    private fun readyForEdit(){
+        selectedIngredient =
+            arguments?.getParcelable(GroceryActivityFragmentMain.SELECTED_INGREDIENT_KEY)!!
+        binding.headerActionItemLabelTv.text = "Update Item"
+        selectedIngredient?.let { setupIngredientView(it) }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,8 +100,136 @@ class GroceryActivityFragmentEdit: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // Setup camera launcher states
+        setupTakePhotoFromGalleryOrCamera()
+
+
+        val isAddable = arguments?.getBoolean(GroceryActivityFragmentMain.ADD_INGREDIENT_KEY)!!
+        if (isAddable) {
+            readyForNew()
+        } else {
+            readyForEdit()
+        }
+        setupDropdowns()
+        setupRecycler()
+        setupConditionRadios()
+
+        // Setup add image button
+        binding.cameraBtn.setOnClickListener {
+            popupDialogForTakePhoto()
+        }
+
+        // TODO: Make image selected
+        binding.editIconBtn.setOnClickListener { selectedColor ->
+            IconPickerDialogFragment { selectedColor ->
+                // Update image selected
+                binding.iconImageIv.setImageResource(selectedColor)
+            }.show(parentFragmentManager, "iconPickerDialog")
+
+        }
+
+        // TODO: Create editIcon click listener
+        setupBarcodeLauncher()
+        binding.scanQRBtn.setOnClickListener {
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            barcodeLauncher.launch(cameraIntent)
+        }
+    }
+
+    private fun setupBarcodeLauncher(){
+        barcodeLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                val image = result.data?.extras?.get("data") as? Bitmap
+                image?.let { bitmap ->
+                    scanBarcodeFromBitmap(bitmap)
+                }
+            }
+        }
+    }
+
+    // QR scanning
+    private fun scanBarcodeFromBitmap(bitmap: Bitmap) {
+        val image = InputImage.fromBitmap(bitmap, 0)
+        val scanner = BarcodeScanning.getClient()
+
+        scanner.process(image)
+            .addOnSuccessListener { barcodes ->
+                if (barcodes.isNotEmpty()) {
+                    val rawValue = barcodes[0].rawValue ?: "No data"
+                    rawValue?.let { code ->
+                        Log.d("Barcode", "Scanned: $code")
+                        fetchBrandFromBarcode(code) // ← Call API here
+                        Toast.makeText(requireContext(), "Scanned: $code", Toast.LENGTH_SHORT).show()
+
+                    }
+
+                } else {
+                    showToast("No barcode detected.")
+                }
+            }
+            .addOnFailureListener {
+                showToast("Failed to scan: ${it.localizedMessage}")
+            }
+    }
+    private val api: OpenFoodFactsApi by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://world.openfoodfacts.org/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(OpenFoodFactsApi::class.java)
+    }
+    fun fetchBrandFromBarcode(barcode: String) {
+        lifecycleScope.launch {
+            try {
+                val response = api.getProduct(barcode)
+                if (response.isSuccessful) {
+                    val product = response.body()?.product
+
+                    binding.itemNameEt.setText(product?.productNameEN ?: "")
+                    binding.itemNumberEt.setText(product?.quantity ?: "")
+                    binding.unitTypeDropDownActv.setText(product?.unit ?: "")
+                    binding.expirationDateEt.setText(product?.expirationDate ?: "")
+
+                    Toast.makeText(requireContext(), "Product: ${product?.productNameEN ?: "Unknown"}", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(requireContext(), "API Error: ${response.code()}", Toast.LENGTH_LONG).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Network Error: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+                e.printStackTrace()
+            }
+        }
+    }
+    private fun showToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun popupDialogForTakePhoto(){
+
+        val dialogView = layoutInflater.inflate(R.layout.photo_method_choice_layout, null)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        dialogView.findViewById<Button>(R.id.gotoGalleryBtn).setOnClickListener {
+            pickImageLauncher.launch("image/*")
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<Button>(R.id.takePhotoBtn).setOnClickListener {
+            tempCameraImageUri = createTempImageUri()
+            tempCameraImageUri?.let { uri ->
+                takePhotoLauncher.launch(uri)
+            }
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun setupTakePhotoFromGalleryOrCamera(){
+
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
                 val bitmap =
@@ -83,57 +250,7 @@ class GroceryActivityFragmentEdit: Fragment() {
                     binding.imagesRecyclerViewRv.adapter?.notifyItemInserted(selectedIngredient.imageContainerLists.size - 1)
                 }
             }
-
-        val isAddable = arguments?.getBoolean(GroceryActivityFragmentMain.ADD_INGREDIENT_KEY)!!
-        if (isAddable) {
-            // create default/empty ingredient
-            selectedIngredient = Ingredient(
-                icon = R.mipmap.chef_hat_icon, // You must define a default/fallback icon in ImageRaw
-                name = "",
-                quantity = 0.0,
-                price = 0.0,
-                dateAdded = "", // or current date
-                expirationDate = "",
-                imageContainerLists = ArrayList<ImageRaw>(),
-                attachedContainerID = -1
-            )
-            binding.headerActionItemLabelTv.text = "Add Grocery"
-        } else {
-
-            selectedIngredient =
-                arguments?.getParcelable(GroceryActivityFragmentMain.SELECTED_INGREDIENT_KEY)!!
-            binding.headerActionItemLabelTv.text = "Update Item"
-            selectedIngredient?.let { setupIngredientView(it) }
-        }
-        setupDropdowns()
-        setupRecycler()
-        setupConditionRadios()
-
-        // Setup add image button
-        binding.AddImageBtn.setOnClickListener {
-            val dialogView = layoutInflater.inflate(R.layout.photo_method_choice_layout, null)
-
-            val dialog = AlertDialog.Builder(requireContext())
-                .setView(dialogView)
-                .create()
-
-            dialogView.findViewById<Button>(R.id.gotoGalleryBtn).setOnClickListener {
-                pickImageLauncher.launch("image/*")
-                dialog.dismiss()
-            }
-
-            dialogView.findViewById<Button>(R.id.takePhotoBtn).setOnClickListener {
-                tempCameraImageUri = createTempImageUri()
-                tempCameraImageUri?.let { uri ->
-                    takePhotoLauncher.launch(uri)
-                }
-                dialog.dismiss()
-            }
-
-            dialog.show()
-        }
     }
-
     private fun createTempImageUri(): Uri {
         val resolver = requireContext().contentResolver
         val contentValues = ContentValues().apply {

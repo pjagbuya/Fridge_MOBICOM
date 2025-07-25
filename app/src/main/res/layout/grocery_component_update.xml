@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dirty_white"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp">
 
     <TextView
         android:id="@+id/header_action_item_label_tv"
@@ -52,13 +54,13 @@
                     android:id="@+id/iconImage_iv"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    app:shapeAppearanceOverlay="@style/CircleImage"
                     android:adjustViewBounds="true"
                     android:background="@drawable/shape_circle_thinstroke"
                     android:backgroundTint="@color/white"
                     android:backgroundTintMode="multiply"
-                    android:scaleType="centerInside"
-                    android:src="@android:drawable/btn_star_big_on" />
+                    android:scaleType="fitCenter"
+                    android:src="@android:drawable/btn_star_big_on"
+                    app:shapeAppearanceOverlay="@style/CircleImage" />
 
                 <View
                     android:layout_width="0dp"
@@ -157,11 +159,11 @@
                     android:background="@drawable/form_field_corner_dropdown"
                     android:completionThreshold="0"
                     android:contentDescription="item drop down"
+                    android:dropDownHeight="150dp"
                     android:inputType="text"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    android:text="Type item type"
-                    android:dropDownHeight="150dp"/>
+                    android:text="Type item type" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -177,7 +179,7 @@
                 android:fontFamily="@font/poppins_regular"
                 android:hint="Price (optional)"
                 android:inputType="text"
-                android:paddingStart="8dp"
+                android:paddingStart="10dp"
                 android:paddingEnd="8dp"
                 android:textColorHint="@color/brown"
                 android:textSize="16sp" />
@@ -228,13 +230,12 @@
                     android:layout_marginTop="0dp"
                     android:background="@drawable/form_field_corner_dropdown"
                     android:completionThreshold="0"
+                    android:dropDownHeight="150dp"
                     android:hint="Select Container"
                     android:inputType="text"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    android:text="type container"
-                    android:dropDownHeight="150dp"
-                    />
+                    android:text="type container" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -268,9 +269,11 @@
                         android:id="@+id/radioVeryOk"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
                         android:button="@drawable/shape_circle_thinstroke"
                         android:buttonTint="@color/radio_button_tint"
-                        android:paddingStart="10dp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:text="Very ok"
                         android:textSize="12sp" />
@@ -279,9 +282,11 @@
                         android:id="@+id/radioStillOk"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
                         android:button="@drawable/shape_circle_thinstroke"
                         android:buttonTint="@color/radio_button_tint"
-                        android:paddingStart="10dp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:text="Still ok"
                         android:textSize="12sp" />
@@ -290,9 +295,11 @@
                         android:id="@+id/radioSlightlyNotOk"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
                         android:button="@drawable/shape_circle_thinstroke"
                         android:buttonTint="@color/radio_button_tint"
-                        android:paddingStart="10dp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:text="Slightly not ok"
                         android:textSize="12sp" />
@@ -301,10 +308,12 @@
                         android:id="@+id/radioNotOk"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
                         android:button="@drawable/shape_circle_thinstroke"
                         android:buttonTint="@color/radio_button_tint"
                         android:drawablePadding="0dp"
-                        android:paddingStart="10dp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:text="Not ok"
                         android:textSize="12sp" />
@@ -318,25 +327,6 @@
 
 
                 </GridLayout>
-
-                <Button
-                    android:id="@+id/AddImage_btn"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.01"
-                    app:background="@drawable/lp_rounded_layout_bg"
-                    app:backgroundTintMode="src_in"
-                    android:fontFamily="@font/poppins"
-                    android:includeFontPadding="true"
-                    android:paddingLeft="0dp"
-                    android:paddingTop="0dp"
-                    android:paddingRight="0dp"
-                    android:paddingBottom="0dp"
-                    android:text="Add Image"
-                    android:textAllCaps="false"
-                    android:textColor="#000000"
-                    android:textSize="12sp"
-                    app:iconPadding="0dp" />
 
             </LinearLayout>
 
@@ -366,6 +356,20 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/cameraBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="10dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/shape_circle_basewhite"
+                    android:backgroundTint="@color/white"
+                    android:backgroundTintMode="src_over"
+                    android:contentDescription="User Camera"
+                    android:elevation="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_button_camera" />
 
                 <ImageButton
                     android:id="@+id/scanQR_btn"

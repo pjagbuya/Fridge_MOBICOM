@@ -54,6 +54,14 @@ android {
 }
 
 dependencies {
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    // Using BarCode scanner functionality
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+
+    // Flexbox for auto adjusting
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+
     // For viewModelScoping
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2")
 

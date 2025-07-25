@@ -46,10 +46,12 @@ class GroceryActivityFragmentMain : Fragment() {
         val topBarBinding: BaseSearchbarContainerBinding = binding.searchBarContainer
         topBarBinding.headerTitleTv.setText(R.string.my_groceries)
 
+
         setupSortTypeDropDown()
         setupSortItemType()
         setupRecycler()
 
+        // Make a mutable groceryList with reflected changes
         groceryViewModel.groceryList.observe(viewLifecycleOwner) { newList ->
             groceryList.clear()
             groceryList.addAll(newList)
@@ -63,6 +65,11 @@ class GroceryActivityFragmentMain : Fragment() {
             adapter.notifyDataSetChanged()
         }
 
+        setupAddButton()
+
+    }
+
+    private fun setupAddButton(){
         binding.addGroceriesBtn.setOnClickListener {
             val action = R.id.gotoGroceriesEdit
             val bundle = Bundle().apply {
@@ -77,7 +84,7 @@ class GroceryActivityFragmentMain : Fragment() {
         binding.containerRecyclerView.visibility = View.GONE
         val emptyFragment = EmptyActivityFragment.newInstance("Add your \nGroceries")
         childFragmentManager.beginTransaction()
-            .replace(R.id.containerFrame, emptyFragment)
+            .replace(R.id.displayFrame, emptyFragment)
             .commit()
     }
 

@@ -21,7 +21,7 @@ interface ContainerDao {
     suspend fun deleteContainer(container: ContainerEntity)
 
     @Query("DELETE FROM ContainerEntity")
-    suspend fun deleteAllContainers()
+    suspend fun deleteAll()
 
     @Query("SELECT * FROM ContainerEntity ORDER BY timeStamp DESC")
     fun getAllContainers(): LiveData<List<ContainerEntity>>

@@ -63,7 +63,15 @@ class PaulMainActivity : AppCompatActivity() {
 
             setupNavigation()
     }
-
+    private fun wipeAllData(context: Context) {
+        val db = AppDatabase.getInstance(context)
+        CoroutineScope(Dispatchers.IO).launch {
+            db.ingredientDao().deleteAll()
+            db.containerDao().deleteAll()
+            db.userDao().deleteAll()
+            Log.d("SampleData", "All data wiped.")
+        }
+    }
     private fun initSampleData(context: Context) {
         val db = AppDatabase.getInstance(context)
         val userDao = db.userDao()
@@ -71,6 +79,12 @@ class PaulMainActivity : AppCompatActivity() {
         val ingredientDao = db.ingredientDao()
 
         CoroutineScope(Dispatchers.IO).launch {
+
+            val existingUsers = userDao.getAllUsers()
+            if (existingUsers.isNotEmpty()) {
+                Log.d("SampleData", "Sample data already initialized. Skipping.")
+                return@launch
+            }
             // Insert one user
             val userIdLong = userDao.insertUser(UserEntity(username = "Paul"))
             val userId = userIdLong.toInt() // Works safely now

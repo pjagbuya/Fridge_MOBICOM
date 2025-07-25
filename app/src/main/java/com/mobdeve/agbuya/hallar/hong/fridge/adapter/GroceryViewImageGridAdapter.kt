@@ -23,6 +23,7 @@ class GroceryViewImageGridAdapter(
             binding.imageTemplate.setImageBitmap(item.getBitmap())
             if(isEditable){
                 binding.imageDeleteBtn.visibility = View.VISIBLE
+
             }else{
                 binding.imageDeleteBtn.visibility = View.GONE
             }
@@ -30,6 +31,15 @@ class GroceryViewImageGridAdapter(
                 val dialog = android.app.Dialog(binding.root.context, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
                 val view = LayoutInflater.from(binding.root.context).inflate(R.layout.dialog_image_zoom, null)
                 val zoomImageView = view.findViewById<ImageView>(R.id.zoomImageView)
+                val removeBtn = view.findViewById<ImageView>(R.id.removeBtn)
+                if(isEditable){
+                    removeBtn.visibility = View.VISIBLE
+
+                }else{
+                    removeBtn.visibility = View.GONE
+                }
+                // TODO:: Make onClick listener for button to update image.
+                // removeBtn.setOnClickListener
 
                 zoomImageView.setImageBitmap(item.getBitmap())
                 dialog.setContentView(view)

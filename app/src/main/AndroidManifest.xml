@@ -4,10 +4,12 @@
     tools:ignore="MissingLeanbackLauncher">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
 
 
     <application
@@ -20,7 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Fridge"
         tools:targetApi="31">
-
 
         <activity
             android:name=".activity.GroceryMainActivity"
@@ -40,18 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.ContainerActivityEdit"
-            android:windowSoftInputMode="adjustNothing"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Fridge">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

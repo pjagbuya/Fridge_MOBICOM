@@ -34,4 +34,8 @@ interface IngredientDao {
 
     @Query("UPDATE ContainerEntity SET currCap = currCap - 1 WHERE containerId = :containerId")
     suspend fun decreaseContainerCap(containerId: Int)
+
+
+    @Query("DELETE FROM IngredientEntity")
+    suspend fun deleteAll()
 }
