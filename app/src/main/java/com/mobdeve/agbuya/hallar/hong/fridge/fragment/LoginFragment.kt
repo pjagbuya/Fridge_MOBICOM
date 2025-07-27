@@ -1,86 +1,64 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.mobdeve.agbuya.hallar.hong.fridge.R
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserRepository
-import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentProfileLoginMainBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
-import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModelFactory
 import androidx.navigation.fragment.findNavController
-import com.mobdeve.agbuya.hallar.hong.fridge.helper.SessionManager
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
+import com.mobdeve.agbuya.hallar.hong.fridge.R
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentProfileLoginMainBinding
 
 class LoginFragment : Fragment() {
-    private var _binding: FragmentProfileLoginMainBinding? = null
-    private val binding get() = _binding!!
 
-    private lateinit var userViewModel: UserViewModel
-    private var loginAttempt = false
+    private lateinit var binding: FragmentProfileLoginMainBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentProfileLoginMainBinding.inflate(inflater, container, false)
+        binding = FragmentProfileLoginMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val db = AppDatabase.getInstance(requireContext())
-        val repository = UserRepository(db.userDao())
-        val factory = UserViewModelFactory(repository)
-        userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
+        auth = FirebaseAuth.getInstance()
 
+        // LOGIN button click
         binding.userLoginBtn.setOnClickListener {
-            val email = binding.emailEt.text.toString()
-            val password = binding.passwordEt.text.toString()
+            val email = binding.emailEt.text.toString().trim()
+            val password = binding.passwordEt.text.toString().trim()
 
-            if (email.isBlank() || password.isBlank()) {
+            if (email.isEmpty() || password.isEmpty()) {
                 binding.loginErrorTv.text = getString(R.string.login_error_msg)
                 binding.loginErrorTv.visibility = View.VISIBLE
-                return@setOnClickListener
             } else {
                 binding.loginErrorTv.visibility = View.INVISIBLE
-            }
-
-            loginAttempt = true
-            userViewModel.loginUser(email, password)
-        }
-
-        // observe login result
-        viewLifecycleOwner.lifecycleScope.launch {
-            userViewModel.user.collectLatest { user ->
-                if (user != null) {
-                    val session = SessionManager(requireContext())
-                    session.saveUserSession(user.email, user.name)
-                    binding.loginErrorTv.visibility = View.INVISIBLE
-                    Toast.makeText(requireContext(), "Logged in successfully", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_loginMain_to_loginUserMain)
-                } else {
-                    if (loginAttempt) {
-                        binding.loginErrorTv.visibility = View.VISIBLE
-                    } else {
-                        binding.loginErrorTv.visibility = View.INVISIBLE
-                    }
-                }
+                loginUser(email, password)
             }
         }
+
+        // GO TO SIGN UP button click
+//        binding.userSignUpBtn.setOnClickListener {
+//            findNavController().navigate(R.id.action_loginMain_to_signupMain)
+//        }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun loginUser(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_loginMain_to_loginUserMain)
+                } else {
+                    binding.loginErrorTv.text = "Login failed: ${task.exception?.message}"
+                    binding.loginErrorTv.visibility = View.VISIBLE
+                }
+            }
     }
 }

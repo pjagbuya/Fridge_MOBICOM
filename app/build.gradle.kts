@@ -5,7 +5,9 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs")
     id("com.google.devtools.ksp")
-//    id("kotlin-kapt")
+    //google firebase
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -60,6 +62,10 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+
+    implementation(platform("com.google.firebase:firebase-bom:34.0.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
 
 
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.1")

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:contentDescription="@string/login_back_btn_desc"
-    tools:context=".activity.LoginActivity">
+    android:contentDescription="@string/login_back_btn_desc">
 
     <!-- Back Button -->
 
