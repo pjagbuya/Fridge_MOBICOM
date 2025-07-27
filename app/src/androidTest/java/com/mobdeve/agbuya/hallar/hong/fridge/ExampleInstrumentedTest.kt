@@ -1,5 +1,8 @@
 package com.mobdeve.agbuya.hallar.hong.fridge
 
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 
@@ -21,4 +24,12 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.mobdeve.agbuya.hallar.hong.fridge", appContext.packageName)
     }
+
+
+    @Test
+    fun barcodeScanButton_opensCameraIntent() {
+        onView(withId(R.id.scanQR_btn)).perform(click())
+        // You'd need to mock the intent result
+    }
+
 }

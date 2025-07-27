@@ -116,6 +116,8 @@
             android:layout_height="match_parent"
             android:elevation="10dp"
             android:layoutDirection="ltr"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
             app:layout_constraintBottom_toBottomOf="@+id/displayFrame"
             app:layout_constraintEnd_toEndOf="@+id/displayFrame"
             app:layout_constraintHorizontal_bias="0.0"

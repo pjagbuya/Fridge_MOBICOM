@@ -13,6 +13,7 @@ import java.util.Locale
 @Suppress("DEPRECATED_ANNOTATION")
 @Parcelize
 class ContainerModel(
+    var containerId: Int,
     var name : String,
     var imageContainer: ImageContainer,
     var currCap : Int,

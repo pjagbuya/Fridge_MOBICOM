@@ -10,7 +10,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
@@ -62,6 +64,14 @@ class PaulMainActivity : AppCompatActivity() {
             navBarBinding = activityMainBinding.navigationBar
 
             setupNavigation()
+
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.dynamicContent) as NavHostFragment
+        val navController = navHostFragment.navController
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
     private fun wipeAllData(context: Context) {
         val db = AppDatabase.getInstance(context)
@@ -86,7 +96,7 @@ class PaulMainActivity : AppCompatActivity() {
                 return@launch
             }
             // Insert one user
-            val userIdLong = userDao.insertUser(UserEntity(username = "Paul"))
+            val userIdLong = userDao.insertUser(UserEntity(username = "Paul", password = "1234"))
             val userId = userIdLong.toInt() // Works safely now
             // Insert 5 containers
             val containerIds = (1..5).map {
@@ -98,7 +108,7 @@ class PaulMainActivity : AppCompatActivity() {
                     ),
                     currCap = 0,
                     maxCap = 10,
-                    timeStamp = System.currentTimeMillis().toString(),
+                    timeStamp = ContainerModel.getTimeStamp(),
                     ownerUserId = userId
                 )
                 containerDao.insertContainer(container)
@@ -130,7 +140,7 @@ class PaulMainActivity : AppCompatActivity() {
             .findFragmentById(R.id.dynamicContent) as NavHostFragment
         val navController = navHostFragment.navController
 
-
+        setupActionBarWithNavController(navController)
         navBarBinding.containersBtn.setOnClickListener {
             resetAllIcons()
             navBarBinding.containersBtn.setImageResource(R.mipmap.container_dark)

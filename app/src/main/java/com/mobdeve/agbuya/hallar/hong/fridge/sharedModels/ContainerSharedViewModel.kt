@@ -1,28 +1,43 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.sharedModels
 
 import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+import android.app.Application
+import androidx.lifecycle.viewModelScope
+import com.mobdeve.agbuya.hallar.hong.fridge.database.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 
-class ContainerSharedViewModel: ViewModel(){
-    private val _containerList = MutableLiveData<ArrayList<ContainerModel>>()
-    val containerList: LiveData<ArrayList<ContainerModel>> get() = _containerList
+class ContainerSharedViewModel(application : Application): AndroidViewModel(application){
+    val readAllData : LiveData<List<ContainerEntity>>
+    private val repository: ContainerRepository
 
-    fun loadInitialData(context: Context) {
-        if (_containerList.value == null) {
-            _containerList.value = ContainerDataHelper.initializeContainers(context)
+    init {
+        val containerDao = AppDatabase.getInstance(application).containerDao()
+        repository = ContainerRepository(containerDao)
+        readAllData = repository.readAllData
+    }
+
+    fun addContainer(container : ContainerEntity){
+        // viewModel Scope a coroutine, Dispatchers.IO sets it as background process
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addContainer(container)
         }
     }
 
-    fun refreshData(context: Context) {
-        _containerList.value = ContainerDataHelper.initializeContainers(context)
+    fun updateContainer(container : ContainerEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateContainer(container)
+        }
     }
 
-    fun setContainerList(newList: ArrayList<ContainerModel>) {
-        _containerList.value = newList
-    }
 }

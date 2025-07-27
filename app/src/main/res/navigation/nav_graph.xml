@@ -8,28 +8,53 @@
 
     <fragment
         android:id="@+id/containerMain"
-        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityMainFragment"
-        android:label="fragment_container_main"
-        tools:layout="@layout/container_activity_main" />
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentMain"
+        android:label="Fridge: Container List View"
+        tools:layout="@layout/container_activity_main" >
+        <action
+            android:id="@+id/action_containerMain_to_containerAdd"
+            app:destination="@id/containerAdd" />
+        <action
+            android:id="@+id/action_containerMain_to_containerUpdate"
+            app:destination="@id/containerUpdate" />
+    </fragment>
     <fragment
-        android:id="@+id/containerEdit"
-        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentEdit"
-        android:label="fragment_second"
-        tools:layout="@layout/container_activity_edit" />
+        android:id="@+id/containerAdd"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentAdd"
+        android:label="Fridge: Container Add"
+        tools:layout="@layout/container_activity_add" >
+        <action
+            android:id="@+id/action_containerAdd_to_containerMain"
+            app:destination="@id/containerMain" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/containerUpdate"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentUpdate"
+        android:label="Fridge: Container Update"
+        tools:layout="@layout/container_activity_update" >
+
+        <action
+            android:id="@+id/action_containerUpdate_to_containerMain"
+            app:destination="@id/containerMain" />
+        <argument
+            android:name="currentContainer"
+            app:argType="com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity" />
+    </fragment>
     <fragment
         android:id="@+id/groceriesMain"
         android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain"
-        android:label="fragment_second"
+        android:label="Fridge: Grocery List View"
         tools:layout="@layout/groceries_activity_main" />
     <fragment
         android:id="@+id/groceriesView"
         android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentView"
-        android:label="fragment_second"
+        android:label="Fridge: Grocery View"
         tools:layout="@layout/grocery_component_view" />
     <fragment
         android:id="@+id/groceriesEdit"
         android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentEdit"
-        android:label="fragment_second"
+        android:label="Fridge: Grocery"
         tools:layout="@layout/grocery_component_update" />
     <!--This section are arguments that EDIT_TYPE can be passed towards -->
     <argument
@@ -46,14 +71,7 @@
         app:popEnterAnim="@anim/slide_in_left"
         app:popExitAnim="@anim/slide_out_right"
         />
-    <action
-        android:id="@+id/gotoContainerEdit"
-        app:destination="@id/containerEdit"
-        app:enterAnim="@anim/slide_in_right"
-        app:exitAnim="@anim/slide_out_left"
-        app:popEnterAnim="@anim/slide_in_left"
-        app:popExitAnim="@anim/slide_out_right"
-        />
+
     <action
         android:id="@+id/gotoGroceriesEdit"
         app:destination="@id/groceriesEdit"
