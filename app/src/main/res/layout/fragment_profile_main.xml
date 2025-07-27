@@ -52,20 +52,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/transparent_btn"
+            android:backgroundTint="@color/brown"
             android:fontFamily="@font/poppins_medium"
             android:text="@string/login_btn_text"
-            android:textColor="@color/light_black"
+            android:textColor="@color/dirty_white"
             android:textSize="18sp" />
 
         <Button
             android:id="@+id/signUpBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/transparent_btn"
+            android:backgroundTint="@color/orange"
             android:fontFamily="@font/poppins_medium"
             android:text="@string/signup_btn_text"
-            android:textColor="@color/light_black"
+            android:textColor="@color/dirty_white"
             android:textSize="18sp" />
     </LinearLayout>
 

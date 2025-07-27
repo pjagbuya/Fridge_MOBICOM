@@ -32,14 +32,14 @@ class LoginUserFragment : Fragment() {
         binding.profileName.text = getString(R.string.welcome_user, name)
 
         binding.addMembersButton.setOnClickListener({
-            findNavController().navigate(R.id.userAddMember)
+            findNavController().navigate(R.id.action_loginUserMain_to_userAddMember)
         })
 
         // clear session when logout
         binding.logoutButton.setOnClickListener {
             session.clearSession()
             Toast.makeText(requireContext(), "Logged out successfully", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.profileMain)
+            findNavController().navigate(R.id.action_loginUserMain_to_profileMain)
         }
     }
 

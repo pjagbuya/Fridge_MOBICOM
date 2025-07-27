@@ -66,7 +66,7 @@ class SignupFragment : Fragment() {
                         if (it.isSuccess) {
                             binding.signupErrorTv.visibility = View.INVISIBLE
                             Toast.makeText(requireContext(), "Signed up successfully", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.loginMain)
+                            findNavController().navigate(R.id.action_signupMain_to_loginMain)
                         } else {
                             Toast.makeText(requireContext(), "Sign up failed", Toast.LENGTH_SHORT).show()
                             binding.signupErrorTv.visibility = View.VISIBLE

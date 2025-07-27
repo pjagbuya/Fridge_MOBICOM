@@ -27,16 +27,18 @@ class ProfileFragment: Fragment() {
 
         if (isLoggedIn) {
             // when user is logged in, redirect to login user main layout instead
-            findNavController().navigate(R.id.loginUserMain)
+            view.post {
+                findNavController().navigate(ProfileFragmentDirections.actionProfileMainToLoginUserMain())
+            }
         } else {
             // set up login button
             binding.loginBtn.setOnClickListener {
-                findNavController().navigate(R.id.loginBtn)
+                findNavController().navigate(R.id.action_profileMain_to_loginMain)
             }
 
             // set up sign up button
             binding.signUpBtn.setOnClickListener {
-                findNavController().navigate(R.id.signUpBtn)
+                findNavController().navigate(R.id.action_profileMain_to_signupMain)
             }
         }
     }

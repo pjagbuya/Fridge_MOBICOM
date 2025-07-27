@@ -14,18 +14,18 @@ interface UserDao {
     suspend fun deleteUser(user: UserEntity)
 
     // get users by ID
-    @Query("SELECT * FROM USERS WHERE id = :userId")
+    @Query("SELECT * FROM UserEntity WHERE id = :userId")
     suspend fun getUserById(userId: Int): UserEntity?
 
     // get users by name
-    @Query("SELECT * FROM USERS WHERE name = :name")
+    @Query("SELECT * FROM UserEntity WHERE name = :name")
     suspend fun getUserByName(name: String): UserEntity?
 
     // get users by email
-    @Query("SELECT * FROM USERS WHERE email = :email LIMIT 1")
+    @Query("SELECT * FROM UserEntity WHERE email = :email LIMIT 1")
     suspend fun getUserByEmail(email: String): UserEntity?
 
     // get all users
-    @Query("SELECT * FROM USERS")
+    @Query("SELECT * FROM UserEntity")
     suspend fun getAllUsers(): List<UserEntity>
 }

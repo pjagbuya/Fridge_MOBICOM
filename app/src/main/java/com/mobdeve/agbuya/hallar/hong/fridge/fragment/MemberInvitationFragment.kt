@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
+import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentProfileMemberInvitationBinding
 
 class MemberInvitationFragment: Fragment() {
@@ -17,6 +19,14 @@ class MemberInvitationFragment: Fragment() {
     ): View {
         _binding = FragmentProfileMemberInvitationBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val args: MemberInvitationFragmentArgs by navArgs()
+        val invitedEmail = args.invitedEmail
+        binding.inviteConfirmationText.text = getString(R.string.member_invite_confirmation, invitedEmail)
     }
 
     override fun onDestroyView() {

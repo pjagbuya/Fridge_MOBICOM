@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
-
     private var _binding: FragmentProfileLoginMainBinding? = null
     private val binding get() = _binding!!
 
@@ -43,7 +42,6 @@ class LoginFragment : Fragment() {
         val repository = UserRepository(db.userDao())
         val factory = UserViewModelFactory(repository)
         userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
-        val sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
 
         binding.userLoginBtn.setOnClickListener {
             val email = binding.emailEt.text.toString()
@@ -69,7 +67,7 @@ class LoginFragment : Fragment() {
                     session.saveUserSession(user.email, user.name)
                     binding.loginErrorTv.visibility = View.INVISIBLE
                     Toast.makeText(requireContext(), "Logged in successfully", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.loginUserMain)
+                    findNavController().navigate(R.id.action_loginMain_to_loginUserMain)
                 } else {
                     if (loginAttempt) {
                         binding.loginErrorTv.visibility = View.VISIBLE

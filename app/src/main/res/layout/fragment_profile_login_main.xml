@@ -109,31 +109,18 @@
             android:layout_width="341dp"
             android:layout_height="61dp"
             android:layout_marginTop="32dp"
-            app:background="@color/forest_green"
+            android:backgroundTint="@color/light_green"
             android:fontFamily="@font/poppins_semibold"
             android:padding="10dp"
             android:text="@string/login_header"
             android:textColor="@color/white"
             android:textSize="20sp"
+            app:background="@color/forest_green"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passwordEt" />
 
         <!-- Sign Up with Google Button -->
-        <Button
-            android:id="@+id/loginSignUpWithGoogleBtn"
-            android:layout_width="349dp"
-            android:layout_height="65dp"
-            android:layout_marginTop="16dp"
-            app:background="@color/dark_blue"
-            android:fontFamily="@font/poppins_semibold"
-            android:padding="10dp"
-            android:text="SIGN IN WITH GOOGLE"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userLoginBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
