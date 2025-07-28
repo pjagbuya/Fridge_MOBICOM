@@ -25,15 +25,15 @@ class InventoryViewModel(private val repository: InventoryRepository): ViewModel
         }
     }
 
-    fun acceptInvite(memberId: Int) {
-        viewModelScope.launch {
-            repository.updateInviteStatus(memberId, "ACCEPTED")
-        }
-    }
-
-    fun declineInvite(memberId: Int) {
-        viewModelScope.launch {
-            repository.updateInviteStatus(memberId, "DECLINED")
-        }
-    }
+//    fun acceptInvite(memberId: Int) {
+//        viewModelScope.launch {
+//            repository.updateInviteStatus(memberId, "ACCEPTED")
+//        }
+//    }
+//
+//    fun declineInvite(memberId: Int) {
+//        viewModelScope.launch {
+//            repository.updateInviteStatus(memberId, "DECLINED")
+//        }
+//    }
 }

@@ -7,17 +7,17 @@ interface RecipeDao {
     @Insert
     suspend fun insertRecipe(recipe: RecipeEntity): Long
 
-    @Insert
-    suspend fun insertIngredients(ingredients: List<RecipeIngredientEntity>)
+//    @Insert
+//    suspend fun insertIngredients(ingredients: List<RecipeIngredientEntity>)
 
-    @Transaction
-    suspend fun insertRecipeWithIngredients(
-        recipe: RecipeEntity,
-        ingredients: List<RecipeIngredientEntity>
-    ) {
-        val recipeId = insertRecipe(recipe).toInt()
-        insertIngredients(ingredients.map { it.copy(recipeId = recipeId) })
-    }
+//    @Transaction
+//    suspend fun insertRecipeWithIngredients(
+//        recipe: RecipeEntity,
+//        ingredients: List<RecipeIngredientEntity>
+//    ) {
+//        val recipeId = insertRecipe(recipe).toInt()
+//        insertIngredients(ingredients.map { it.copy(recipeId = recipeId) })
+//    }
 
     //get all recipes
     @Query("SELECT * FROM recipes")
@@ -28,10 +28,10 @@ interface RecipeDao {
     suspend fun getIngredientsForRecipe(recipeId: Int): List<RecipeIngredientEntity>
 
     // delete a recipe by ID
-    @Query("DELETE FROM recipes WHERE id = :recipeId")
-    suspend fun deleteRecipeById(recipeId: Int)
+//    @Query("DELETE FROM recipes WHERE id = :recipeId")
+//    suspend fun deleteRecipeById(recipeId: Int)
 
     //also delete the recipe's ingredient when deleting a recipe
-    @Query("DELETE FROM recipe_ingredients WHERE recipeId = :recipeId")
-    suspend fun deleteIngredientsByRecipeId(recipeId: Int)
+//    @Query("DELETE FROM recipe_ingredients WHERE recipeId = :recipeId")
+//    suspend fun deleteIngredientsByRecipeId(recipeId: Int)
 }

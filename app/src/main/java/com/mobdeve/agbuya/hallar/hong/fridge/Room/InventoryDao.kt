@@ -18,8 +18,8 @@ interface InventoryDao {
     @Query("SELECT * FROM MemberEntity WHERE inventoryId = :inventoryId")
     suspend fun getMembers(inventoryId: Int): List<MemberEntity>
 
-    @Query("UPDATE MemberEntity SET inviteStatus = :status WHERE id = :memberId")
-    suspend fun updateInviteStatus(memberId: Int, status: String)
+//    @Query("UPDATE MemberEntity SET inviteStatus = :status WHERE id = :memberId")
+//    suspend fun updateInviteStatus(status: String, memberId: Int)
 
     @Query("SELECT * FROM InventoryEntity WHERE name = :name LIMIT 1")
     suspend fun getInventoryByName(name: String): InventoryEntity?

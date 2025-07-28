@@ -6,12 +6,12 @@ import androidx.room.PrimaryKey
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
 
 @Entity(
-    foreignKeys = [ForeignKey(
-        entity = ContainerEntity::class,
-        parentColumns = ["containerId"],
-        childColumns = ["attachedContainerId"],
-        onDelete = ForeignKey.CASCADE
-    )]
+//    foreignKeys = [ForeignKey(
+//        entity = ContainerEntity::class,
+//        parentColumns = ["containerId"],
+//        childColumns = ["attachedContainerId"],
+//        onDelete = ForeignKey.CASCADE
+//    )]
 )
 data class IngredientEntity(
     @PrimaryKey(autoGenerate = true) val ingredientID: Int = 0,
@@ -24,6 +24,6 @@ data class IngredientEntity(
     val itemType: String,
     val dateAdded: String,
     val expirationDate: String,
-    val attachedContainerId: Int,
-    val imageList: ArrayList<ImageRaw>
+    val attachedContainerId: Int
+//    val imageList: ArrayList<ImageRaw>
 )

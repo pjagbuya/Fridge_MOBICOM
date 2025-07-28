@@ -19,12 +19,12 @@ import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.database.AppDatabase
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.NavigationbarBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.UserEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,15 +42,15 @@ class PaulMainActivity : AppCompatActivity() {
 
     private lateinit var  groceryModels: ArrayList<Ingredient>
     private val groceryViewModel: GrocerySharedViewModel by viewModels()
-    private val newContainerResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        // Check to see if the result returned is appropriate (i.e. OK)
-        if (result.resultCode == RESULT_OK) {
-            // TODO get back the changes to the recycler view and correspondingly add it
-
-
-        }
-    }
+//    private val newContainerResultLauncher = registerForActivityResult(
+//        ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+//        // Check to see if the result returned is appropriate (i.e. OK)
+//        if (result.resultCode == RESULT_OK) {
+//            // TODO get back the changes to the recycler view and correspondingly add it
+//
+//
+//        }
+//    }
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -59,7 +59,7 @@ class PaulMainActivity : AppCompatActivity() {
             setContentView(activityMainBinding.root)
             Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
 
-            initSampleData(applicationContext)
+//            initSampleData(applicationContext)
             groceryViewModel.loadGroceryList(applicationContext)
             groceryViewModel.groceryList.observe(this) { list ->
                 groceryModels = ArrayList(list)
@@ -81,7 +81,7 @@ class PaulMainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             db.ingredientDao().deleteAll()
             db.containerDao().deleteAll()
-            db.userDao().deleteAll()
+//            db.userDao().deleteAll()
             Log.d("SampleData", "All data wiped.")
         }
     }
@@ -99,7 +99,13 @@ class PaulMainActivity : AppCompatActivity() {
                 return@launch
             }
             // Insert one user
-            val userIdLong = userDao.insertUser(UserEntity(username = "Paul", password = "1234"))
+            val userIdLong = userDao.insertUser(
+                UserEntity(
+                    name = "Paul",
+                    email = "p@gmail.com",
+                    password = "123456"
+                )
+            )
             val userId = userIdLong.toInt() // Works safely now
             // Insert 5 containers
             val containerIds = (1..5).map {

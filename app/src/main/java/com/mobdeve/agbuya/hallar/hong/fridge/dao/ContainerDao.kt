@@ -25,7 +25,7 @@ interface ContainerDao {
 
     @Query("SELECT * FROM ContainerEntity ORDER BY timeStamp DESC")
     fun getAllContainers(): LiveData<List<ContainerEntity>>
-
-    @Query("SELECT * FROM ContainerEntity WHERE containerId = :selectedId LIMIT 1")
-    suspend fun getContainerById(selectedId: Int): ContainerModel?
+//
+//    @Query("SELECT * FROM ContainerEntity WHERE containerId = :selectedId LIMIT 1")
+//    suspend fun getContainerById(selectedId: Int): ContainerModel?
 }

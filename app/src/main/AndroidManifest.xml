@@ -23,12 +23,7 @@
         android:theme="@style/Theme.Fridge"
         tools:targetApi="31">
 
-        <activity
-            android:name=".activity.GroceryMainActivity"
-            android:exported="false"
-            android:launchMode="singleTop"
-            android:label="@string/grocery_activity_label"
-            android:theme="@style/Theme.Fridge" />
+
         <activity
             android:name=".activity.PaulMainActivity"
             android:exported="true"

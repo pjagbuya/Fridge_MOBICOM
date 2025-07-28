@@ -7,17 +7,19 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.ImageContainerTypeConverter
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import kotlinx.parcelize.Parcelize
+
 
 
 @Parcelize
 @Entity(
-    foreignKeys = [ForeignKey(
-        entity = UserEntity::class,
-        parentColumns = ["userId"],
-        childColumns = ["ownerUserId"],
-        onDelete = ForeignKey.CASCADE
-    )]
+//    foreignKeys = [ForeignKey(
+//        entity = UserEntity::class,
+//        parentColumns = ["id"],
+//        childColumns = ["ownerUserId"],
+//        onDelete = ForeignKey.CASCADE
+//    )]
 )
 data class ContainerEntity(
     @PrimaryKey(autoGenerate = true) val containerId: Int = 0,

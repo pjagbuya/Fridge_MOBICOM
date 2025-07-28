@@ -65,11 +65,19 @@ android {
     }
 }
 
+configurations.all{
+    exclude(group="xpp3", module="xpp3")
+}
+
 dependencies {
+    implementation("xmlpull:xmlpull:1.1.3.4d_b4_min")
+
+
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+//    kapt("androidx.room:room-compiler:$room_version")
 
     implementation(platform("com.google.firebase:firebase-bom:34.0.0"))
     implementation("com.google.firebase:firebase-auth")
@@ -78,10 +86,7 @@ dependencies {
 
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.9.1")
-    implementation("xmlpull:xmlpull:1.1.3.4d_b4_min")
 
-    // Used for parcelable safe args to be passed via actions on nav_graph
-    implementation("androidx.navigation:navigation-safe-args-gradle-plugin:2.9.2")
 
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
@@ -96,10 +101,9 @@ dependencies {
 
     // For parsing uints to ints
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.0")
-    implementation("androidx.room:room-runtime:2.7.2")
+    implementation("androidx.room:room-runtime:$room_version")
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("androidx.test.ext:junit-ktx:1.2.1")
-    kapt("androidx.room:room-compiler:2.7.2")
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
 
         // Frag,emts
@@ -109,7 +113,6 @@ dependencies {
 
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.core:core-ktx:1.16.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.1")
     implementation("androidx.activity:activity-compose:1.10.1")
     implementation(platform("androidx.compose:compose-bom:2025.06.01"))
     implementation("androidx.compose.ui:ui")
@@ -127,7 +130,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.18.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
     testImplementation("org.assertj:assertj-core:3.27.3")
-    testImplementation("androidx.room:room-testing:2.7.2")
+    testImplementation("androidx.room:room-testing:$room_version")
 
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
