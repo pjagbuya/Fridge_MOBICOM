@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@+id/containerMain">
+    app:startDestination="@+id/groceriesMain">
     <fragment
         android:id="@+id/containerMain"
         android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityMainFragment"
@@ -13,6 +13,11 @@
     <fragment
         android:id="@+id/containerEdit"
         android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentEdit"
+        android:label="fragment_second"
+        tools:layout="@layout/container_activity_edit" />
+    <fragment
+        android:id="@+id/groceriesMain"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain"
         android:label="fragment_second"
         tools:layout="@layout/container_activity_edit" />
 
@@ -39,6 +44,151 @@
         app:popExitAnim="@anim/slide_out_right"
         />
 
+<!--    for recipe-->
+    <fragment
+        android:id="@+id/recipeMainFragment"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.RecipeMainFragment"
+        android:label="Recipes"
+        tools:layout="@layout/fragment_recipe_main">
+        <action
+            android:id="@+id/action_recipeMainFragment_to_addRecipeFragment"
+            app:destination="@id/addRecipeFragment" />
+        <action
+            android:id="@+id/action_recipeMainFragment_to_recipeDetails"
+            app:destination="@id/recipeDetails" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addRecipeFragment"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.AddRecipeFragment"
+        android:label="Add Recipe"
+        tools:layout="@layout/fragment_add_recipe_form">
+        <argument
+            android:name="recipeToEdit"
+            app:argType="com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_addRecipeFragment_to_addIngredient"
+            app:destination="@id/addIngredientFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addIngredientFragment"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.AddIngredient"
+        android:label="Add Ingredient"
+        tools:layout="@layout/fragment_add_ingredient" />
 
 
+    <fragment
+        android:id="@+id/recipeDetails"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.RecipeDetails"
+        android:label="Recipe Details"
+        tools:layout="@layout/fragment_recipe_details">
+        <argument
+            android:name="recipe"
+            app:argType="com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel" />
+        <action
+            android:id="@+id/action_recipeDetails_to_addRecipeFragment"
+            app:destination="@id/addRecipeFragment" />
+    </fragment>
+
+    <!--- For Profile -->
+    <fragment
+        android:id="@+id/profileMain"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.ProfileFragment"
+        android:label="Profile Main"
+        tools:layout="@layout/fragment_profile_main">
+        <action
+            android:id="@+id/action_profileMain_to_loginMain"
+            app:destination="@id/loginMain" />
+        <action
+            android:id="@+id/action_profileMain_to_signupMain"
+            app:destination="@id/signupMain" />
+        <action
+            android:id="@+id/action_profileMain_to_loginUserMain"
+            app:destination="@id/loginUserMain" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginMain"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.LoginFragment"
+        android:label="Profile Login Main"
+        tools:layout="@layout/fragment_profile_login_main">
+        <action
+            android:id="@+id/action_loginMain_to_loginUserMain"
+            app:destination="@id/loginUserMain" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signupMain"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.SignupFragment"
+        android:label="Profile Signup Main"
+        tools:layout="@layout/fragment_profile_signup_main">
+        <action
+            android:id="@+id/action_signupMain_to_loginMain"
+            app:destination="@id/loginMain" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginUserMain"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.LoginUserFragment"
+        android:label="Login User Main"
+        tools:layout="@layout/fragment_profile_user">
+        <action
+            android:id="@+id/action_loginUserMain_to_userAddMember"
+            app:destination="@id/userAddMember" />
+        <action
+            android:id="@+id/action_loginUserMain_to_userInventoryList"
+            app:destination="@id/userInventoryList" />
+        <action
+            android:id="@+id/action_loginUserMain_to_userMemberRequests"
+            app:destination="@id/userMemberRequests" />
+        <action
+            android:id="@+id/action_loginUserMain_to_profileMain"
+            app:destination="@id/profileMain" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userAddMember"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.AddMemberFragment"
+        android:label="User Add Member Main"
+        tools:layout="@layout/fragment_profile_add_member">
+        <action
+            android:id="@+id/action_userAddMember_to_userMemberInvitation"
+            app:destination="@id/userMemberInvitation"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/userMemberInvitation"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.MemberInvitationFragment"
+        android:label="User Member Invitation"
+        tools:layout="@layout/fragment_profile_member_invitation">
+        <argument
+            android:name="invitedEmail"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userMemberRequests"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.MemberRequestFragment"
+        android:label="User Member Request"
+        tools:layout="@layout/fragment_profile_user_invite">
+    </fragment>
+
+    <fragment
+        android:id="@+id/userInventoryList"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.InventoryListFragment"
+        android:label="User Inventory List"
+        tools:layout="@layout/fragment_profile_user_inventory_list">
+        <action
+            android:id="@+id/action_to_userInventoryList_to_userManageMembers"
+            app:destination="@id/userManageMembers"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/userManageMembers"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.InventoryManageMemberFragment"
+        android:label="User Manage Inventory Members"
+        tools:layout="@layout/fragment_profile_manage_members">
+    </fragment>
 </navigation>

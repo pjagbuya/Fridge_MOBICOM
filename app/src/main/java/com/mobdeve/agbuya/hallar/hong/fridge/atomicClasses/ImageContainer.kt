@@ -11,6 +11,7 @@ import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
 import kotlinx.android.parcel.Parcelize
+import androidx.core.net.toUri
 
 @Parcelize
 class ImageContainer(
@@ -35,7 +36,7 @@ class ImageContainer(
 
         // Fast load to image, separate thread
         fun LOAD_IMAGE(context: Context, imageView : ImageView, uriToImage: String){
-            val uri = Uri.parse("android.resource://${context.packageName}/${uriToImage}")
+            val uri = "android.resource://${context.packageName}/${uriToImage}".toUri()
             //imageView.setImageURI(uri) - works but happens in the same thread and might delay especially when image is not located near
             /*
             * Can handle the ff uris:

@@ -3,7 +3,7 @@ package com.mobdeve.agbuya.hallar.hong.fridge.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.ContainerActivityEditHolder
+import com.mobdeve.agbuya.hallar.hong.fridge.viewHolder.ContainerActivityEditHolder
 import com.mobdeve.agbuya.hallar.hong.fridge.customInterface.ContainerEditActionListener
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerComponentEditBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel

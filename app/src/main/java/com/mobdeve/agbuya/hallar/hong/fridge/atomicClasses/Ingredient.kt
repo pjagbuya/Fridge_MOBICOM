@@ -1,8 +1,10 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses
 
+import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+
 class Ingredient(
-    val ingredientID : String,
-//    val icon : Image <- not yet much images ready
+    val ingredientID : Int,
+    val icon : ImageIngredient,
     val name : String,
     val amount : Double,
     val dateAdded : String,
@@ -10,8 +12,8 @@ class Ingredient(
     val unit : UnitOfMeasurement = UnitOfMeasurement.PIECE,
     val conditionType: ConditionType = ConditionType.VERY_OK,
     val itemType: ItemType = ItemType.OTHER,
-    val imageContainerLists : ArrayList<ImageContainer> = ArrayList<ImageContainer>()
-
+    val imageContainerLists : ArrayList<ImageIngredient> = ArrayList<ImageIngredient>()
+//    val attachedContainerName: String <- Singleton needed to access list of containermodel and list of ingredient model
 ) {
     companion object{
         var TOTAL_NUM = 0
