@@ -24,6 +24,6 @@ data class IngredientEntity(
     val itemType: String,
     val dateAdded: String,
     val expirationDate: String,
-    val attachedContainerId: Int
-//    val imageList: ArrayList<ImageRaw>
+    val attachedContainerId: Int,
+    val imageList: ArrayList<ImageRaw>
 )

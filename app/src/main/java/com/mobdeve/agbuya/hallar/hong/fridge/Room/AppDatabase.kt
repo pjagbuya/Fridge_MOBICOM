@@ -24,7 +24,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
         InventoryEntity::class,
         MemberEntity::class, ContainerEntity::class, IngredientEntity::class, ContainerImageEntity::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 

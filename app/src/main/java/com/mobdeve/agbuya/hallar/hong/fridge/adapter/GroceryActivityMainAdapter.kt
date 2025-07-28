@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceriesComponentBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.GroceryMainViewItemVH
+import com.mobdeve.agbuya.hallar.hong.fridge.viewHolder.GroceryMainViewItemVH
 
 class GroceryActivityMainAdapter(
     private val data: MutableList<Ingredient>,

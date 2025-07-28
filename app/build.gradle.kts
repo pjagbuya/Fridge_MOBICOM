@@ -100,7 +100,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2")
 
     // For parsing uints to ints
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.21")
     implementation("androidx.room:room-runtime:$room_version")
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("androidx.test.ext:junit-ktx:1.2.1")

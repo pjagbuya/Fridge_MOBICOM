@@ -22,7 +22,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserDao
 @TypeConverters(BitmapTypeConverter::class, Converters::class, ImageContainerTypeConverter::class)
 @Database(
     entities = [UserEntity::class, ContainerEntity::class, IngredientEntity::class, ContainerImageEntity::class],
-    version = 2, // ✅ UPDATED!
+    version = 3, // ✅ UPDATED!
     exportSchema = false
 
 )

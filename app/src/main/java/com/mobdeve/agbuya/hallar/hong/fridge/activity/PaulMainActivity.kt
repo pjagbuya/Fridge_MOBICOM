@@ -59,7 +59,7 @@ class PaulMainActivity : AppCompatActivity() {
             setContentView(activityMainBinding.root)
             Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
 
-//            initSampleData(applicationContext)
+            initSampleData(applicationContext)
             groceryViewModel.loadGroceryList(applicationContext)
             groceryViewModel.groceryList.observe(this) { list ->
                 groceryModels = ArrayList(list)
@@ -157,7 +157,7 @@ class PaulMainActivity : AppCompatActivity() {
         navBarBinding.groceriesBtn.setOnClickListener {
             resetAllIcons()
             navBarBinding.groceriesBtn.setImageResource(R.mipmap.ingredients_dark)
-//            navController.navigate(R.id.groceriesMain)
+            navController.navigate(R.id.groceriesMain)
         }
         navBarBinding.recipesBtn.setOnClickListener {
             resetAllIcons()
