@@ -1,28 +1,61 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses
 
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+import android.os.Build
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
+@Parcelize
 class Ingredient(
-    val ingredientID : Int,
-    val icon : ImageIngredient,
-    val name : String,
-    val amount : Double,
-    val dateAdded : String,
-    val expirationDate : String,
-    val unit : UnitOfMeasurement = UnitOfMeasurement.PIECE,
-    val conditionType: ConditionType = ConditionType.VERY_OK,
-    val itemType: ItemType = ItemType.OTHER,
-    val imageContainerLists : ArrayList<ImageIngredient> = ArrayList<ImageIngredient>()
-//    val attachedContainerName: String <- Singleton needed to access list of containermodel and list of ingredient model
-) {
+    val ingredientID : Int = TOTAL_NUM++,
+    var icon : Int,
+    var name : String,
+    var quantity: Double,
+    var price : Double,
+    var dateAdded : String,
+    var expirationDate : String,
+    var unit : String = UnitOfMeasurement.PIECE.displayName,
+    var conditionType: String = ConditionType.VERY_OK.displayName,
+    var itemType: String = ItemType.OTHER.displayName,
+    val imageContainerLists : ArrayList<ImageRaw> = ArrayList<ImageRaw>(),
+    val attachedContainerID: Int
+): Parcelable {
+
     companion object{
         var TOTAL_NUM = 0
+        fun getTimeStamp() : String {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                val formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy 'at' hh:mm a", Locale.ENGLISH)
+                val now = LocalDateTime.now()
+                val timeStamp = "Last updated: ${now.format(formatter)}"
+
+                return timeStamp
+            }else{
+
+                val formatter = SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm a", Locale.ENGLISH)
+                val now = Date()
+                val timeStamp = "Last updated: ${formatter.format(now)}"
+
+                return timeStamp
+
+            }
+
+        }
+
         enum class ItemType(val displayName: String) {
-            // Produce
+            // Vegetable
             VEGETABLE("Vegetable"),
+
+            // Fruit
             FRUIT("Fruit"),
 
-            // Proteins
+            // Meat
             MEAT("Meat"),
             EGG("Egg"),
 
@@ -37,7 +70,7 @@ class Ingredient(
             CEREAL("Cereal"),
             FLOUR("Flour"),
 
-            // Baking & Sweets
+            // Sweets
             SUGAR("Sugar"),
             SWEETENER("Sweetener"),
 

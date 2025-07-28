@@ -21,7 +21,7 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
     //insert a RecipeModel into DB
     suspend fun insertRecipe(recipe: RecipeModel) = withContext(Dispatchers.IO) {
         val recipeId = recipeDao.insertRecipe(recipe.toEntity()).toInt()
-        recipeDao.insertIngredients(recipe.ingredients.map { it.toEntity(recipeId) })
+//        recipeDao.insertIngredients(recipe.ingredients.map { it.toEntity(recipeId) })
     }
 
     //seed dummy data (if empty for testing)

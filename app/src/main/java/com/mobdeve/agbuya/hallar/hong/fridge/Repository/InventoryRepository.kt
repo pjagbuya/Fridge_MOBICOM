@@ -25,9 +25,9 @@ class InventoryRepository(private val dao: InventoryDao) {
         return Result.success(id)
     }
 
-    suspend fun updateInviteStatus(memberId: Int, status: String) {
-        dao.updateInviteStatus(memberId, status)
-    }
+//    suspend fun updateInviteStatus(memberId: Int, status: String) {
+//        dao.updateInviteStatus(status, memberId)
+//    }
 
     suspend fun getInventoryByName(name: String): InventoryEntity? {
         return dao.getInventoryByName(name)

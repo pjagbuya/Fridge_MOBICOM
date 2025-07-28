@@ -5,19 +5,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceriesComponentBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.viewHolder.GroceryActivityViewHolder
+import com.mobdeve.agbuya.hallar.hong.fridge.viewHolder.GroceryMainViewItemVH
 
 class GroceryActivityMainAdapter(
-    private val data: ArrayList<Ingredient>
-) : RecyclerView.Adapter<GroceryActivityViewHolder>() {
+    private val data: MutableList<Ingredient>,
+    private val onClick: (Ingredient) -> Unit
+) : RecyclerView.Adapter<GroceryMainViewItemVH>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroceryActivityViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroceryMainViewItemVH {
         val binding = GroceriesComponentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return GroceryActivityViewHolder(binding)
+        return GroceryMainViewItemVH(binding)
     }
 
-    override fun onBindViewHolder(holder: GroceryActivityViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: GroceryMainViewItemVH, position: Int) {
         holder.bindData(data[position])
+
+        holder.itemView.setOnClickListener {
+            onClick(data[position]) // <- send clicked item
+        }
     }
 
     override fun getItemCount(): Int = data.size

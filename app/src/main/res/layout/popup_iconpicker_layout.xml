@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemTypeFlexbox"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    app:flexWrap="wrap"
+    app:justifyContent="flex_start"
+    app:alignItems="center"
+    app:flexDirection="row">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/exitBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            app:srcCompat="@android:drawable/btn_dialog" />
+    </LinearLayout>
+
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/otherBtn"
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_thinstroke"
+            android:layout_margin="10dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/black"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/white"
+            app:shapeAppearance="@style/CircleImage"
+            android:src="@mipmap/ic_itemtype_other"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/fruitsBtn"
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_thinstroke"
+            android:layout_margin="10dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/black"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/white"
+            app:shapeAppearance="@style/CircleImage"
+            android:src="@mipmap/ic_itemtype_fruits"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/vegetableBtn"
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_thinstroke"
+            android:layout_margin="10dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/black"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/white"
+            app:shapeAppearance="@style/CircleImage"
+            android:src="@mipmap/ic_itemtype_vegetable"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/condiments_seasoning_btn"
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_thinstroke"
+            android:layout_margin="10dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/black"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/white"
+            app:shapeAppearance="@style/CircleImage"
+            android:src="@mipmap/ic_itemtype_condiments_seasoning" />
+
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/grain_bread_btn"
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_thinstroke"
+            android:layout_margin="10dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/black"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/white"
+            app:shapeAppearance="@style/CircleImage"
+            android:src="@mipmap/ic_itemtype_condiments_seasoning" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/dairyBtn"
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_thinstroke"
+            android:layout_margin="10dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/black"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/white"
+            app:shapeAppearance="@style/CircleImage"
+            android:src="@mipmap/ic_itemtype_dairy" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/canned_jarred_btn"
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_thinstroke"
+            android:layout_margin="10dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/black"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/white"
+            app:shapeAppearance="@style/CircleImage"
+            android:src="@mipmap/ic_itemtype_canned_jarred" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/meat_btn"
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_thinstroke"
+            android:layout_margin="10dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/black"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/white"
+            app:shapeAppearance="@style/CircleImage"
+            android:src="@mipmap/ic_itemtype_meat" />
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/sweets_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/shape_circle_thinstroke"
+            android:backgroundTint="@color/white"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_itemtype_sweets"
+            app:shapeAppearance="@style/CircleImage"
+            app:strokeColor="@color/black"
+            app:strokeWidth="2dp" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/beverage_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/shape_circle_thinstroke"
+            android:backgroundTint="@color/white"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_itemtype_beverage"
+            app:shapeAppearance="@style/CircleImage"
+            app:strokeColor="@color/black"
+            app:strokeWidth="2dp" />
+
+</com.google.android.flexbox.FlexboxLayout>

@@ -39,20 +39,23 @@ class ContainerDataHelper {
 
         val containerModelsSelection = arrayListOf(
             ContainerModel(
+                containerId = -3,
                 name = "My Fridge1",
-                imageContainer = ImageContainer(R.drawable.container_type_1_fridge, getRandomColorGenerator()),
+                imageContainer = ImageContainer(R.drawable.container_type_1_fridge, R.color.red),
                 currCap = 5,
                 maxCap = 10
             ),
             ContainerModel(
+                containerId = -2,
                 name = "My Fridge2",
-                imageContainer = ImageContainer(R.drawable.container_type_1_fridge, getRandomColorGenerator()),
+                imageContainer = ImageContainer(R.drawable.container_type_2_cabinet, R.color.red),
                 currCap = 5,
                 maxCap = 10
             ),
             ContainerModel(
+                containerId = -1,
                 name = "My Fridge3",
-                imageContainer = ImageContainer(R.drawable.container_type_1_fridge, getRandomColorGenerator()),
+                imageContainer = ImageContainer(R.drawable.container_type_3_freezer, R.color.red),
                 currCap = 5,
                 maxCap = 10
             )
@@ -61,6 +64,7 @@ class ContainerDataHelper {
             val containerModels = ArrayList<ContainerModel>()
             containerModels.add(
                 ContainerModel(
+                    containerId = 0,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer(R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -69,6 +73,7 @@ class ContainerDataHelper {
             )
             containerModels.add(
                 ContainerModel(
+                    containerId = 1,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -77,6 +82,7 @@ class ContainerDataHelper {
             )
             containerModels.add(
                 ContainerModel(
+                    containerId = 2,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -85,6 +91,7 @@ class ContainerDataHelper {
             )
             containerModels.add(
                 ContainerModel(
+                    containerId = 3,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -93,6 +100,7 @@ class ContainerDataHelper {
             )
             containerModels.add(
                 ContainerModel(
+                    containerId = 4,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -101,6 +109,7 @@ class ContainerDataHelper {
             )
             containerModels.add(
                 ContainerModel(
+                    containerId = 5,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -109,6 +118,7 @@ class ContainerDataHelper {
             )
             containerModels.add(
                 ContainerModel(
+                    containerId = 6,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -117,6 +127,7 @@ class ContainerDataHelper {
             )
             containerModels.add(
                 ContainerModel(
+                    containerId = 7,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -125,6 +136,7 @@ class ContainerDataHelper {
             )
             containerModels.add(
                 ContainerModel(
+                    containerId = 8,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -133,6 +145,7 @@ class ContainerDataHelper {
             )
             containerModels.add(
                 ContainerModel(
+                    containerId = 9,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -141,6 +154,7 @@ class ContainerDataHelper {
             )
             containerModels.add(
                 ContainerModel(
+                    containerId = 10,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -149,6 +163,7 @@ class ContainerDataHelper {
             )
             containerModels.add(
                 ContainerModel(
+                    containerId = 11,
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
@@ -158,6 +173,7 @@ class ContainerDataHelper {
 
             containerModels.add(
                 ContainerModel(
+                    containerId = 12,
                     name = "Fruit Shelf",
                     imageContainer = ImageContainer( R.drawable.container_type_2_cabinet, getRandomColorGenerator()),
                     currCap = 3,
@@ -167,6 +183,7 @@ class ContainerDataHelper {
 
             containerModels.add(
                 ContainerModel(
+                    containerId = 13,
                     name = "Meat Compartment",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 2,
@@ -176,6 +193,7 @@ class ContainerDataHelper {
 
             containerModels.add(
                 ContainerModel(
+                    containerId = 14,
                     name = "Condiments Door",
                     imageContainer = ImageContainer( R.drawable.container_type_2_cabinet, getRandomColorGenerator()),
                     currCap = 6,
@@ -185,6 +203,7 @@ class ContainerDataHelper {
 
             containerModels.add(
                 ContainerModel(
+                    containerId = 15,
                     name = "Freezer Top",
                     imageContainer = ImageContainer( R.drawable.container_type_3_freezer, getRandomColorGenerator()),
                     currCap = 1,

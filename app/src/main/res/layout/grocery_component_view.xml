@@ -4,59 +4,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dirty_white">
+    android:background="@color/dirty_white"
+    android:padding="10dp">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
+        app:shapeAppearanceOverlay="@style/CircleImage"
         android:id="@+id/imageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="297dp"
-        android:adjustViewBounds="true"
+        android:adjustViewBounds="false"
         android:background="@drawable/shape_circle_thinstroke"
         android:backgroundTint="@color/white"
         android:backgroundTintMode="multiply"
-        android:scaleType="centerInside"
+        android:scaleType="fitCenter"
         android:src="@android:drawable/btn_star_big_on"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.034"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.119" />
 
     <TextView
         android:id="@+id/groceryTitle_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="277dp"
+        android:layout_marginBottom="169dp"
+        android:elevation="10dp"
         android:fontFamily="@font/dongle"
         android:text="TextView"
-        android:textSize="34sp"
+        android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/quantity_label_tv"
+        app:layout_constraintBottom_toTopOf="@+id/groceryDetails_rv"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.018"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.509" />
 
     <TextView
         android:id="@+id/quantity_label_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="7dp"
         android:fontFamily="@font/anybody"
         android:text="Quantity:"
         android:textAlignment="viewStart"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:typeface="normal"
+        app:flow_horizontalBias="0"
         app:layout_constraintBottom_toTopOf="@+id/date_bought_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/groceryTitle_tv"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
@@ -73,7 +77,7 @@
         android:typeface="normal"
         app:layout_constraintBottom_toTopOf="@+id/expirationDateLabel_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintVertical_bias="1.0" />
@@ -92,7 +96,7 @@
         android:typeface="normal"
         app:layout_constraintBottom_toTopOf="@+id/storedInLabel_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintVertical_bias="1.0" />
@@ -111,7 +115,7 @@
         android:typeface="normal"
         app:layout_constraintBottom_toTopOf="@+id/categoryLabel_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintVertical_bias="1.0" />
@@ -130,57 +134,61 @@
         android:typeface="normal"
         app:layout_constraintBottom_toTopOf="@+id/conditionLabel_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintVertical_bias="1.0" />
+
 
     <TextView
         android:id="@+id/conditionLabel_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:layout_marginBottom="16dp"
         android:fontFamily="@font/anybody"
         android:text="Condition: "
         android:textAlignment="viewStart"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:typeface="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:flow_horizontalBias="0"
+        app:layout_constraintBottom_toTopOf="@+id/groceryDetails_rv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.341" />
+        app:layout_constraintVertical_bias="0.961" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/groceryDetails_tv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:id="@+id/groceryDetails_rv"
+        android:layout_width="320dp"
+        android:layout_height="297dp"
         android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.07"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/conditionLabel_tv" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageButton
         android:id="@+id/delete_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:adjustViewBounds="true"
         android:background="@drawable/shape_circle_basewhite"
         android:backgroundTint="@color/red"
-        android:padding="5dp"
 
         android:backgroundTintMode="src_atop"
         android:contentDescription="@string/add_container"
         android:elevation="10dp"
-        android:adjustViewBounds="true"
+        android:padding="5dp"
         android:scaleType="fitCenter"
         android:src="@drawable/grocery_trash_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.889"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.842" />
@@ -196,7 +204,7 @@
         android:textColor="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintHorizontal_bias="0.991"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/delete_btn"
         app:layout_constraintVertical_bias="0.0" />
@@ -207,16 +215,16 @@
         android:layout_height="50dp"
         android:adjustViewBounds="true"
         android:background="@drawable/shape_circle_basewhite"
-        android:padding="10dp"
+        android:backgroundTint="@color/light_green_50"
 
         android:contentDescription="@string/add_container"
         android:elevation="10dp"
+        android:padding="10dp"
         android:scaleType="fitCenter"
-        android:backgroundTint="@color/light_green_50"
         android:src="@drawable/grocery_edit_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.891"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/delete_tv"
         app:layout_constraintVertical_bias="0.0" />
@@ -232,7 +240,7 @@
         android:textColor="@color/forest_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.89"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/update_btn"
         app:layout_constraintVertical_bias="0.0" />

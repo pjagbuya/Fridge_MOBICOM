@@ -12,6 +12,7 @@ class EmptyActivityFragment : Fragment() {
     companion object {
         private const val ARG_MESSAGE = "ARG_MESSAGE"
 
+
         fun newInstance(message: String): EmptyActivityFragment {
             val fragment = EmptyActivityFragment()
             val args = Bundle()
@@ -23,6 +24,8 @@ class EmptyActivityFragment : Fragment() {
 
     private var _binding: EmptyTemplateBinding? = null
     private val binding get() = _binding!!
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

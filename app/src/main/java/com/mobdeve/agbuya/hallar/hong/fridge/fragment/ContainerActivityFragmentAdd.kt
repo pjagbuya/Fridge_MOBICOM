@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +19,15 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityEditAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.customInterface.ContainerEditActionListener
-import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityEditBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityAddBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 enum class EditType{
     ADD,
     EDIT
 }
-class ContainerActivityFragmentEdit : Fragment(){
+class ContainerActivityFragmentAdd : Fragment(){
+
+    private var containerName: String = ""
     companion object{
         val CONTAINERS_KEY : String = "CONTAINER_DATA_KEY"
         val CONTAINER_EDIT_NAME_KEY: String  = "CONTAINER_EDIT_NAME_KEY"
@@ -30,7 +35,7 @@ class ContainerActivityFragmentEdit : Fragment(){
         val ADD_RESULT : String = "ADD_RESULT"
         val EDIT_RESULT : String = "EDIT_RESULT"
     }
-    private var _binding:ContainerActivityEditBinding? = null
+    private var _binding:ContainerActivityAddBinding? = null
     private var editType: Int = -1
     private var isEdit: Boolean = false
     private val binding get() = _binding!!
@@ -57,7 +62,7 @@ class ContainerActivityFragmentEdit : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View?{
-        _binding = ContainerActivityEditBinding.inflate(inflater, container, false)
+        _binding = ContainerActivityAddBinding.inflate(inflater, container, false)
         val view = binding.root
 
 
@@ -71,6 +76,14 @@ class ContainerActivityFragmentEdit : Fragment(){
 
         setupTopBar()
         setupRecycler()
+        binding.containerNameEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                containerName = s.toString()
+                Log.d("CONTAINER_ACTIVITY_EDIT", "Detected change")
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
     override fun onDestroyView() {
         super.onDestroyView()
@@ -127,41 +140,40 @@ class ContainerActivityFragmentEdit : Fragment(){
 
         binding.containerRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter =
-                ContainerActivityEditAdapter(containerList, object : ContainerEditActionListener {
+            adapter = ContainerActivityEditAdapter(
+                containerList,
+                requireActivity(),
+                object : ContainerEditActionListener {
                     override fun onOkClick(position: Int) {
+                        val name = containerName // latest value from EditText
                         val result = Bundle().apply {
-                            // TODO: Finish fragments to also pass color of container based on adapter position
-                            putString(CONTAINER_EDIT_NAME_KEY, "Fruits")
+                            putString(CONTAINER_EDIT_NAME_KEY, name)
                             putBoolean(CONTAINER_ISCANCELED, false)
                         }
-
-                        if(isEdit){
-                            parentFragmentManager.setFragmentResult(EDIT_RESULT, result)
-
-                        }else{
-                            parentFragmentManager.setFragmentResult(ADD_RESULT, result)
-
-                        }
-                        findNavController().navigateUp() // goes back to previous fragment
+                        parentFragmentManager.setFragmentResult(
+                            if (isEdit) EDIT_RESULT else ADD_RESULT,
+                            result
+                        )
+                        findNavController().navigateUp()
                     }
 
                     override fun onCancelClick(position: Int) {
                         val result = Bundle().apply {
-                            // TODO: Finish fragments to also pass color of container based on adapter position
-                            putString(CONTAINER_EDIT_NAME_KEY, "Fruits")
+                            putString(CONTAINER_EDIT_NAME_KEY, containerName)
                             putBoolean(CONTAINER_ISCANCELED, true)
                         }
-                        if(isEdit){
-                            parentFragmentManager.setFragmentResult(EDIT_RESULT, result)
-
-                        }else{
-                            parentFragmentManager.setFragmentResult(ADD_RESULT, result)
-
-                        }
+                        parentFragmentManager.setFragmentResult(
+                            if (isEdit) EDIT_RESULT else ADD_RESULT,
+                            result
+                        )
                         findNavController().navigateUp()
                     }
-                })
+                },
+                getContainerName = { containerName }, // 👈 live reference
+                -1,
+                R.color.white
+            )
+
         }
 
     }

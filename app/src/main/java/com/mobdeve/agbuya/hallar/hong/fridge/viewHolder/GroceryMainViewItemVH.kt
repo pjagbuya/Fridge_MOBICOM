@@ -4,12 +4,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceriesComponentBinding
 
-class GroceryActivityViewHolder(private val binding: GroceriesComponentBinding) : RecyclerView.ViewHolder(binding.root) {
+class GroceryMainViewItemVH(private val binding: GroceriesComponentBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bindData(item: Ingredient) {
-        item.icon.loadImageView(binding.containerIv)
+
+        binding.containerIv.setImageResource(item.icon)
+
         binding.groceryTitleTv.setText(item.name.toString())
-        val details: String ="Quantity: ${item.amount} ${item.unit}\n" +
+        val details: String ="Quantity: ${item.quantity} ${item.unit}\n" +
                 "Date bought: ${item.dateAdded}\n" +
                 "Expiration Date: ${item.expirationDate}\n" +
                 "Stored in: DEFAULT CONTAINER"
