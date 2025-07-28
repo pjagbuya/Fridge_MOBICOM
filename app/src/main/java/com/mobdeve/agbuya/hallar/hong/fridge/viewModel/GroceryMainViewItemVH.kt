@@ -1,4 +1,4 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.viewModel
+package com.mobdeve.agbuya.hallar.hong.fridge.viewHolder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
@@ -9,6 +9,7 @@ class GroceryMainViewItemVH(private val binding: GroceriesComponentBinding) : Re
     fun bindData(item: Ingredient) {
 
         binding.containerIv.setImageResource(item.icon)
+
         binding.groceryTitleTv.setText(item.name.toString())
         val details: String ="Quantity: ${item.quantity} ${item.unit}\n" +
                 "Date bought: ${item.dateAdded}\n" +

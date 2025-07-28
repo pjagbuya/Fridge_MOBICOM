@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "196654881214",
+    "firebase_url": "https://fridge-mobicom-default-rtdb.firebaseio.com",
+    "project_id": "fridge-mobicom",
+    "storage_bucket": "fridge-mobicom.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196654881214:android:738911a07324d04aa8c1ef",
+        "android_client_info": {
+          "package_name": "com.mobdeve.agbuya.hallar.hong.fridge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGh7K6-gy3TwYgZlqdISJR1wC6dMcSYJM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
-import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.ContainerViewHolder
+import com.mobdeve.agbuya.hallar.hong.fridge.viewHolder.ContainerViewHolder
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerComponentBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentMainDirections
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentUpdateDirections

@@ -1,4 +1,4 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.viewModel
+package com.mobdeve.agbuya.hallar.hong.fridge.viewHolder
 
 import android.widget.Button
 import android.widget.TextView
@@ -24,13 +24,9 @@ class ContainerViewHolder(private val binding: ContainerComponentBinding): Recyc
 
     }
     fun bindData(cont: ContainerModel){
-
         cont.imageContainer.loadImageView(binding.containerIv)
         fridgeNameTv.text = cont.name
         fridgeCapacityTv.text = binding.root.context.getString(R.string.capacity_format, cont.currCap, cont.maxCap)
         fridgeTimeStamp.text = cont.timeStamp
-
-
     }
-
 }

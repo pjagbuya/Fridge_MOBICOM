@@ -144,7 +144,7 @@
         app:layout_constraintVertical_bias="0.913" />
 
     <TextView
-        android:id="@+id/addContainerTv"
+        android:id="@+id/addButtonLabelTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="10dp"
