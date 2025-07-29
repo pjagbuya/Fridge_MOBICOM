@@ -16,7 +16,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
-import com.mobdeve.agbuya.hallar.hong.fridge.database.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity

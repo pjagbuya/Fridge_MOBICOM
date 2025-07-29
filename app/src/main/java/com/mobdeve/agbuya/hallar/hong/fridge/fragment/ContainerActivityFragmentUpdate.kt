@@ -78,14 +78,16 @@ class ContainerActivityFragmentUpdate : Fragment(){
         setupTopBar()
         setupRecycler()
         binding.containerNameEt.setText(args.currentContainer.name)
-
+        containerName = args.currentContainer.name
         binding.containerNameEt.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 containerName = s.toString()
-                Log.d("CONTAINER_ACTIVITY_EDIT", "Detected change")
             }
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+
+            }
         })
     }
     override fun onDestroyView() {
@@ -176,7 +178,7 @@ class ContainerActivityFragmentUpdate : Fragment(){
                 },
                 getContainerName = { containerName }, // 👈 live reference
                 targetIndex,
-                args.currentContainer.imageContainer.getColorId()
+                args.currentContainer
             )
 
         }

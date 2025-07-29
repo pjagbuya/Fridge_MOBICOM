@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.R
+import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityAddAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityEditAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.customInterface.ContainerEditActionListener
@@ -76,11 +77,11 @@ class ContainerActivityFragmentAdd : Fragment(){
 
         setupTopBar()
         setupRecycler()
+        containerName = binding.containerNameEt.text.toString()
         binding.containerNameEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 containerName = s.toString()
-                Log.d("CONTAINER_ACTIVITY_EDIT", "Detected change")
             }
             override fun afterTextChanged(s: Editable?) {}
         })
@@ -140,7 +141,7 @@ class ContainerActivityFragmentAdd : Fragment(){
 
         binding.containerRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = ContainerActivityEditAdapter(
+            adapter = ContainerActivityAddAdapter(
                 containerList,
                 requireActivity(),
                 object : ContainerEditActionListener {
@@ -170,8 +171,7 @@ class ContainerActivityFragmentAdd : Fragment(){
                     }
                 },
                 getContainerName = { containerName }, // 👈 live reference
-                -1,
-                R.color.white
+
             )
 
         }

@@ -49,17 +49,17 @@ class UserRepository(private val userDao: UserDao) {
         }
     }
 
-    // update user
-    suspend fun updateUser(user: UserEntity) {
-        withContext(Dispatchers.IO) {
-            userDao.updateUser(user)
-        }
-    }
-
-    // delete user
-    suspend fun deleteUser(user: UserEntity) {
-        withContext(Dispatchers.IO) {
-            userDao.deleteUser(user)
-        }
-    }
+//    // update user
+//    suspend fun updateUser(user: UserEntity) {
+//        withContext(Dispatchers.IO) {
+//            userDao.updateUser(user)
+//        }
+//    }
+//
+//    // delete user
+//    suspend fun deleteUser(user: UserEntity) {
+//        withContext(Dispatchers.IO) {
+//            userDao.deleteUser(user)
+//        }
+//    }
 }
