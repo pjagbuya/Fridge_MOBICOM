@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
@@ -23,9 +24,11 @@ import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentViewBin
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.ADD_INGREDIENT_KEY
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.EDIT_INGREDIENT_KEY
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.SELECTED_INGREDIENT_KEY
+import kotlin.getValue
 
 class GroceryActivityFragmentView : Fragment() {
 
+    private val args by navArgs<GroceryActivityFragmentViewArgs>()
     private var _binding: GroceryComponentViewBinding? = null
     private val binding get() = _binding!!
 
@@ -56,13 +59,8 @@ class GroceryActivityFragmentView : Fragment() {
         setupRecycler()
         // TODO: setup button edit
         binding.updateBtn.setOnClickListener {
-            val bundle = Bundle().apply {
-                putParcelable(SELECTED_INGREDIENT_KEY, selectedIngredient)
-                putBoolean(EDIT_INGREDIENT_KEY, true)
-                putBoolean(ADD_INGREDIENT_KEY, false)
-
-            }
-            findNavController().navigate(R.id.gotoGroceriesEdit, bundle)
+            val action = GroceryActivityFragmentViewDirections.actionGroceriesViewToGroceriesEdit(args.currGrocery)
+            findNavController().navigate(action)
         }
 
 
@@ -76,24 +74,23 @@ class GroceryActivityFragmentView : Fragment() {
     }
 
     private fun setupIngredientView(){
-        selectedIngredient = arguments?.getParcelable<Ingredient>(GroceryActivityFragmentMain.SELECTED_INGREDIENT_KEY)!!
-        selectedIngredient.let {
+        args.currGrocery.let {
             binding.groceryTitleTv.text = it.name
             binding.quantityLabelTv.text = "Quantity: ${it.quantity} ${it.unit}"
             binding.dateBoughtTv.text = "Date bought: ${it.dateAdded}"
             binding.expirationDateLabelTv.text = "Expiration date: ${it.expirationDate}"
-            binding.storedInLabelTv.text = "Stored in: DEFAULT CONTAINER"
+            binding.storedInLabelTv.text = "Stored in: Container id ${it.attachedContainerId}"
             binding.categoryLabelTv.text = "Category: ${it.itemType}"
-            binding.imageView.setImageResource(it.icon)
+            binding.conditionLabelTv.text = "Condition: ${it.conditionType}"
+            binding.imageView.setImageResource(it.iconResId)
         }
     }
     private fun setupRecycler() {
 
         val isEditable = arguments?.getBoolean(GroceryActivityFragmentMain.EDIT_INGREDIENT_KEY)!!
 
-        selectedIngredient.let {
-            binding.groceryDetailsRv.adapter = GroceryViewImageGridAdapter(it.imageContainerLists, isEditable)
-
+        args.currGrocery.let {
+            binding.groceryDetailsRv.adapter = GroceryViewImageGridAdapter(it.imageList, isEditable)
 
         }
         binding.groceryDetailsRv.layoutManager = GridLayoutManager(requireContext(), 2)

@@ -1,11 +1,13 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 
 @Dao
@@ -22,7 +24,7 @@ interface IngredientDao {
     @Query("SELECT * FROM IngredientEntity WHERE attachedContainerId = :containerId")
     suspend fun getIngredientsByContainer(containerId: Int): List<IngredientEntity>
     @Query("SELECT * FROM IngredientEntity")
-    suspend fun getAllIngredients(): List<IngredientEntity>
+    fun getAllIngredients(): LiveData<List<IngredientEntity>>
     @Transaction
     suspend fun insertAndUpdateCapacity(ingredient: IngredientEntity) {
         insertIngredient(ingredient)

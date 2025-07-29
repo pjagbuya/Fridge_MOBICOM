@@ -20,9 +20,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
@@ -30,21 +28,16 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.GroceryViewImageGridAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
-import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.OpenFoodFactsResponse
-import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentUpdateBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentViewBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.retrofitCall.RetrofitInstanceOPF
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.OpenFoodFactsApi
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentAddBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentUpdateBinding
 import kotlinx.coroutines.launch
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.getValue
 
-class GroceryActivityFragmentEdit: Fragment() {
-    private val args by navArgs<GroceryActivityFragmentEditArgs>()
-    private var _binding: GroceryComponentUpdateBinding? = null
+class GroceryActivityFragmentAdd : Fragment() {
+
+    private var _binding: GroceryComponentAddBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var imagesList: ArrayList<ImageRaw>
@@ -88,15 +81,16 @@ class GroceryActivityFragmentEdit: Fragment() {
     }
 
     private fun readyForEdit(){
-
+        selectedIngredient =
+            arguments?.getParcelable(GroceryActivityFragmentMain.SELECTED_INGREDIENT_KEY)!!
         binding.headerActionItemLabelTv.text = "Update Item"
-        args.currGrocery.let { setupIngredientView(it) }
+        selectedIngredient?.let { setupIngredientView(it) }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = GroceryComponentUpdateBinding.inflate(inflater, container, false)
+        _binding = GroceryComponentAddBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -105,7 +99,7 @@ class GroceryActivityFragmentEdit: Fragment() {
         // Setup camera launcher states
         setupTakePhotoFromGalleryOrCamera()
 
-        readyForEdit()
+        readyForNew()
 
         setupDropdowns()
 
@@ -258,13 +252,12 @@ class GroceryActivityFragmentEdit: Fragment() {
         }
         return resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
     }
-    private fun setupIngredientView(ingredient: IngredientEntity) {
+    private fun setupIngredientView(ingredient: Ingredient) {
         binding.itemNameEt.setText(ingredient.name)
         binding.itemNumberEt.setText(ingredient.quantity.toString())
         binding.unitTypeDropDownActv.setText(ingredient.unit)
         binding.itemTypeDropDownActv.setText(ingredient.itemType)
-        val formatted = getString(R.string.formatted_price, ingredient.price)
-        binding.priceEt.setText(formatted)
+        binding.priceEt.setText("Php ${ingredient.price}")
         binding.dateBoughtEt.setText(ingredient.dateAdded)
         binding.expirationDateEt.setText(ingredient.expirationDate)
         binding.containerTypeDropDownActv.setText("DEFAULT CONTAINER")
@@ -276,7 +269,7 @@ class GroceryActivityFragmentEdit: Fragment() {
             "not ok" -> binding.radioNotOk.isChecked = true
         }
 
-        binding.iconImageIv.setImageResource(ingredient.iconResId)
+        binding.iconImageIv.setImageResource(ingredient.icon)
     }
 
     private fun setupConditionRadios() {
@@ -317,9 +310,9 @@ class GroceryActivityFragmentEdit: Fragment() {
     private fun setupRecycler() {
 
         val isEditable = arguments?.getBoolean(GroceryActivityFragmentMain.EDIT_INGREDIENT_KEY)!!
-        args.currGrocery.let {
+        selectedIngredient.let {
             binding.imagesRecyclerViewRv.adapter =
-                GroceryViewImageGridAdapter(it.imageList, isEditable)
+                GroceryViewImageGridAdapter(it.imageContainerLists, isEditable)
         }
         binding.imagesRecyclerViewRv.layoutManager = GridLayoutManager(requireContext(), 2)
 
