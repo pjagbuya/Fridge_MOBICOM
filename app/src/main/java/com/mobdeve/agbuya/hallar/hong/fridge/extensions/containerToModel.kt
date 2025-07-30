@@ -1,7 +1,7 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.extensions
 
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
 
 fun ContainerEntity.toDomain(): ContainerModel {
     return ContainerModel(

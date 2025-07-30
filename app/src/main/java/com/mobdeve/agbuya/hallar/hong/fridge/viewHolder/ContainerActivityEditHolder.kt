@@ -21,17 +21,8 @@ class ContainerActivityEditHolder(private val binding: ContainerComponentEditBin
             containerIv = binding.containerIv
             okBtn = binding.okBtn
             cancelBtn = binding.cancelBtn
-            if(selectedPosition == currPos){
-                cont.imageContainer.loadImageView(binding.containerIv)
-
-            }else{
-
-            }
-
+            cont.imageContainer.loadImageView(binding.containerIv)
         }
-
-
-
     }
     fun bindData(cont: ContainerModel){
         containerIv = binding.containerIv

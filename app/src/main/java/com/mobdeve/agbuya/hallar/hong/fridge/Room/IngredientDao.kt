@@ -1,7 +1,6 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.dao
+package com.mobdeve.agbuya.hallar.hong.fridge.Room
 
 import androidx.room.*
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 
 @Dao
 interface IngredientDao {

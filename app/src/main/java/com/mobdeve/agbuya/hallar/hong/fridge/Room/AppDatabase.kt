@@ -8,9 +8,8 @@ import androidx.room.TypeConverters
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.BitmapTypeConverter
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.Converters
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.ImageContainerTypeConverter
-import com.mobdeve.agbuya.hallar.hong.fridge.dao.*
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.*
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.*
+import com.mobdeve.agbuya.hallar.hong.fridge.dao.RecipeDao
+import com.mobdeve.agbuya.hallar.hong.fridge.dao.UserDao
 
 @Database(
     entities = [
@@ -22,14 +21,13 @@ import com.mobdeve.agbuya.hallar.hong.fridge.Room.*
         ContainerImageEntity::class,
         InventoryEntity::class
     ],
-    version = 6,
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(
     BitmapTypeConverter::class,
     Converters::class,
-    ImageContainerTypeConverter::class,
-    Converters::class // Important for handling ArrayLists in InventoryEntity
+    ImageContainerTypeConverter::class
 )
 abstract class AppDatabase : RoomDatabase() {
 

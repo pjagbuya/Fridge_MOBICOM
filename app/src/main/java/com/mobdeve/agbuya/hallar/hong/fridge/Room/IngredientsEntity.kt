@@ -1,4 +1,4 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.rooms
+package com.mobdeve.agbuya.hallar.hong.fridge.Room
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

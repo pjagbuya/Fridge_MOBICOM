@@ -4,11 +4,11 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("kotlin-parcelize")
-
     // Safeargs fromletty branch
 //    id("androidx.navigation.safeargs")
 
     id("com.google.devtools.ksp")
+
     //google firebase
     id("com.google.gms.google-services")
 

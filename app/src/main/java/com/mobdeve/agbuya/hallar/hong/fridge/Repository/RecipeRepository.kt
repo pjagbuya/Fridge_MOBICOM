@@ -2,7 +2,7 @@ package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.RecipeWithIngredients
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeWithIngredients
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.RecipeDao
 
 class RecipeRepository(private val recipeDao: RecipeDao) {

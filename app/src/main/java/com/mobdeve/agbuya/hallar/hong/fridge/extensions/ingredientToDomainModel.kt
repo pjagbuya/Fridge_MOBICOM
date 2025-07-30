@@ -1,7 +1,7 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.extensions
 
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.IngredientEntity
 
 fun IngredientEntity.toDomainModel(): Ingredient {
     return Ingredient(

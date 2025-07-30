@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.viewHolder.ContainerViewHolder
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerComponentBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentMainDirections
-import com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentUpdateDirections
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
 
 class ContainerActivityMainAdapter(
     private val onClick: () -> Unit

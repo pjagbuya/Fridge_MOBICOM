@@ -3,7 +3,7 @@ package com.mobdeve.agbuya.hallar.hong.fridge.dao
 import androidx.room.*
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.RecipeWithIngredients
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeWithIngredients
 
 @Dao
 interface RecipeDao {
@@ -36,4 +36,7 @@ interface RecipeDao {
 
     @Query("DELETE FROM recipe_ingredients WHERE recipeId = :recipeId")
     suspend fun deleteIngredientsByRecipeId(recipeId: Int)
+
+    @Query("DELETE FROM recipes")
+    suspend fun deleteAll()
 }

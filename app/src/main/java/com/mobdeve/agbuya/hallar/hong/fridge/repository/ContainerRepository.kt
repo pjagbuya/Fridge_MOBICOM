@@ -1,8 +1,8 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
 import androidx.lifecycle.LiveData
-import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerDao
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
 
 class ContainerRepository(private val containerDao: ContainerDao) {
     val readAllData : LiveData<List<ContainerEntity>> = containerDao.getAllContainers()

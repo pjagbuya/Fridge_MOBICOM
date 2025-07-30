@@ -1,8 +1,6 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.rooms
+package com.mobdeve.agbuya.hallar.hong.fridge.Room
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
 
 //inventory with everything:
 data class InventoryWithEverything(

@@ -5,8 +5,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
 
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.IngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.Member
 

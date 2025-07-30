@@ -1,13 +1,9 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.adapter
 
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +13,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.customInterface.ContainerEditAction
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerComponentEditBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.ColorPickerDialogFragment
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 
 
@@ -41,12 +37,14 @@ class ContainerActivityEditAdapter(
         val model = data[position]
         holder.bindData(model, selectedPosition, position)
 
+        // Color choice picker
         // Given a presence of selected position
         if (position == selectedPosition) {
             // Highlight color using container.imageContainer.getColorId()
             holder.containerIv.setColorFilter(selectedColorId)
         } else {
             // Random Color selected
+            holder.containerIv.setColorFilter(model.imageContainer.getColorId())
 
         }
 

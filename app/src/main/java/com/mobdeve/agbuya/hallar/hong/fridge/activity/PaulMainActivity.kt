@@ -1,23 +1,15 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.activity
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityOptionsCompat
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
-import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
@@ -25,13 +17,14 @@ import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.NavigationbarBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.IngredientEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.InventoryEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.room.withTransaction
 
 class PaulMainActivity : AppCompatActivity() {
     companion object{
@@ -39,10 +32,8 @@ class PaulMainActivity : AppCompatActivity() {
 
     }
     private lateinit var  activityMainBinding : ActivityMainBinding
-
     private lateinit var  containerModels: ArrayList<ContainerModel>
     private lateinit var navBarBinding: NavigationbarBinding
-
     private lateinit var  groceryModels: ArrayList<Ingredient>
     private val groceryViewModel: GrocerySharedViewModel by viewModels()
 //    private val newContainerResultLauncher = registerForActivityResult(
@@ -55,24 +46,25 @@ class PaulMainActivity : AppCompatActivity() {
 //        }
 //    }
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
+        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(activityMainBinding.root)
+        navBarBinding = activityMainBinding.navigationBar
 
-            activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-            setContentView(activityMainBinding.root)
-            Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
+        Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
 
-            initSampleData(applicationContext)
-            groceryViewModel.loadGroceryList(applicationContext)
-            groceryViewModel.groceryList.observe(this) { list ->
-                groceryModels = ArrayList(list)
-            }
-            navBarBinding = activityMainBinding.navigationBar
+        val db = AppDatabase.getInstance(applicationContext)
 
+        lifecycleScope.launch(Dispatchers.IO) {
+            initSampleData(db)
+        }
 
-            setupNavigation()
-            initSampleData(this)
+        groceryViewModel.loadGroceryList(applicationContext)
+        groceryViewModel.groceryList.observe(this) { list ->
+            groceryModels = ArrayList(list)
+        }
 
+        setupNavigation()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -81,17 +73,29 @@ class PaulMainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
-    private fun wipeAllData(context: Context) {
-        val db = AppDatabase.getInstance(context)
-        CoroutineScope(Dispatchers.IO).launch {
-            db.ingredientDao().deleteAll()
-            db.containerDao().deleteAll()
-//            db.userDao().deleteAll()
-            Log.d("SampleData", "All data wiped.")
-        }
+
+//    private fun wipeAllData(context: Context) {
+//        val db = AppDatabase.getInstance(context)
+//        CoroutineScope(Dispatchers.IO).launch {
+//            db.ingredientDao().deleteAll()
+//            db.containerDao().deleteAll()
+////            db.userDao().deleteAll()
+//            Log.d("SampleData", "All data wiped.")
+//        }
+//    }
+
+    private suspend fun wipeAllData(db: AppDatabase) {
+        // Do this INSIDE the transaction to guarantee FK safety.
+        db.recipeIngredientDao().deleteAll()
+        db.recipeDao().deleteAll()
+        db.ingredientDao().deleteAll()
+        db.containerDao().deleteAll()
+        db.inventoryDao().deleteAll()
+        db.userDao().deleteAll()
+        Log.d("SampleData", "All data wiped.")
     }
-    private fun initSampleData(context: Context) {
-        val db = AppDatabase.getInstance(context)
+
+    private suspend fun initSampleData(db: AppDatabase) {
         val userDao = db.userDao()
         val inventoryDao = db.inventoryDao()
         val containerDao = db.containerDao()
@@ -99,24 +103,22 @@ class PaulMainActivity : AppCompatActivity() {
         val recipeDao = db.recipeDao()
         val recipeIngredientDao = db.recipeIngredientDao()
 
-        CoroutineScope(Dispatchers.IO).launch {
-//            // Skip if data already exists
-//            if (userDao) {
-//                Log.d("SampleData", "Sample data already initialized.")
-//                return@launch
-//            }
+        db.withTransaction {
+            // 1️⃣ wipe all data
+            wipeAllData(db)
 
-            // 1. Insert User
+            // 2️⃣ fresh user
+            val inventoryId = "inv_sample_001"
+
             val user = UserEntity(
                 firebaseUid = "0",
                 username = "Paul",
-                ownedInventoryId = null,
+                ownedInventoryId = inventoryId,  // ✅ set directly!
                 joinedInventoryId = null
             )
             userDao.insertUser(user)
 
-            // 2. Insert Inventory
-            val inventoryId = "inv_sample_001"
+            // 3️⃣ fresh inventory
             val inventory = InventoryEntity(
                 inventoryId = inventoryId,
                 inventoryName = "Paul's Inventory",
@@ -124,10 +126,7 @@ class PaulMainActivity : AppCompatActivity() {
             )
             inventoryDao.insertInventory(inventory)
 
-            // 3. Update User with ownedInventoryId
-            userDao.insertUser(user.copy(ownedInventoryId = inventoryId))
-
-            // 4. Insert Containers
+            // 4️⃣ fresh containers that use the inventory
             val containerIds = (1..3).map { i ->
                 val container = ContainerEntity(
                     inventoryOwnerId = inventoryId,
@@ -141,9 +140,10 @@ class PaulMainActivity : AppCompatActivity() {
                     timeStamp = System.currentTimeMillis().toString()
                 )
                 containerDao.insertContainer(container)
+                container.containerId
             }
 
-            // 5. Insert Ingredients (1 per container)
+            // 5️⃣ fresh ingredients that use containers
             val ingredientNames = mutableListOf<String>()
             val ingredientEntities = containerIds.mapIndexed { index, containerId ->
                 val name = "Ingredient ${index + 1}"
@@ -158,14 +158,14 @@ class PaulMainActivity : AppCompatActivity() {
                     itemType = "VEGETABLE",
                     dateAdded = "2025-07-01",
                     expirationDate = "2025-08-01",
-                    attachedContainerId = containerId.toInt(),
+                    attachedContainerId = containerId,
                     imageList = arrayListOf()
                 )
             }
 
             ingredientEntities.forEach { ingredientDao.insertIngredient(it) }
 
-            // 6. Insert Recipe
+            // 6️⃣ fresh recipe
             val recipe = RecipeEntity(
                 inventoryOwnerId = inventoryId,
                 name = "Easy Salad",
@@ -173,7 +173,6 @@ class PaulMainActivity : AppCompatActivity() {
             )
             val recipeId = recipeDao.insertRecipe(recipe).toInt()
 
-            // 7. Insert RecipeIngredientEntities referencing ingredients
             ingredientNames.forEachIndexed { index, name ->
                 val recipeIngredient = RecipeIngredientEntity(
                     recipeId = recipeId,
@@ -185,10 +184,9 @@ class PaulMainActivity : AppCompatActivity() {
                 recipeIngredientDao.insert(recipeIngredient)
             }
 
-            Log.d("SampleData", "Sample user, inventory, containers, ingredients, and recipes inserted.")
+            Log.d("SampleData", "Sample data inserted successfully!")
         }
     }
-
 
     private fun setupNavigation() {
         val navHostFragment = supportFragmentManager

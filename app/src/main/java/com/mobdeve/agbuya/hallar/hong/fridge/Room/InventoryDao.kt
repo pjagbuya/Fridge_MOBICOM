@@ -1,11 +1,7 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.dao
+package com.mobdeve.agbuya.hallar.hong.fridge.Room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryWithContainers
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryWithEverything
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryWithRecipes
 
 
 @Dao

@@ -1,21 +1,14 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.sharedModels
 
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
-import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 
 class ContainerSharedViewModel(application : Application): AndroidViewModel(application){
     val readAllData : LiveData<List<ContainerEntity>>

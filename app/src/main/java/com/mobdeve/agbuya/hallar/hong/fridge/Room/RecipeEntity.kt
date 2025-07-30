@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryEntity
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -11,5 +11,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE firebaseUid = :firebaseUid LIMIT 1")
     suspend fun getUserByFirebaseUid(firebaseUid: String): UserEntity?
 
+    @Query("SELECT COUNT(*) FROM users")
+    suspend fun getUserCount(): Int
 
+    @Query("DELETE FROM users")
+    suspend fun deleteAll()
 }

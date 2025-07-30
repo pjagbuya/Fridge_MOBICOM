@@ -2,9 +2,14 @@ package com.mobdeve.agbuya.hallar.hong.fridge.firestore
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerWithIngredients
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.IngredientEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.InventoryEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.InventoryWithEverything
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.*
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeWithIngredients
 import kotlinx.coroutines.tasks.await
 
 object FirestoreHelper {

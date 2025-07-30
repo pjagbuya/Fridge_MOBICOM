@@ -22,4 +22,7 @@ interface RecipeIngredientDao {
 
     @Query("DELETE FROM recipe_ingredients WHERE recipeId = :recipeId")
     suspend fun deleteByRecipeId(recipeId: Int)
+
+    @Query("DELETE FROM recipe_ingredients")
+    suspend fun deleteAll()
 }

@@ -2,12 +2,11 @@ package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
 
 import androidx.lifecycle.LiveData
-import com.mobdeve.agbuya.hallar.hong.fridge.dao.InventoryDao
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryWithContainers
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryWithEverything
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryWithRecipes
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.InventoryDao
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.InventoryEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.InventoryWithContainers
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.InventoryWithEverything
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.InventoryWithRecipes
 
 class InventoryRepository(private val inventoryDao: InventoryDao) {
 
