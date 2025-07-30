@@ -1,4 +1,4 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.dao
+package com.mobdeve.agbuya.hallar.hong.fridge.Room
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 
 @Dao
 interface IngredientDao {

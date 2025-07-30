@@ -1,4 +1,4 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.sharedModels
+package com.mobdeve.agbuya.hallar.hong.fridge.viewModel
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
-import com.mobdeve.agbuya.hallar.hong.fridge.database.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import kotlinx.coroutines.launch
 import com.mobdeve.agbuya.hallar.hong.fridge.extensions.toDomainModel
 class GrocerySharedViewModel : ViewModel(){

@@ -1,17 +1,18 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.Room
 
 import androidx.room.*
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: UserEntity): Long
 
-//    @Update
-//    suspend fun updateUser(user: UserEntity)
+    @Update
+    suspend fun updateUser(user: UserEntity)
 
-//    @Delete
-//    suspend fun deleteUser(user: UserEntity)
+    @Delete
+    suspend fun deleteUser(user: UserEntity)
 
     // get users by ID
     @Query("SELECT * FROM UserEntity WHERE id = :userId")

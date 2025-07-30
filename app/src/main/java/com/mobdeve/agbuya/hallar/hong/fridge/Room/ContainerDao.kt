@@ -1,9 +1,7 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.dao
+package com.mobdeve.agbuya.hallar.hong.fridge.Room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 
 @Dao
 interface ContainerDao {

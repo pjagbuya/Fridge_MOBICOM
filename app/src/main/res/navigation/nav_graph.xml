@@ -39,7 +39,7 @@
             app:destination="@id/containerMain" />
         <argument
             android:name="currentContainer"
-            app:argType="com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity" />
+            app:argType="com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity" />
     </fragment>
     <fragment
         android:id="@+id/groceriesMain"

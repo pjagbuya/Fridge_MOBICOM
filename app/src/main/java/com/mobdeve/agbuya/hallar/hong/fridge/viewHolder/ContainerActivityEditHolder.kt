@@ -15,31 +15,23 @@ class ContainerActivityEditHolder(private val binding: ContainerComponentEditBin
      lateinit var cancelBtn : Button
      lateinit var containerIv : ImageView
     fun bindData(cont: ContainerModel, selectedPosition: Int, currPos:Int){
-        if (selectedPosition == -1)
-            bindData(cont)
-        else{
-            containerIv = binding.containerIv
-            okBtn = binding.okBtn
-            cancelBtn = binding.cancelBtn
-            if(selectedPosition == currPos){
+        fun bindData(cont: ContainerModel, selectedPosition: Int, currPos:Int){
+            if (selectedPosition == -1)
+                bindData(cont)
+            else{
+                containerIv = binding.containerIv
+                okBtn = binding.okBtn
+                cancelBtn = binding.cancelBtn
                 cont.imageContainer.loadImageView(binding.containerIv)
-
-            }else{
-
             }
-
         }
-
-
-
     }
+
     fun bindData(cont: ContainerModel){
         containerIv = binding.containerIv
         cont.imageContainer.loadImageView(binding.containerIv)
         okBtn = binding.okBtn
         cancelBtn = binding.cancelBtn
-
-
     }
 
 }

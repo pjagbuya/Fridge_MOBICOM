@@ -10,11 +10,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.BitmapTypeConverter
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.Converters
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.ImageContainerTypeConverter
-import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
-import com.mobdeve.agbuya.hallar.hong.fridge.dao.IngredientDao
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerImageEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerDao
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.IngredientDao
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerImageEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.IngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserDao
 

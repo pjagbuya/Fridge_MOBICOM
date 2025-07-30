@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
-import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Parcelable
 import android.widget.ImageView

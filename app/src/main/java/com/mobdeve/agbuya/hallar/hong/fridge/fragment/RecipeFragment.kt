@@ -63,9 +63,12 @@ class RecipeMainFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        recipeAdapter = RecipeMainAdapter(arrayListOf()) { recipe ->
-            onRecipeSelected(recipe)
-        }
+        recipeAdapter = RecipeMainAdapter(
+            arrayListOf(),
+            onRecipeClick = { recipe -> onRecipeSelected(recipe) },
+            onEditClick = { recipe -> onEditRecipe(recipe) },
+            onDeleteClick = { recipe -> deleteRecipe(recipe) }
+        )
         binding.recipeListRv.layoutManager = LinearLayoutManager(requireContext())
         binding.recipeListRv.adapter = recipeAdapter
     }
@@ -86,6 +89,20 @@ class RecipeMainFragment : Fragment() {
         val action = RecipeMainFragmentDirections
             .actionRecipeMainFragmentToRecipeDetails(recipe)
         findNavController().navigate(action)
+    }
+
+    private fun onEditRecipe(recipe: RecipeModel) {
+        val action = RecipeMainFragmentDirections
+            .actionRecipeMainFragmentToAddRecipeFragment(recipe)
+        findNavController().navigate(action)
+    }
+
+    private fun deleteRecipe(recipe: RecipeModel) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            recipeRepository.deleteRecipe(recipe)
+            val updatedRecipes = recipeRepository.getAllRecipes()
+            recipeAdapter.updateData(updatedRecipes)
+        }
     }
 
     private fun loadRecipes() {

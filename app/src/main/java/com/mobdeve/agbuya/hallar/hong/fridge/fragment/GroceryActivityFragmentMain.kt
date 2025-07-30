@@ -1,4 +1,5 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.fragment
+
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
@@ -13,10 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.GroceryActivityMainAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
-import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceriesActivityMainBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.GrocerySharedViewModel
 
 
 class GroceryActivityFragmentMain : Fragment() {

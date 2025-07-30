@@ -1,8 +1,6 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.domain
 
 import android.os.Parcelable
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import kotlinx.parcelize.Parcelize
 

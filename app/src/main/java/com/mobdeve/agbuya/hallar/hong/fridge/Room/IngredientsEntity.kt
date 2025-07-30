@@ -1,7 +1,6 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.rooms
+package com.mobdeve.agbuya.hallar.hong.fridge.Room
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
 

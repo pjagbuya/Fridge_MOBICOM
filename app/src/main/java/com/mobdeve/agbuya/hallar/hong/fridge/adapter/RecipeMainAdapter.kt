@@ -10,8 +10,9 @@ import com.mobdeve.agbuya.hallar.hong.fridge.viewHolder.RecipeViewHolder
 
 class RecipeMainAdapter(
     private val recipeList: ArrayList<RecipeModel>,
-    private val onRecipeClick: (RecipeModel) -> Unit
-
+    private val onRecipeClick: (RecipeModel) -> Unit,
+    private val onEditClick: (RecipeModel) -> Unit = {},
+    private val onDeleteClick: (RecipeModel) -> Unit = {}
 ) : RecyclerView.Adapter<RecipeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
@@ -31,11 +32,13 @@ class RecipeMainAdapter(
         // Edit button
         holder.editButton.setOnClickListener {
             Toast.makeText(holder.itemView.context, "Edit clicked: ${recipe.name}", Toast.LENGTH_SHORT).show()
+            onEditClick(recipe)
         }
 
         // Delete button
         holder.deleteButton.setOnClickListener {
             Toast.makeText(holder.itemView.context, "Delete clicked: ${recipe.name}", Toast.LENGTH_SHORT).show()
+            onDeleteClick(recipe)
         }
     }
 

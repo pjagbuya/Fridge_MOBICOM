@@ -1,13 +1,9 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.adapter
 
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -17,8 +13,8 @@ import com.mobdeve.agbuya.hallar.hong.fridge.customInterface.ContainerEditAction
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerComponentEditBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.ColorPickerDialogFragment
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.ContainerSharedViewModel
 
 
 class ContainerActivityEditAdapter(
@@ -41,19 +37,19 @@ class ContainerActivityEditAdapter(
         val model = data[position]
         holder.bindData(model, selectedPosition, position)
 
+        // Color choice picker
         // Given a presence of selected position
         if (position == selectedPosition) {
             // Highlight color using container.imageContainer.getColorId()
             holder.containerIv.setColorFilter(selectedColorId)
         } else {
             // Random Color selected
-
+            holder.containerIv.setColorFilter(model.imageContainer.getColorId())
         }
 
         // TODO: Test Container Saving mechanisms
         holder.okBtn.setOnClickListener {
             insertDataToDatabase(position)
-
             listener.onOkClick(position)
         }
 
@@ -68,9 +64,6 @@ class ContainerActivityEditAdapter(
             }.show(activity.supportFragmentManager, "colorPickerDialog")
 
         }
-
-
-
     }
 
     private fun updateDataToDatabase(position : Int){
@@ -83,7 +76,6 @@ class ContainerActivityEditAdapter(
                 colorId = model.imageContainer.getColorId()
             )
 
-
             // TODO:  Make ownerUserId of this entity be attached to a user that is in session. currently the entity is defaulting to user 0
             val containerEntity = ContainerEntity(
                 name = containerName,
@@ -93,15 +85,10 @@ class ContainerActivityEditAdapter(
                 timeStamp = ContainerModel.getTimeStamp(),
                 ownerUserId = 1
             )
-
             sharedContainerViewModel.addContainer(containerEntity)
             Toast.makeText(activity, "Successfully created Container", Toast.LENGTH_LONG).show()
-
-
-
         }else{
             Toast.makeText(activity, "ERROR: Please fill in an appropriate name", Toast.LENGTH_LONG).show()
-
         }
     }
 
@@ -116,7 +103,6 @@ class ContainerActivityEditAdapter(
                 colorId = model.imageContainer.getColorId()
             )
 
-
             // TODO:  Make ownerUserId of this entity be attached to a user that is in session. currently the entity is defaulting to user 0
             val containerEntity = ContainerEntity(
                 name = containerName,
@@ -129,22 +115,12 @@ class ContainerActivityEditAdapter(
 
             sharedContainerViewModel.addContainer(containerEntity)
             Toast.makeText(activity, "Successfully created Container", Toast.LENGTH_LONG).show()
-
-
-
         }else{
             Toast.makeText(activity, "ERROR: Please fill in an appropriate name", Toast.LENGTH_LONG).show()
-
         }
-
-
     }
-
-
-
 
     override fun getItemCount(): Int {
         return data.size
     }
-
 }

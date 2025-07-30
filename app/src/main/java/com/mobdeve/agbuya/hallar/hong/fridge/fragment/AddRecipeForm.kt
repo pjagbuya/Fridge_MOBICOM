@@ -104,6 +104,7 @@ class AddRecipeFragment : Fragment() {
         }
 
         val newRecipe = RecipeModel(
+            id = editingRecipe?.id ?: 0, // Keep the existing ID if editing
             name = name,
             description = description,
             ingredients = ingredients
@@ -111,7 +112,7 @@ class AddRecipeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                recipeRepository.insertRecipe(newRecipe)
+                recipeRepository.saveRecipe(newRecipe)
                 Toast.makeText(requireContext(), "Recipe added successfully!", Toast.LENGTH_SHORT).show()
                 sharedViewModel.clearIngredients()
                 findNavController().popBackStack()

@@ -17,12 +17,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
-
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityMainAdapter
-import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityMainBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.ContainerSharedViewModel
 
 
 class ContainerActivityFragmentMain : Fragment() {

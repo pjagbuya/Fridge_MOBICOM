@@ -5,6 +5,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.colorGeneratorComponents.ColorGenerator
+
 val FIXED_EXCLUDED_COLOR_HEX_LIST = listOf(
     "#FF000000", // black
     "#FFFFFFFF", // white

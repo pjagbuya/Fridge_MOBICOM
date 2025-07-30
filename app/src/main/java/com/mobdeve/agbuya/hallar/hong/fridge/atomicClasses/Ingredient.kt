@@ -3,7 +3,6 @@ package com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses
 import android.os.Build
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

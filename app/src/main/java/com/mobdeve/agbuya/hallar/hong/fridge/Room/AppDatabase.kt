@@ -8,11 +8,6 @@ import androidx.room.TypeConverters
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.BitmapTypeConverter
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.Converters
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.ImageContainerTypeConverter
-import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
-import com.mobdeve.agbuya.hallar.hong.fridge.dao.IngredientDao
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerImageEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 
 @TypeConverters(BitmapTypeConverter::class, Converters::class, ImageContainerTypeConverter::class)
 //this is the database, put all entities here

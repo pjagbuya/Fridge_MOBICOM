@@ -1,8 +1,6 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.container
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
@@ -10,8 +8,6 @@ import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient.Companion.ItemType
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient.Companion.ConditionType
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient.Companion.UnitOfMeasurement
-import androidx.core.net.toUri
-
 
 class GroceryDataHelper {
     companion object {

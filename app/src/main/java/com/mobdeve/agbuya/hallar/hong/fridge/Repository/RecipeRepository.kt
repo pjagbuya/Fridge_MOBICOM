@@ -35,4 +35,17 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
         recipeDao.deleteIngredientsByRecipeId(recipe.id)
         recipeDao.deleteRecipeById(recipe.id)
     }
+
+    // update recipe
+    suspend fun saveRecipe(recipe: RecipeModel) = withContext(Dispatchers.IO) {
+        val entity = recipe.toEntity()
+
+        if (recipe.id == 0) {
+            val recipeId = recipeDao.insertRecipe(entity).toInt()
+        } else {
+            recipeDao.updateRecipe(entity)
+            recipeDao.deleteIngredientsByRecipeId(recipe.id)
+            recipeDao.insertIngredients(recipe.ingredients.map { it.toEntity(recipe.id) })
+        }
+    }
 }
