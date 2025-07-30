@@ -4,17 +4,21 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(
-//    foreignKeys = [ForeignKey(
-//        entity = ContainerEntity::class,
-//        parentColumns = ["containerId"],
-//        childColumns = ["attachedContainerId"],
-//        onDelete = ForeignKey.CASCADE
-//    )]
+    foreignKeys = [ForeignKey(
+        entity = ContainerEntity::class,
+        parentColumns = ["containerId"],
+        childColumns = ["attachedContainerId"],
+        onDelete = ForeignKey.CASCADE
+    )]
 )
 data class IngredientEntity(
     @PrimaryKey(autoGenerate = true) val ingredientID: Int = 0,
+    //added
+
     val name: String,
     val iconResId: Int,
     val quantity: Double,

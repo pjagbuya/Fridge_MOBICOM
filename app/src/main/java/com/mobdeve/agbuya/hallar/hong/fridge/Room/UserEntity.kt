@@ -1,11 +1,17 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.Room
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
-@Entity(indices = [Index(value = ["email"], unique = true)])
+@Serializable
+@Entity(tableName = "users")
 data class UserEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val name: String,
-    val email: String,
-    val password: String,
+    @PrimaryKey
+    val firebaseUid: String, // Fireauth current user  RecipeId
+    val username: String,
+
+    //added
+    val ownedInventoryId: String?,
+    val joinedInventoryId: String?
 )

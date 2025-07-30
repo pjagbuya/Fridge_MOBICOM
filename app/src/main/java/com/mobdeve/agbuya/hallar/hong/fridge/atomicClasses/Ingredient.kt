@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
+@Serializable
 @Parcelize
 class Ingredient(
     val ingredientID : Int = TOTAL_NUM++,

@@ -10,7 +10,8 @@ fun ContainerEntity.toDomain(): ContainerModel {
         imageContainer = this.imageContainer,
         currCap = this.currCap,
         maxCap = this.maxCap,
-        timeStamp = this.timeStamp
+        timeStamp = this.timeStamp,
+        inventoryOwnerUserId = this.inventoryOwnerId,
     )
 }
 
@@ -22,6 +23,6 @@ fun ContainerModel.toEntity(ownerUserId: Int, containerId: Int = 0): ContainerEn
         currCap = this.currCap,
         maxCap = this.maxCap,
         timeStamp = this.timeStamp,
-        ownerUserId = ownerUserId
+        inventoryOwnerId = this.inventoryOwnerUserId
     )
 }

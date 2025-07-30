@@ -9,7 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.mobdeve.agbuya.hallar.hong.fridge.R
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentProfileLoginMainBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.firestore.FirestoreHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
@@ -29,7 +34,6 @@ class LoginFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
-        // LOGIN button click
         binding.userLoginBtn.setOnClickListener {
             val email = binding.emailEt.text.toString().trim()
             val password = binding.passwordEt.text.toString().trim()
@@ -42,11 +46,6 @@ class LoginFragment : Fragment() {
                 loginUser(email, password)
             }
         }
-
-        // GO TO SIGN UP button click
-//        binding.userSignUpBtn.setOnClickListener {
-//            findNavController().navigate(R.id.action_loginMain_to_signupMain)
-//        }
     }
 
     private fun loginUser(email: String, password: String) {
@@ -54,7 +53,24 @@ class LoginFragment : Fragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_loginMain_to_loginUserMain)
+
+                    // Sync Room Inventory data to Firestore
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val appDb = AppDatabase.getInstance(requireContext())
+                        val inventories = appDb.inventoryDao().getAllInventories2()
+
+                        inventories.forEach { inventoryEntity ->
+                            val inventoryId = inventoryEntity.inventoryId
+                            val inventoryWithEverything = appDb.inventoryDao().getInventoryWithEverything(inventoryId)
+                            FirestoreHelper.uploadInventoryFull(inventoryWithEverything)
+                        }
+
+                        // Navigate on main thread
+                        launch(Dispatchers.Main) {
+                            findNavController().navigate(R.id.action_loginMain_to_loginUserMain)
+                        }
+                    }
+
                 } else {
                     binding.loginErrorTv.text = "Login failed: ${task.exception?.message}"
                     binding.loginErrorTv.visibility = View.VISIBLE

@@ -91,7 +91,7 @@ class ContainerActivityEditAdapter(
                 currCap = 0,
                 maxCap = 30,
                 timeStamp = ContainerModel.getTimeStamp(),
-                ownerUserId = 1
+                inventoryOwnerId = "0"
             )
 
             sharedContainerViewModel.addContainer(containerEntity)
@@ -124,7 +124,7 @@ class ContainerActivityEditAdapter(
                 currCap = 0,
                 maxCap = 30,
                 timeStamp = ContainerModel.getTimeStamp(),
-                ownerUserId = 1
+                inventoryOwnerId = "0"
             )
 
             sharedContainerViewModel.addContainer(containerEntity)

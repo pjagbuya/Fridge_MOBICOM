@@ -9,7 +9,8 @@ import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
 // RecipeModel to RecipeEntity
 fun RecipeModel.toEntity(): RecipeEntity {
     return RecipeEntity(
-        id = if (this.id == 0) 0 else this.id,
+        RecipeId = if (this.recipeId == 0) 0 else this.recipeId,
+        inventoryOwnerId = this.inventoryOwnerId,
         name = this.name,
         description = this.description
     )
@@ -30,9 +31,10 @@ fun RecipeModel.RecipeIngredient.toEntity(recipeId: Int): RecipeIngredientEntity
 // RecipeEntity + RecipeIngredientEntity to RecipeModel
 fun RecipeEntity.toModel(ingredients: List<RecipeIngredientEntity>): RecipeModel {
     return RecipeModel(
-        id = this.id,
+        recipeId = this.RecipeId,
         name = this.name,
         description = this.description,
+        inventoryOwnerId = this.inventoryOwnerId,
         ingredients = ArrayList(
             ingredients.map {
                 RecipeModel.RecipeIngredient(

@@ -9,8 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mobdeve.agbuya.hallar.hong.fridge.R
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentProfileSignupMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class SignupFragment : Fragment() {
 
@@ -18,6 +26,7 @@ class SignupFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,8 +38,8 @@ class SignupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
 
         binding.signUpBtn.setOnClickListener {
             val fullName = binding.userFullNameEt.text.toString().trim()
@@ -61,12 +70,31 @@ class SignupFragment : Fragment() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Set display name (optional)
                     val user = auth.currentUser
-                    val profileUpdates = UserProfileChangeRequest.Builder()
-                        .setDisplayName(fullName)
-                        .build()
-                    user?.updateProfile(profileUpdates)
+                    user?.updateProfile(
+                        UserProfileChangeRequest.Builder()
+                            .setDisplayName(fullName)
+                            .build()
+                    )
+
+                    val uid = user?.uid ?: return@addOnCompleteListener
+                    val newUser = UserEntity(
+                        firebaseUid = uid,
+                        username = fullName,
+                        ownedInventoryId = TODO(),
+                        joinedInventoryId = TODO(),
+                    )
+
+                    // Save to Room + Firestore
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val appDb = AppDatabase.getInstance(requireContext())
+                        appDb.userDao().insertUser(newUser)
+
+                        val serializedUser = Json.encodeToString(newUser)
+                        db.collection("users")
+                            .document(uid)
+                            .set(mapOf("json" to serializedUser))
+                    }
 
                     Toast.makeText(requireContext(), "Sign up successful!", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_signupMain_to_loginMain)

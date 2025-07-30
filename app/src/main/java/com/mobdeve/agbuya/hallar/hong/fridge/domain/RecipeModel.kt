@@ -8,9 +8,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RecipeModel(
-    var id: Int = 0,  // Room auto-generates this if 0
+    var recipeId: Int = 0,
     var name: String,
     var description: String = "",
+    var inventoryOwnerId: String = "0",
     var ingredients: ArrayList<RecipeIngredient> = ArrayList()
 ) : Parcelable {
 

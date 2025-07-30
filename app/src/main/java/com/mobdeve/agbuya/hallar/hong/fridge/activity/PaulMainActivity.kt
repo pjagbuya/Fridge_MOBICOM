@@ -16,15 +16,18 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
-import com.mobdeve.agbuya.hallar.hong.fridge.database.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.NavigationbarBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,7 +69,9 @@ class PaulMainActivity : AppCompatActivity() {
             }
             navBarBinding = activityMainBinding.navigationBar
 
+
             setupNavigation()
+            initSampleData(this)
 
     }
 
@@ -88,60 +93,102 @@ class PaulMainActivity : AppCompatActivity() {
     private fun initSampleData(context: Context) {
         val db = AppDatabase.getInstance(context)
         val userDao = db.userDao()
+        val inventoryDao = db.inventoryDao()
         val containerDao = db.containerDao()
         val ingredientDao = db.ingredientDao()
+        val recipeDao = db.recipeDao()
+        val recipeIngredientDao = db.recipeIngredientDao()
 
         CoroutineScope(Dispatchers.IO).launch {
+//            // Skip if data already exists
+//            if (userDao) {
+//                Log.d("SampleData", "Sample data already initialized.")
+//                return@launch
+//            }
 
-            val existingUsers = userDao.getAllUsers()
-            if (existingUsers.isNotEmpty()) {
-                Log.d("SampleData", "Sample data already initialized. Skipping.")
-                return@launch
-            }
-            // Insert one user
-            val userIdLong = userDao.insertUser(
-                UserEntity(
-                    name = "Paul",
-                    email = "p@gmail.com",
-                    password = "123456"
-                )
+            // 1. Insert User
+            val user = UserEntity(
+                firebaseUid = "0",
+                username = "Paul",
+                ownedInventoryId = null,
+                joinedInventoryId = null
             )
-            val userId = userIdLong.toInt() // Works safely now
-            // Insert 5 containers
-            val containerIds = (1..5).map {
+            userDao.insertUser(user)
+
+            // 2. Insert Inventory
+            val inventoryId = "inv_sample_001"
+            val inventory = InventoryEntity(
+                inventoryId = inventoryId,
+                inventoryName = "Paul's Inventory",
+                ownerId = user.firebaseUid
+            )
+            inventoryDao.insertInventory(inventory)
+
+            // 3. Update User with ownedInventoryId
+            userDao.insertUser(user.copy(ownedInventoryId = inventoryId))
+
+            // 4. Insert Containers
+            val containerIds = (1..3).map { i ->
                 val container = ContainerEntity(
-                    name = "Container $it",
+                    inventoryOwnerId = inventoryId,
+                    name = "Container $i",
                     imageContainer = ImageContainer(
                         resId = R.drawable.container_type_1_fridge,
                         colorId = R.color.black
                     ),
                     currCap = 0,
                     maxCap = 10,
-                    timeStamp = ContainerModel.getTimeStamp(),
-                    ownerUserId = userId
+                    timeStamp = System.currentTimeMillis().toString()
                 )
                 containerDao.insertContainer(container)
             }
 
-            // Insert 5 ingredients (1 each container)
-            containerIds.forEachIndexed { index, containerId ->
-                val ingredient = IngredientEntity(
-                    name = "Ingredient ${index + 1}",
+            // 5. Insert Ingredients (1 per container)
+            val ingredientNames = mutableListOf<String>()
+            val ingredientEntities = containerIds.mapIndexed { index, containerId ->
+                val name = "Ingredient ${index + 1}"
+                ingredientNames.add(name)
+                IngredientEntity(
+                    name = name,
                     iconResId = R.drawable.ic_launcher_foreground,
-                    price = 10.0,
-                    quantity = 10.0,
-                    unit = "kg",
+                    quantity = 2.0 * (index + 1),
+                    price = 5.0 + index,
+                    unit = "g",
                     conditionType = "Fresh",
                     itemType = "VEGETABLE",
-                    dateAdded = "2025-07-15",
-                    expirationDate = "2025-08-15",
+                    dateAdded = "2025-07-01",
+                    expirationDate = "2025-08-01",
                     attachedContainerId = containerId.toInt(),
-                    imageList = arrayListOf() // Or dummy ImageRaw
+                    imageList = arrayListOf()
                 )
-                ingredientDao.insertIngredient(ingredient)
             }
+
+            ingredientEntities.forEach { ingredientDao.insertIngredient(it) }
+
+            // 6. Insert Recipe
+            val recipe = RecipeEntity(
+                inventoryOwnerId = inventoryId,
+                name = "Easy Salad",
+                description = "Simple veggie salad with fresh ingredients"
+            )
+            val recipeId = recipeDao.insertRecipe(recipe).toInt()
+
+            // 7. Insert RecipeIngredientEntities referencing ingredients
+            ingredientNames.forEachIndexed { index, name ->
+                val recipeIngredient = RecipeIngredientEntity(
+                    recipeId = recipeId,
+                    name = name,
+                    amount = 100.0 + index * 50,
+                    unit = "g",
+                    isCustom = false
+                )
+                recipeIngredientDao.insert(recipeIngredient)
+            }
+
+            Log.d("SampleData", "Sample user, inventory, containers, ingredients, and recipes inserted.")
         }
     }
+
 
     private fun setupNavigation() {
         val navHostFragment = supportFragmentManager

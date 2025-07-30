@@ -14,6 +14,9 @@ plugins {
 
     // Safeargs my branch
     id("androidx.navigation.safeargs.kotlin")
+
+    //serialization
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
 android {
@@ -71,6 +74,10 @@ configurations.all{
 
 dependencies {
     implementation("xmlpull:xmlpull:1.1.3.4d_b4_min")
+    implementation("androidx.databinding:adapters:3.2.0-alpha11")
+
+    //added
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
 
     val room_version = "2.6.1"

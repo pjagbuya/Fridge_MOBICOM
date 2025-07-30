@@ -43,21 +43,27 @@ class ContainerDataHelper {
                 name = "My Fridge1",
                 imageContainer = ImageContainer(R.drawable.container_type_1_fridge, R.color.red),
                 currCap = 5,
-                maxCap = 10
+                maxCap = 10,
+                timeStamp = TODO(),
+                inventoryOwnerUserId = TODO()
             ),
             ContainerModel(
                 containerId = -2,
                 name = "My Fridge2",
                 imageContainer = ImageContainer(R.drawable.container_type_2_cabinet, R.color.red),
                 currCap = 5,
-                maxCap = 10
+                maxCap = 10,
+                timeStamp = TODO(),
+                inventoryOwnerUserId = TODO()
             ),
             ContainerModel(
                 containerId = -1,
                 name = "My Fridge3",
                 imageContainer = ImageContainer(R.drawable.container_type_3_freezer, R.color.red),
                 currCap = 5,
-                maxCap = 10
+                maxCap = 10,
+                timeStamp = TODO(),
+                inventoryOwnerUserId = TODO()
             )
         )
         fun initializeContainers(context: Context): ArrayList<ContainerModel> {
@@ -68,7 +74,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer(R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
             containerModels.add(
@@ -77,7 +85,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
             containerModels.add(
@@ -86,7 +96,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
             containerModels.add(
@@ -95,7 +107,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
             containerModels.add(
@@ -104,7 +118,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
             containerModels.add(
@@ -113,7 +129,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
             containerModels.add(
@@ -122,7 +140,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
             containerModels.add(
@@ -131,7 +151,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
             containerModels.add(
@@ -140,7 +162,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
             containerModels.add(
@@ -149,7 +173,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
             containerModels.add(
@@ -158,7 +184,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
             containerModels.add(
@@ -167,7 +195,9 @@ class ContainerDataHelper {
                     name = "Vegetable Bin",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 5,
-                    maxCap = 10
+                    maxCap = 10,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
 
@@ -177,7 +207,9 @@ class ContainerDataHelper {
                     name = "Fruit Shelf",
                     imageContainer = ImageContainer( R.drawable.container_type_2_cabinet, getRandomColorGenerator()),
                     currCap = 3,
-                    maxCap = 5
+                    maxCap = 5,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
 
@@ -187,7 +219,9 @@ class ContainerDataHelper {
                     name = "Meat Compartment",
                     imageContainer = ImageContainer( R.drawable.container_type_1_fridge, getRandomColorGenerator()),
                     currCap = 2,
-                    maxCap = 4
+                    maxCap = 4,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
 
@@ -197,7 +231,9 @@ class ContainerDataHelper {
                     name = "Condiments Door",
                     imageContainer = ImageContainer( R.drawable.container_type_2_cabinet, getRandomColorGenerator()),
                     currCap = 6,
-                    maxCap = 8
+                    maxCap = 8,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
 
@@ -207,7 +243,9 @@ class ContainerDataHelper {
                     name = "Freezer Top",
                     imageContainer = ImageContainer( R.drawable.container_type_3_freezer, getRandomColorGenerator()),
                     currCap = 1,
-                    maxCap = 3
+                    maxCap = 3,
+                    timeStamp = TODO(),
+                    inventoryOwnerUserId = TODO()
                 )
             )
 

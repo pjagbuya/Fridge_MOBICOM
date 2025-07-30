@@ -12,7 +12,9 @@ import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
 import kotlinx.android.parcel.Parcelize
 import androidx.core.net.toUri
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Parcelize
 class ImageContainer(
     @DrawableRes

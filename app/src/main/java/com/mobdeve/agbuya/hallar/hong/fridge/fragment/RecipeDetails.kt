@@ -11,11 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mobdeve.agbuya.hallar.hong.fridge.Repository.RecipeRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeIngredientAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentRecipeDetailsBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
 import kotlinx.coroutines.launch
 
 class RecipeDetails : Fragment() {
@@ -90,7 +90,7 @@ class RecipeDetails : Fragment() {
     private fun deleteRecipe() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                recipeRepository.deleteRecipe(recipe)
+                recipeRepository.deleteRecipeById(recipe.recipeId)
                 Toast.makeText(requireContext(),
                     "Deleted ${recipe.name}", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()

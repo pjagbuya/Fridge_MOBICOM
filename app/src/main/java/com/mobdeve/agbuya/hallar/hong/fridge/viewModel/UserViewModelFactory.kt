@@ -1,8 +1,9 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.viewModel
+package com.mobdeve.agbuya.hallar.hong.fridge.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.UserRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.viewmodels.UserViewModel
 
 class UserViewModelFactory(private val repository: UserRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -13,3 +14,4 @@ class UserViewModelFactory(private val repository: UserRepository) : ViewModelPr
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+

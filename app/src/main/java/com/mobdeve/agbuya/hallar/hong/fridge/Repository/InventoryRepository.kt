@@ -1,35 +1,35 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.Repository
+package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.InventoryDao
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.InventoryEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.MemberEntity
 
-class InventoryRepository(private val dao: InventoryDao) {
-    suspend fun createInventory(ownerEmail: String, name: String): Long {
-        return dao.insertInventory(InventoryEntity(ownerEmail = ownerEmail, name = name))
+import androidx.lifecycle.LiveData
+import com.mobdeve.agbuya.hallar.hong.fridge.dao.InventoryDao
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryWithContainers
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryWithEverything
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.InventoryWithRecipes
+
+class InventoryRepository(private val inventoryDao: InventoryDao) {
+
+    val readAllData : LiveData<List<InventoryEntity>> = inventoryDao.getAllInventories()
+
+    suspend fun getAllInventories(): List<InventoryEntity> =
+        inventoryDao.getAllInventories2()
+
+    suspend fun getInventoryWithContainers(id: String): InventoryWithContainers =
+        inventoryDao.getInventoryWithContainers(id)
+
+    suspend fun getInventoryWithRecipes(id: String): InventoryWithRecipes =
+        inventoryDao.getInventoryWithRecipes(id)
+
+    suspend fun getInventoryWithEverything(id: String): InventoryWithEverything =
+        inventoryDao.getInventoryWithEverything(id)
+
+    suspend fun insertInventory(inventory: InventoryEntity) {
+        inventoryDao.insertInventory(inventory)
     }
 
-    suspend fun inviteMember(inventoryId: Int, email: String, nickname: String): Result<Long> {
-        val user = dao.getUserByEmail(email) ?: return Result.failure(Exception("User does not exist"))
-
-        val currentMembers = dao.getMembers(inventoryId)
-        if (currentMembers.size >= 5) {
-            return Result.failure(Exception("Maximum members reached"))
-        }
-
-        val id = dao.insertMember(MemberEntity(
-            inventoryId = inventoryId,
-            memberEmail = email,
-            nickname = nickname
-        ))
-        return Result.success(id)
-    }
-
-//    suspend fun updateInviteStatus(memberId: Int, status: String) {
-//        dao.updateInviteStatus(status, memberId)
-//    }
-
-    suspend fun getInventoryByName(name: String): InventoryEntity? {
-        return dao.getInventoryByName(name)
+    suspend fun deleteInventory(inventory: InventoryEntity) {
+        inventoryDao.deleteInventory(inventory)
     }
 }

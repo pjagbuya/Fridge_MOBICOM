@@ -1,31 +1,15 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.Room
+package com.mobdeve.agbuya.hallar.hong.fridge.dao
 
 import androidx.room.*
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: UserEntity): Long
+    suspend fun insertUser(user: UserEntity)
 
-//    @Update
-//    suspend fun updateUser(user: UserEntity)
+    @Query("SELECT * FROM users WHERE firebaseUid = :firebaseUid LIMIT 1")
+    suspend fun getUserByFirebaseUid(firebaseUid: String): UserEntity?
 
-//    @Delete
-//    suspend fun deleteUser(user: UserEntity)
 
-    // get users by ID
-    @Query("SELECT * FROM UserEntity WHERE id = :userId")
-    suspend fun getUserById(userId: Int): UserEntity?
-
-    // get users by name
-    @Query("SELECT * FROM UserEntity WHERE name = :name")
-    suspend fun getUserByName(name: String): UserEntity?
-
-    // get users by email
-    @Query("SELECT * FROM UserEntity WHERE email = :email LIMIT 1")
-    suspend fun getUserByEmail(email: String): UserEntity?
-
-    // get all users
-    @Query("SELECT * FROM UserEntity")
-    suspend fun getAllUsers(): List<UserEntity>
 }

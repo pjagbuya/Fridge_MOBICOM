@@ -2,14 +2,14 @@ package com.mobdeve.agbuya.hallar.hong.fridge.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerWithIngredients
 
 @Dao
 interface ContainerDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertContainer(container: ContainerEntity) : Long
+    suspend fun insertContainer(container: ContainerEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(containers: List<ContainerEntity>)
@@ -20,12 +20,13 @@ interface ContainerDao {
     @Delete
     suspend fun deleteContainer(container: ContainerEntity)
 
-    @Query("DELETE FROM ContainerEntity")
-    suspend fun deleteAll()
-
-    @Query("SELECT * FROM ContainerEntity ORDER BY timeStamp DESC")
+    @Query("SELECT * FROM containers ORDER BY timeStamp DESC")
     fun getAllContainers(): LiveData<List<ContainerEntity>>
-//
-//    @Query("SELECT * FROM ContainerEntity WHERE containerId = :selectedId LIMIT 1")
-//    suspend fun getContainerById(selectedId: Int): ContainerModel?
+
+    @Transaction
+    @Query("SELECT * FROM containers WHERE containerId = :containerId")
+    suspend fun getContainerWithIngredients(containerId: Int): ContainerWithIngredients
+
+    @Query("DELETE FROM containers")
+    suspend fun deleteAll()
 }

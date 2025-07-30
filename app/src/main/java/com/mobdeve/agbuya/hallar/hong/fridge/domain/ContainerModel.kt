@@ -19,6 +19,7 @@ class ContainerModel(
     var currCap : Int,
     var maxCap : Int,
     var timeStamp : String = getTimeStamp(),
+    var inventoryOwnerUserId: String
 ) : Parcelable {
     companion object{
         fun getTimeStamp() : String {

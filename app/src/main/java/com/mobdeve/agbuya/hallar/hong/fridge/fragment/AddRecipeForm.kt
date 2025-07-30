@@ -11,11 +11,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mobdeve.agbuya.hallar.hong.fridge.Repository.RecipeRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.Mappers.toEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeIngredientAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentAddRecipeFormBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.SharedRecipeViewModel
 import kotlinx.coroutines.launch
 
@@ -111,7 +112,7 @@ class AddRecipeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                recipeRepository.insertRecipe(newRecipe)
+                recipeRepository.insertRecipe(newRecipe.toEntity())
                 Toast.makeText(requireContext(), "Recipe added successfully!", Toast.LENGTH_SHORT).show()
                 sharedViewModel.clearIngredients()
                 findNavController().popBackStack()
