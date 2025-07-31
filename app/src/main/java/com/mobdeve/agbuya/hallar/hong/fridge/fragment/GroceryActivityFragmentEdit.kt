@@ -340,7 +340,7 @@ class GroceryActivityFragmentEdit: Fragment() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
 
-                selectedIngredient.imageList.add(ImageRaw(ImageRaw.fromUri(requireContext(), tempCameraImageUri!!)!!.getBlob()))
+                selectedIngredient.imageList.add(ImageRaw.fromUri(requireContext(), tempCameraImageUri!!)!!)
                 binding.imagesRecyclerViewRv.adapter?.notifyItemInserted(selectedIngredient.imageList.size - 1)
             }
         }
@@ -349,7 +349,7 @@ class GroceryActivityFragmentEdit: Fragment() {
             registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
                 if (success && tempCameraImageUri != null) {
 
-                    selectedIngredient.imageList.add(ImageRaw(ImageRaw.fromUri(requireContext(), tempCameraImageUri!!)!!.getBlob()))
+                    selectedIngredient.imageList.add(ImageRaw.fromUri(requireContext(), tempCameraImageUri!!)!!)
                     binding.imagesRecyclerViewRv.adapter?.notifyItemInserted(selectedIngredient.imageList.size - 1)
                 }
             }
