@@ -1,42 +1,29 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.adapter
 
-import android.graphics.Bitmap
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
-import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.DialogImageZoomBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ImageLayoutViewBinding
 
-class GroceryViewImageGridAdapter(
-    private val images: MutableList<ImageRaw>,
+class GroceryViewImageGridAdapterDefault(
+    private val images: List<ImageRaw>,
     private val isEditable: Boolean
-) : RecyclerView.Adapter<GroceryViewImageGridAdapter.ImageViewHolder>() {
+) : RecyclerView.Adapter<GroceryViewImageGridAdapterDefault.ImageViewHolder>() {
 
     inner class ImageViewHolder(private val binding: ImageLayoutViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindData(item: ImageRaw, pos : Int) {
             binding.imageTemplate.setImageBitmap(item.getBitmap())
-            if(isEditable){
-                binding.imageDeleteBtn.visibility = View.VISIBLE
-                binding.imageDeleteBtn.isEnabled = true
-                binding.imageDeleteBtn.setOnClickListener {
-                    removeAt(pos)
-                }
 
-            }else{
-                binding.imageDeleteBtn.visibility = View.GONE
-                binding.imageDeleteBtn.isEnabled = false
+            binding.imageDeleteBtn.visibility = View.GONE
+            binding.imageDeleteBtn.isEnabled = false
 
-            }
             binding.imageTemplate.setOnClickListener {
                 val context = binding.root.context
                 val dialog = android.app.Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
@@ -52,13 +39,6 @@ class GroceryViewImageGridAdapter(
                         .into(dialogBinding.zoomImageView)
                 } else {
                     Toast.makeText(context, "Failed to load image", Toast.LENGTH_SHORT).show()
-                }
-                // Safely remove using captured position
-                dialogBinding.removeBtn.setOnClickListener {
-
-                    removeAt(pos)
-                    dialog.dismiss()
-
                 }
 
                 // Show/hide remove button
@@ -87,10 +67,6 @@ class GroceryViewImageGridAdapter(
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         holder.bindData(images[position], position)
-    }
-    fun removeAt(position: Int) {
-        images.removeAt(position)
-        notifyItemRemoved(position)
     }
 
     override fun getItemCount(): Int = images.size

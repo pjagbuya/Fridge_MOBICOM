@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper.Compa
 import com.mobdeve.agbuya.hallar.hong.fridge.customInterface.ContainerEditActionListener
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityUpdateBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
 
 class ContainerActivityFragmentUpdate : Fragment(){
 
@@ -78,14 +80,16 @@ class ContainerActivityFragmentUpdate : Fragment(){
         setupTopBar()
         setupRecycler()
         binding.containerNameEt.setText(args.currentContainer.name)
-
+        containerName = args.currentContainer.name
         binding.containerNameEt.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 containerName = s.toString()
-                Log.d("CONTAINER_ACTIVITY_EDIT", "Detected change")
             }
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+
+            }
         })
     }
     override fun onDestroyView() {
@@ -150,33 +154,18 @@ class ContainerActivityFragmentUpdate : Fragment(){
                 requireActivity(),
                 object : ContainerEditActionListener {
                     override fun onOkClick(position: Int) {
-                        val name = containerName // latest value from EditText
-                        val result = Bundle().apply {
-                            putString(CONTAINER_EDIT_NAME_KEY, name)
-                            putBoolean(CONTAINER_ISCANCELED, false)
-                        }
-                        parentFragmentManager.setFragmentResult(
-                            if (isEdit) EDIT_RESULT else ADD_RESULT,
-                            result
-                        )
+
                         findNavController().navigateUp()
                     }
 
                     override fun onCancelClick(position: Int) {
-                        val result = Bundle().apply {
-                            putString(CONTAINER_EDIT_NAME_KEY, containerName)
-                            putBoolean(CONTAINER_ISCANCELED, true)
-                        }
-                        parentFragmentManager.setFragmentResult(
-                            if (isEdit) EDIT_RESULT else ADD_RESULT,
-                            result
-                        )
+
                         findNavController().navigateUp()
                     }
                 },
                 getContainerName = { containerName }, // 👈 live reference
                 targetIndex,
-                args.currentContainer.imageContainer.getColorId()
+                args.currentContainer
             )
 
         }

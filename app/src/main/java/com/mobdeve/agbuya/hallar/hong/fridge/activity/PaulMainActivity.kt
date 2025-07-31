@@ -16,7 +16,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
-import com.mobdeve.agbuya.hallar.hong.fridge.database.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
@@ -37,10 +37,8 @@ class PaulMainActivity : AppCompatActivity() {
     }
     private lateinit var  activityMainBinding : ActivityMainBinding
 
-    private lateinit var  containerModels: ArrayList<ContainerModel>
     private lateinit var navBarBinding: NavigationbarBinding
 
-    private lateinit var  groceryModels: ArrayList<Ingredient>
     private val groceryViewModel: GrocerySharedViewModel by viewModels()
 //    private val newContainerResultLauncher = registerForActivityResult(
 //        ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -58,12 +56,9 @@ class PaulMainActivity : AppCompatActivity() {
             activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(activityMainBinding.root)
             Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
-
+//            wipeAllData(applicationContext)
             initSampleData(applicationContext)
-            groceryViewModel.loadGroceryList(applicationContext)
-            groceryViewModel.groceryList.observe(this) { list ->
-                groceryModels = ArrayList(list)
-            }
+
             navBarBinding = activityMainBinding.navigationBar
 
             setupNavigation()
@@ -81,7 +76,7 @@ class PaulMainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             db.ingredientDao().deleteAll()
             db.containerDao().deleteAll()
-//            db.userDao().deleteAll()
+            db.userDao().deleteAll()
             Log.d("SampleData", "All data wiped.")
         }
     }
@@ -127,18 +122,18 @@ class PaulMainActivity : AppCompatActivity() {
             containerIds.forEachIndexed { index, containerId ->
                 val ingredient = IngredientEntity(
                     name = "Ingredient ${index + 1}",
-                    iconResId = R.drawable.ic_launcher_foreground,
+                    iconResId = R.mipmap.ic_itemtype_other,
                     price = 10.0,
                     quantity = 10.0,
                     unit = "kg",
-                    conditionType = "Fresh",
+                    conditionType = "very ok",
                     itemType = "VEGETABLE",
                     dateAdded = "2025-07-15",
                     expirationDate = "2025-08-15",
                     attachedContainerId = containerId.toInt(),
                     imageList = arrayListOf() // Or dummy ImageRaw
                 )
-                ingredientDao.insertIngredient(ingredient)
+                ingredientDao.insertAndUpdateCapacity(ingredient)
             }
         }
     }
@@ -147,6 +142,15 @@ class PaulMainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.dynamicContent) as NavHostFragment
         val navController = navHostFragment.navController
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            resetAllIcons()
+            when (destination.id) {
+                R.id.containerMain -> navBarBinding.containersBtn.setImageResource(R.mipmap.container_dark)
+                R.id.groceriesMain -> navBarBinding.groceriesBtn.setImageResource(R.mipmap.ingredients_dark)
+                R.id.recipeMainFragment -> navBarBinding.recipesBtn.setImageResource(R.mipmap.recipe_dark)
+                R.id.profileMain -> navBarBinding.profileBtn.setImageResource(R.mipmap.profile_dark)
+            }
+        }
 
 
         navBarBinding.containersBtn.setOnClickListener {

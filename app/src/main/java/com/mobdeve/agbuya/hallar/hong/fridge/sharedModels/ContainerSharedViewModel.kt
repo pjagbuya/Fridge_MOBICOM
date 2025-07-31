@@ -10,7 +10,8 @@ import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import android.app.Application
 import androidx.lifecycle.viewModelScope
-import com.mobdeve.agbuya.hallar.hong.fridge.database.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerIdName
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,9 @@ import okhttp3.Dispatcher
 class ContainerSharedViewModel(application : Application): AndroidViewModel(application){
     val readAllData : LiveData<List<ContainerEntity>>
     private val repository: ContainerRepository
+    val containerIdNameMap = MutableLiveData<List<ContainerIdName>>() // Live observable result
+
+
 
     init {
         val containerDao = AppDatabase.getInstance(application).containerDao()
@@ -37,6 +41,31 @@ class ContainerSharedViewModel(application : Application): AndroidViewModel(appl
     fun updateContainer(container : ContainerEntity){
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateContainer(container)
+        }
+    }
+
+    fun deleteContainer(containerId : Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteContainer(containerId)
+        }
+    }
+    fun decreaseCurrCap(containerId: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.decreaseCurrCap(containerId)
+        }
+    }
+
+    fun getContainerIdNameMapDirect(userId: Int): List<ContainerIdName> {
+        return readAllData.value
+            ?.filter { it.ownerUserId == userId }
+            ?.map { ContainerIdName(it.containerId, it.name) }
+            ?: emptyList()
+    }
+
+    fun fetchContainerIdNameMap(userId: Int) {
+        viewModelScope.launch {
+            val result = repository.getContainerIdNameMap(userId)
+            containerIdNameMap.postValue(result)
         }
     }
 

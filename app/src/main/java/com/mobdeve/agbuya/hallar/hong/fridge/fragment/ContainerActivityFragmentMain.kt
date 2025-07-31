@@ -2,7 +2,6 @@ package com.mobdeve.agbuya.hallar.hong.fridge.fragment
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Parcelable
@@ -19,10 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityMainAdapter
-import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
 
 
 class ContainerActivityFragmentMain : Fragment() {
@@ -35,7 +33,8 @@ class ContainerActivityFragmentMain : Fragment() {
     }
     private var _binding:ContainerActivityMainBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: ContainerSharedViewModel
+    private lateinit var containerViewModel: ContainerSharedViewModel
+    private lateinit var groceryViewModel: GrocerySharedViewModel
 
     private val newContainerResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -60,20 +59,9 @@ class ContainerActivityFragmentMain : Fragment() {
     ): View?{
         _binding = ContainerActivityMainBinding.inflate(inflater, container, false)
         val view = binding.root
-        viewModel = ViewModelProvider(this).get(ContainerSharedViewModel::class.java)
+        containerViewModel = ViewModelProvider(this).get(ContainerSharedViewModel::class.java)
+        groceryViewModel = ViewModelProvider(this).get(GrocerySharedViewModel::class.java)
 
-        // Logic here is related to the onDestroy logic
-        if(savedInstanceState!= null){
-
-            // Loads up the onDestroy of the parcelable ArrayList of the given sets of container
-            if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//                containerList = savedInstanceState.getParcelableArrayList<ContainerModel>(CONTAINERS_KEY, ContainerModel::class.java) ?: run {
-//                    ContainerDataHelper.Companion.initializeContainers(requireContext())
-//                }
-            }
-
-        }else{
-        }
 
 
 
@@ -84,23 +72,15 @@ class ContainerActivityFragmentMain : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupTopBar()
         //TODO: Now not using test data but live data of shared view models. Only looks at the data again
 //        containerList.clear()
-        viewModel.readAllData.observe(viewLifecycleOwner) { containerList ->
+        containerViewModel.readAllData.observe(viewLifecycleOwner) { containerList ->
             if (containerList.isNullOrEmpty()) {
                 // 🔴 LiveData is empty
                 showEmptyState()
             } else {
                 // ✅ LiveData has data
-                setupRecycler()
-            }
-        }
-        // Receives if it is cancelled, may need to change this
-
-        //TODO: delete clear() Testing if data empty, utilize shared viewholders in the activity
-        parentFragmentManager.setFragmentResultListener(ADD_RESULT, viewLifecycleOwner) { _, bundle ->
-            val isCancelled = bundle.getBoolean(CONTAINER_ISCANCELED)
-            if(!isCancelled){
                 setupRecycler()
             }
         }
@@ -133,7 +113,7 @@ class ContainerActivityFragmentMain : Fragment() {
 
     private fun setupTopBar() {
 
-        binding.searchBarContainer.headerTitleTv.setText(R.string.add_container)
+        binding.searchBarContainer.headerTitleTv.setText(R.string.container_header)
     }
 
     private fun checkAndPlaceRecyclerViewSpot(){
@@ -151,9 +131,9 @@ class ContainerActivityFragmentMain : Fragment() {
         // If empty activity is still hogging
         checkAndPlaceRecyclerViewSpot()
         val tempAdapter = ContainerActivityMainAdapter() {
-
-//        ListFragment
-//            findNavController().navigate(action, bundle)
+            container->
+            groceryViewModel.deleteAllGroceryAtContainer(container.containerId)
+            containerViewModel.deleteContainer(container.containerId)
         }
 
         binding.containerRecyclerView.visibility = View.VISIBLE
@@ -164,7 +144,7 @@ class ContainerActivityFragmentMain : Fragment() {
 
         }
 
-        viewModel.readAllData.observe(viewLifecycleOwner, Observer { container ->
+        containerViewModel.readAllData.observe(viewLifecycleOwner, Observer { container ->
             tempAdapter.setData(container)
         })
 

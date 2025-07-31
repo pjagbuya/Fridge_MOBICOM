@@ -193,5 +193,5 @@
         <!-- Misc -->
         <item>Other</item>
     </string-array>
-
+    <string name="formatted_price">Php %.2f</string>
 </resources>

@@ -1,11 +1,13 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 
 @Dao
@@ -19,10 +21,15 @@ interface IngredientDao {
     @Delete
     suspend fun deleteIngredient(ingredient: IngredientEntity)
 
+    @Query("DELETE FROM IngredientEntity WHERE ingredientId = :ingredientId")
+    suspend fun deleteIngredientById(ingredientId: Int)
+    @Query("DELETE FROM IngredientEntity WHERE attachedContainerId = :containerId")
+    suspend fun deleteAllIngredientsByContainerId(containerId: Int)
+
     @Query("SELECT * FROM IngredientEntity WHERE attachedContainerId = :containerId")
     suspend fun getIngredientsByContainer(containerId: Int): List<IngredientEntity>
-    @Query("SELECT * FROM IngredientEntity")
-    suspend fun getAllIngredients(): List<IngredientEntity>
+    @Query("SELECT * FROM IngredientEntity ORDER BY ingredientID DESC")
+    fun getAllIngredients(): LiveData<List<IngredientEntity>>
     @Transaction
     suspend fun insertAndUpdateCapacity(ingredient: IngredientEntity) {
         insertIngredient(ingredient)
@@ -38,4 +45,12 @@ interface IngredientDao {
 
     @Query("DELETE FROM IngredientEntity")
     suspend fun deleteAll()
+
+
+    // Features
+    @Query("SELECT * FROM IngredientEntity ORDER BY dateAdded DESC")
+    fun getAllIngredientsSortedByDateDesc(): LiveData<List<IngredientEntity>>
+
+    @Query("SELECT * FROM IngredientEntity ORDER BY dateAdded ASC")
+    fun getAllIngredientsSortedByDateAsc(): LiveData<List<IngredientEntity>>
 }

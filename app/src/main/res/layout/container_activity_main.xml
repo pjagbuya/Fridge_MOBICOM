@@ -79,6 +79,7 @@
             android:elevation="10dp"
             android:layoutDirection="ltr"
             android:paddingStart="30dp"
+            android:paddingTop="40dp"
             android:paddingEnd="30dp"
             android:paddingBottom="150dp"
             app:layout_constraintBottom_toBottomOf="@+id/containerFrame"
