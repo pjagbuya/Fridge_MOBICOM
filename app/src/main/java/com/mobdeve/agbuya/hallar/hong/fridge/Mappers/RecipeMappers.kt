@@ -9,7 +9,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
 // RecipeModel to RecipeEntity
 fun RecipeModel.toEntity(): RecipeEntity {
     return RecipeEntity(
-        id = if (this.id == 0) 0 else this.id,
+        id = this.id, // if (this.id == 0) 0 else
         name = this.name,
         description = this.description
     )
