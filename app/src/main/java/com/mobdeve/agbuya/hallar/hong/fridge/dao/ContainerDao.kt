@@ -27,6 +27,9 @@ interface ContainerDao {
     @Query("SELECT * FROM ContainerEntity ORDER BY timeStamp DESC")
     fun getAllContainers(): LiveData<List<ContainerEntity>>
 
+
+
+
     // Increase currCap by a value
     @Query("UPDATE ContainerEntity SET currCap = currCap + 1 WHERE containerId = :containerId")
     suspend fun increaseCurrCap(containerId: Int)
@@ -40,9 +43,12 @@ interface ContainerDao {
 
     @Query("SELECT containerId, name FROM ContainerEntity WHERE ownerUserId = :userId")
     suspend fun getContainerIdNameMap(userId: Int): List<ContainerIdName>
-//
-//    @Query("SELECT * FROM ContainerEntity WHERE containerId = :selectedId LIMIT 1")
-//    suspend fun getContainerById(selectedId: Int): ContainerModel?
+
+
+    //TODO: This is for the final sharedViewmodel to integrate so that it can know which userId it needs to find
+    @Query("SELECT * FROM ContainerEntity WHERE ownerUserId = :userId ORDER BY timeStamp DESC")
+    fun getAllContainersByUserId(userId: Int): LiveData<List<ContainerEntity>>
+    //Features below
 }
 
 data class ContainerIdName(

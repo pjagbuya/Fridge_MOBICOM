@@ -46,6 +46,10 @@ interface IngredientDao {
     @Query("DELETE FROM IngredientEntity")
     suspend fun deleteAll()
 
+    //TODO : This should be the official groceryShareviewmodel get All once a user session is decided
+    @Query("SELECT * FROM IngredientEntity WHERE attachedContainerId IN (:containerIds)")
+    suspend fun getIngredientsByContainerIds(containerIds: List<Int>): List<IngredientEntity>
+
 
     // Features
     @Query("SELECT * FROM IngredientEntity ORDER BY dateAdded DESC")
