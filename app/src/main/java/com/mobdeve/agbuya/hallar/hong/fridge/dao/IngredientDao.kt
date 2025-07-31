@@ -21,9 +21,14 @@ interface IngredientDao {
     @Delete
     suspend fun deleteIngredient(ingredient: IngredientEntity)
 
+    @Query("DELETE FROM IngredientEntity WHERE ingredientId = :ingredientId")
+    suspend fun deleteIngredientById(ingredientId: Int)
+    @Query("DELETE FROM IngredientEntity WHERE attachedContainerId = :containerId")
+    suspend fun deleteAllIngredientsByContainerId(containerId: Int)
+
     @Query("SELECT * FROM IngredientEntity WHERE attachedContainerId = :containerId")
     suspend fun getIngredientsByContainer(containerId: Int): List<IngredientEntity>
-    @Query("SELECT * FROM IngredientEntity")
+    @Query("SELECT * FROM IngredientEntity ORDER BY ingredientID DESC")
     fun getAllIngredients(): LiveData<List<IngredientEntity>>
     @Transaction
     suspend fun insertAndUpdateCapacity(ingredient: IngredientEntity) {
@@ -40,4 +45,12 @@ interface IngredientDao {
 
     @Query("DELETE FROM IngredientEntity")
     suspend fun deleteAll()
+
+
+    // Features
+    @Query("SELECT * FROM IngredientEntity ORDER BY dateAdded DESC")
+    fun getAllIngredientsSortedByDateDesc(): LiveData<List<IngredientEntity>>
+
+    @Query("SELECT * FROM IngredientEntity ORDER BY dateAdded ASC")
+    fun getAllIngredientsSortedByDateAsc(): LiveData<List<IngredientEntity>>
 }

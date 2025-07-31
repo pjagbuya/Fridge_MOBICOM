@@ -11,6 +11,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 class ContainerViewHolder(private val binding: ContainerComponentBinding): RecyclerView.ViewHolder(binding.root)  {
 
     val editBtn : Button = binding.editBtn
+    val deleteBtn : Button = binding.deleteBtn
     private val fridgeNameTv : TextView = binding.fridgeNameTv
     private val fridgeCapacityTv : TextView = binding.fridgeCapacityTv
     private val fridgeTimeStamp: TextView = binding.fridgeTimeStampTv

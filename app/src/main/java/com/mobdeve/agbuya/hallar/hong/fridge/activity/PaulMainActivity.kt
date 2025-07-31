@@ -56,6 +56,7 @@ class PaulMainActivity : AppCompatActivity() {
             activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(activityMainBinding.root)
             Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
+//            wipeAllData(applicationContext)
             initSampleData(applicationContext)
 
             navBarBinding = activityMainBinding.navigationBar
@@ -121,7 +122,7 @@ class PaulMainActivity : AppCompatActivity() {
             containerIds.forEachIndexed { index, containerId ->
                 val ingredient = IngredientEntity(
                     name = "Ingredient ${index + 1}",
-                    iconResId = R.drawable.ic_launcher_foreground,
+                    iconResId = R.mipmap.ic_itemtype_other,
                     price = 10.0,
                     quantity = 10.0,
                     unit = "kg",

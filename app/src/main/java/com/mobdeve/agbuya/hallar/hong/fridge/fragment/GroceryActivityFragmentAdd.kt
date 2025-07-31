@@ -20,7 +20,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
@@ -31,6 +33,10 @@ import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.OpenFoodFactsApi
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentAddBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentUpdateBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -39,9 +45,11 @@ class GroceryActivityFragmentAdd : Fragment() {
 
     private var _binding: GroceryComponentAddBinding? = null
     private val binding get() = _binding!!
+    private var selectedIconId : Int = -1
+    private var selectedContainerId : Int = -1
+
 
     private lateinit var imagesList: ArrayList<ImageRaw>
-    private lateinit var selectedIngredient: Ingredient
 
     // Camera setup
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
@@ -49,6 +57,12 @@ class GroceryActivityFragmentAdd : Fragment() {
 
     // QR setup
     private lateinit var barcodeLauncher: ActivityResultLauncher<Intent>
+
+    private lateinit var groceryViewModel : GrocerySharedViewModel
+    private lateinit var containerViewModel : ContainerSharedViewModel
+
+
+    private lateinit var idToNameMap : Map<Int, String>
 
     private var tempCameraImageUri: Uri? = null
 
@@ -65,58 +79,61 @@ class GroceryActivityFragmentAdd : Fragment() {
         }
     private fun readyForNew(){
         // create default/empty ingredient
-        val newDate = Ingredient.getTimeStamp()
-        selectedIngredient = Ingredient(
-            icon = R.mipmap.chef_hat_icon, // You must define a default/fallback icon in ImageRaw
-            name = "",
-            quantity = 0.0,
-            price = 0.0,
-            dateAdded = newDate, // or current date
-            expirationDate = "",
-            imageContainerLists = ArrayList<ImageRaw>(),
-            attachedContainerID = -1
-        )
+
+        // TODO: Track whose containerID they will pick
+        val newDate = Ingredient.getSimpleDateStamp()
         binding.headerActionItemLabelTv.text = "Add Grocery"
         binding.dateBoughtEt.setText(newDate)
     }
 
-    private fun readyForEdit(){
-        selectedIngredient =
-            arguments?.getParcelable(GroceryActivityFragmentMain.SELECTED_INGREDIENT_KEY)!!
-        binding.headerActionItemLabelTv.text = "Update Item"
-        selectedIngredient?.let { setupIngredientView(it) }
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = GroceryComponentAddBinding.inflate(inflater, container, false)
+        groceryViewModel = ViewModelProvider(this)[GrocerySharedViewModel::class.java]
+        containerViewModel = ViewModelProvider(this)[ContainerSharedViewModel::class.java]
+        imagesList = ArrayList<ImageRaw>()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Setup camera launcher states
+
+        setupDropdowns()
+        setupConditionRadios()
         setupTakePhotoFromGalleryOrCamera()
 
         readyForNew()
 
-        setupDropdowns()
 
         setupRecycler()
+        //Saving information for original container it was stored in
 
-        setupConditionRadios()
+        // TODO: Setup actual user that logs in for the contrainers.
+//        lifecycleScope.launch {
+        val currentUserId = 1
+        setupContainerTypeDropDownActv(currentUserId)
 
+
+
+        binding.iconImageIv.setImageResource(R.mipmap.ic_itemtype_other)
         // Setup add image button
         binding.cameraBtn.setOnClickListener {
             popupDialogForTakePhoto()
         }
 
+        binding.saveBtn.setOnClickListener {
+            validateAndAddIngredient()
+        }
+
         // TODO: Make image selected
-        binding.editIconBtn.setOnClickListener { selectedColor ->
-            IconPickerDialogFragment { selectedColor ->
+        binding.editIconBtn.setOnClickListener { selectedImage ->
+            IconPickerDialogFragment { selectedImage ->
                 // Update image selected
-                binding.iconImageIv.setImageResource(selectedColor)
+                selectedIconId = selectedImage
+                binding.iconImageIv.setImageResource(selectedImage)
             }.show(parentFragmentManager, "iconPickerDialog")
 
         }
@@ -128,6 +145,85 @@ class GroceryActivityFragmentAdd : Fragment() {
             barcodeLauncher.launch(cameraIntent)
         }
     }
+
+    private fun validateAndAddIngredient() {
+        var isValid = true
+
+        fun markInvalid(view: View, hint: String) {
+            view.requestFocus()
+            if (view is Button) return
+            if (view is androidx.appcompat.widget.AppCompatEditText) {
+                view.setText("")
+                view.hint = hint
+                view.setHintTextColor(resources.getColor(android.R.color.holo_red_light, null))
+            }
+            isValid = false
+        }
+
+        val name = binding.itemNameEt.text.toString().trim()
+        if (name.isEmpty()) markInvalid(binding.itemNameEt, "Name required")
+
+        val quantityText = binding.itemNumberEt.text.toString().trim()
+        val quantity = quantityText.toDoubleOrNull()
+        if (quantity == null) markInvalid(binding.itemNumberEt, "Enter quantity")
+
+        val unit = binding.unitTypeDropDownActv.text.toString().trim()
+        if (unit.isEmpty()) markInvalid(binding.unitTypeDropDownActv, "Select unit")
+
+        val type = binding.itemTypeDropDownActv.text.toString().trim()
+        if (type.isEmpty()) markInvalid(binding.itemTypeDropDownActv, "Select type")
+
+        val priceText = binding.priceEt.text.toString().replace("Php", "").trim()
+        val price = priceText.toDoubleOrNull()
+        if (price == null) markInvalid(binding.priceEt, "Enter price")
+
+        val dateAdded = binding.dateBoughtEt.text.toString().trim()
+        if (dateAdded.isEmpty()) markInvalid(binding.dateBoughtEt, "Set date bought")
+
+        val expiration = binding.expirationDateEt.text.toString().trim()
+        if (expiration.isEmpty()) markInvalid(binding.expirationDateEt, "Set expiration date")
+
+        val condition = when {
+            binding.radioVeryOk.isChecked -> "very ok"
+            binding.radioStillOk.isChecked -> "still ok"
+            binding.radioSlightlyNotOk.isChecked -> "slightly not ok"
+            binding.radioNotOk.isChecked -> "not ok"
+            else -> {
+                Toast.makeText(requireContext(), "Please select a condition.", Toast.LENGTH_SHORT).show()
+                isValid = false
+                ""
+            }
+        }
+        val containerType = binding.containerTypeDropDownActv.text.toString().trim()
+        if (containerType.isEmpty()) markInvalid(binding.containerTypeDropDownActv, "Set container")
+
+
+        if (!isValid) {
+            Toast.makeText(requireContext(), "Please complete all fields.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Save into database
+        val newIngredientEntity = IngredientEntity(
+            iconResId = selectedIconId,
+            name = name,
+            quantity = quantity!!,
+            unit = unit,
+            itemType = type,
+            price = price!!,
+            conditionType = condition,
+            dateAdded = dateAdded,
+            expirationDate = expiration,
+            imageList = imagesList,
+            attachedContainerId = selectedContainerId
+        )
+
+        groceryViewModel.addGrocery(newIngredientEntity)
+        Toast.makeText(requireContext(), "Grocery added!", Toast.LENGTH_SHORT).show()
+        findNavController().navigateUp()
+
+    }
+
 
     private fun setupBarcodeLauncher(){
         barcodeLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -225,22 +321,19 @@ class GroceryActivityFragmentAdd : Fragment() {
 
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
-                val bitmap =
-                    MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, uri)
-                selectedIngredient.imageContainerLists.add(ImageRaw(bitmap))
-                binding.imagesRecyclerViewRv.adapter?.notifyItemInserted(selectedIngredient.imageContainerLists.size - 1)
+
+                imagesList.add(ImageRaw.fromUri(requireContext(), uri)!!)
+                binding.imagesRecyclerViewRv.adapter?.notifyItemInserted(imagesList.size - 1)
             }
         }
 
         takePhotoLauncher =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
                 if (success && tempCameraImageUri != null) {
-                    val bitmap = MediaStore.Images.Media.getBitmap(
-                        requireActivity().contentResolver,
-                        tempCameraImageUri
-                    )
-                    selectedIngredient.imageContainerLists.add(ImageRaw(bitmap))
-                    binding.imagesRecyclerViewRv.adapter?.notifyItemInserted(selectedIngredient.imageContainerLists.size - 1)
+
+                    imagesList.add(ImageRaw.fromUri(requireContext(), tempCameraImageUri!!)!!)
+
+                    binding.imagesRecyclerViewRv.adapter?.notifyItemInserted(imagesList.size - 1)
                 }
             }
     }
@@ -251,25 +344,6 @@ class GroceryActivityFragmentAdd : Fragment() {
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
         }
         return resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
-    }
-    private fun setupIngredientView(ingredient: Ingredient) {
-        binding.itemNameEt.setText(ingredient.name)
-        binding.itemNumberEt.setText(ingredient.quantity.toString())
-        binding.unitTypeDropDownActv.setText(ingredient.unit)
-        binding.itemTypeDropDownActv.setText(ingredient.itemType)
-        binding.priceEt.setText("Php ${ingredient.price}")
-        binding.dateBoughtEt.setText(ingredient.dateAdded)
-        binding.expirationDateEt.setText(ingredient.expirationDate)
-        binding.containerTypeDropDownActv.setText("DEFAULT CONTAINER")
-
-        when (ingredient.conditionType.lowercase()) {
-            "very ok" -> binding.radioVeryOk.isChecked = true
-            "still ok" -> binding.radioStillOk.isChecked = true
-            "slightly not ok" -> binding.radioSlightlyNotOk.isChecked = true
-            "not ok" -> binding.radioNotOk.isChecked = true
-        }
-
-        binding.iconImageIv.setImageResource(ingredient.icon)
     }
 
     private fun setupConditionRadios() {
@@ -287,7 +361,40 @@ class GroceryActivityFragmentAdd : Fragment() {
             }
         }
     }
+    private fun setupContainerTypeDropDownActv(userId: Int) {
+        containerViewModel.readAllData.observe(viewLifecycleOwner) { containerList ->
+            if (containerList.isEmpty()) {
+                Toast.makeText(requireContext(), "No containers found.", Toast.LENGTH_SHORT).show()
+            }
+            // Build ID-to-name and name-to-ID maps
+            idToNameMap = containerList.associate { it.containerId to it.name }
+            val nameToIdMap = containerList.associate { it.name to it.containerId }
+
+
+            val containerNames = containerList.map { it.name }
+            val adapter = ArrayAdapter(
+                requireContext(),
+                R.layout.dropdown_item_for_update,
+                containerNames
+            )
+            binding.containerTypeDropDownActv.setAdapter(adapter)
+
+
+
+            // Set up listener for future dropdown selection
+            binding.containerTypeDropDownActv.setOnItemClickListener { _, _, position, _ ->
+                val selectedName = containerNames[position]
+                selectedContainerId = nameToIdMap[selectedName]!!
+            }
+        }
+
+
+    }
+
     private fun setupDropdowns(){
+
+
+
         val layoutChosen = R.layout.dropdown_item_for_update
         var sortOptions = resources.getStringArray(R.array.item_type_array)
         var sortAdapter =
@@ -309,11 +416,10 @@ class GroceryActivityFragmentAdd : Fragment() {
     }
     private fun setupRecycler() {
 
-        val isEditable = arguments?.getBoolean(GroceryActivityFragmentMain.EDIT_INGREDIENT_KEY)!!
-        selectedIngredient.let {
-            binding.imagesRecyclerViewRv.adapter =
-                GroceryViewImageGridAdapter(it.imageContainerLists, isEditable)
-        }
+
+        binding.imagesRecyclerViewRv.adapter =
+            GroceryViewImageGridAdapter(imagesList, true)
+
         binding.imagesRecyclerViewRv.layoutManager = GridLayoutManager(requireContext(), 2)
 
 

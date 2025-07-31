@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -22,6 +23,8 @@ import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.customInterface.ContainerEditActionListener
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityAddBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
+
 enum class EditType{
     ADD,
     EDIT
@@ -146,27 +149,12 @@ class ContainerActivityFragmentAdd : Fragment(){
                 requireActivity(),
                 object : ContainerEditActionListener {
                     override fun onOkClick(position: Int) {
-                        val name = containerName // latest value from EditText
-                        val result = Bundle().apply {
-                            putString(CONTAINER_EDIT_NAME_KEY, name)
-                            putBoolean(CONTAINER_ISCANCELED, false)
-                        }
-                        parentFragmentManager.setFragmentResult(
-                            if (isEdit) EDIT_RESULT else ADD_RESULT,
-                            result
-                        )
+
                         findNavController().navigateUp()
                     }
 
                     override fun onCancelClick(position: Int) {
-                        val result = Bundle().apply {
-                            putString(CONTAINER_EDIT_NAME_KEY, containerName)
-                            putBoolean(CONTAINER_ISCANCELED, true)
-                        }
-                        parentFragmentManager.setFragmentResult(
-                            if (isEdit) EDIT_RESULT else ADD_RESULT,
-                            result
-                        )
+
                         findNavController().navigateUp()
                     }
                 },

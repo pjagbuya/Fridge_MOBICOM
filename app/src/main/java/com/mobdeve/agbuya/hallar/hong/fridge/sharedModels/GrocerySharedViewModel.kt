@@ -34,7 +34,17 @@ class GrocerySharedViewModel(application : Application): AndroidViewModel(applic
             repository.addGrocery(grocery)
         }
     }
-
+    fun deleteGrocery(id : Int){
+        // viewModel Scope a coroutine, Dispatchers.IO sets it as background process
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteGrocery(id)
+        }
+    }
+    fun deleteAllGroceryAtContainer(id : Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllGroceryAtContainer(id)
+        }
+    }
     fun updateGrocery(grocery : IngredientEntity){
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateGrocery(grocery)

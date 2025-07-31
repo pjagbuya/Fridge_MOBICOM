@@ -16,7 +16,8 @@ interface ContainerDao {
 
     @Update
     suspend fun updateContainer(container: ContainerEntity)
-
+    @Query("DELETE FROM ContainerEntity WHERE containerId = :containerId")
+    suspend fun deleteContainerById(containerId: Int)
     @Delete
     suspend fun deleteContainer(container: ContainerEntity)
 
@@ -25,7 +26,26 @@ interface ContainerDao {
 
     @Query("SELECT * FROM ContainerEntity ORDER BY timeStamp DESC")
     fun getAllContainers(): LiveData<List<ContainerEntity>>
+
+    // Increase currCap by a value
+    @Query("UPDATE ContainerEntity SET currCap = currCap + 1 WHERE containerId = :containerId")
+    suspend fun increaseCurrCap(containerId: Int)
+
+    // Decrease currCap by a value
+    @Query("UPDATE ContainerEntity SET currCap = currCap - 1 WHERE containerId = :containerId")
+    suspend fun decreaseCurrCap(containerId: Int)
+
+    @Query("SELECT name FROM ContainerEntity WHERE containerId = :containerId LIMIT 1")
+    suspend fun getContainerNameById(containerId: Int): String?
+
+    @Query("SELECT containerId, name FROM ContainerEntity WHERE ownerUserId = :userId")
+    suspend fun getContainerIdNameMap(userId: Int): List<ContainerIdName>
 //
 //    @Query("SELECT * FROM ContainerEntity WHERE containerId = :selectedId LIMIT 1")
 //    suspend fun getContainerById(selectedId: Int): ContainerModel?
 }
+
+data class ContainerIdName(
+    val containerId: Int,
+    val name: String
+)

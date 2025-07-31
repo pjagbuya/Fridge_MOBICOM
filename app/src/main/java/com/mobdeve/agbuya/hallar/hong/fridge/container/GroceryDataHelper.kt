@@ -22,10 +22,10 @@ class GroceryDataHelper {
             fun createImageList(context: Context): ArrayList<ImageRaw> {
                 val list = ArrayList<ImageRaw>()
                 val uri = Uri.parse("android.resource://${context.packageName}/${R.drawable.hutao_only}")
-                val dummyImage = ImageRaw.extractBitmap(context, uri)
+                val dummyImage = ImageRaw.fromUri(context, uri)
                     ?: throw IllegalArgumentException("Drawable not found: hutao_only")
                 repeat(4) {
-                    list.add(ImageRaw(dummyImage))
+                    list.add(ImageRaw(dummyImage.getBlob()))
                 }
                 return list
             }
