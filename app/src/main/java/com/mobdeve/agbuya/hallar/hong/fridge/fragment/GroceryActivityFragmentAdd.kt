@@ -20,8 +20,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -37,9 +39,12 @@ import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.getValue
+@AndroidEntryPoint
 
 class GroceryActivityFragmentAdd : Fragment() {
 
@@ -58,8 +63,8 @@ class GroceryActivityFragmentAdd : Fragment() {
     // QR setup
     private lateinit var barcodeLauncher: ActivityResultLauncher<Intent>
 
-    private lateinit var groceryViewModel : GrocerySharedViewModel
-    private lateinit var containerViewModel : ContainerSharedViewModel
+    private val containerViewModel: ContainerSharedViewModel by viewModels()
+    private val groceryViewModel: GrocerySharedViewModel by viewModels()
 
 
     private lateinit var idToNameMap : Map<Int, String>
@@ -91,8 +96,7 @@ class GroceryActivityFragmentAdd : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = GroceryComponentAddBinding.inflate(inflater, container, false)
-        groceryViewModel = ViewModelProvider(this)[GrocerySharedViewModel::class.java]
-        containerViewModel = ViewModelProvider(this)[ContainerSharedViewModel::class.java]
+
         imagesList = ArrayList<ImageRaw>()
         return binding.root
     }
@@ -362,33 +366,33 @@ class GroceryActivityFragmentAdd : Fragment() {
         }
     }
     private fun setupContainerTypeDropDownActv(userId: Int) {
-        containerViewModel.readAllData.observe(viewLifecycleOwner) { containerList ->
-            if (containerList.isEmpty()) {
-                Toast.makeText(requireContext(), "No containers found.", Toast.LENGTH_SHORT).show()
-            }
-            // Build ID-to-name and name-to-ID maps
-            idToNameMap = containerList.associate { it.containerId to it.name }
-            val nameToIdMap = containerList.associate { it.name to it.containerId }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+                containerViewModel.readAllData.collect { containerList ->
+                    if (containerList.isEmpty()) {
+                        Toast.makeText(requireContext(), "No containers found.", Toast.LENGTH_SHORT).show()
+                    }
 
+                    // Build ID-to-name and name-to-ID maps
+                    idToNameMap = containerList.associate { it.containerId to it.name }
+                    val nameToIdMap = containerList.associate { it.name to it.containerId }
 
-            val containerNames = containerList.map { it.name }
-            val adapter = ArrayAdapter(
-                requireContext(),
-                R.layout.dropdown_item_for_update,
-                containerNames
-            )
-            binding.containerTypeDropDownActv.setAdapter(adapter)
+                    val containerNames = containerList.map { it.name }
+                    val adapter = ArrayAdapter(
+                        requireContext(),
+                        R.layout.dropdown_item_for_update,
+                        containerNames
+                    )
+                    binding.containerTypeDropDownActv.setAdapter(adapter)
 
-
-
-            // Set up listener for future dropdown selection
-            binding.containerTypeDropDownActv.setOnItemClickListener { _, _, position, _ ->
-                val selectedName = containerNames[position]
-                selectedContainerId = nameToIdMap[selectedName]!!
+                    // Set up listener for future dropdown selection
+                    binding.containerTypeDropDownActv.setOnItemClickListener { _, _, position, _ ->
+                        val selectedName = containerNames[position]
+                        selectedContainerId = nameToIdMap[selectedName] ?: -1
+                    }
+                }
             }
         }
-
-
     }
 
     private fun setupDropdowns(){

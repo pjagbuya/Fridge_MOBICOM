@@ -20,9 +20,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -42,11 +45,13 @@ import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.getValue
+@AndroidEntryPoint
 
 class GroceryActivityFragmentEdit: Fragment() {
     private val args by navArgs<GroceryActivityFragmentEditArgs>()
@@ -76,9 +81,8 @@ class GroceryActivityFragmentEdit: Fragment() {
     }
 
     // Info for data models to modify
-    private lateinit var groceryViewModel: GrocerySharedViewModel
-
-    private lateinit var containerViewModel : ContainerSharedViewModel
+    private val containerViewModel: ContainerSharedViewModel by viewModels()
+    private val groceryViewModel: GrocerySharedViewModel by viewModels()
 
 
     private lateinit var idToNameMap : Map<Int, String>
@@ -100,40 +104,45 @@ class GroceryActivityFragmentEdit: Fragment() {
             else -> @Suppress("DEPRECATION") getParcelableArrayList(key)
         }
 
-    private fun readyForEdit(){
 
-        binding.headerActionItemLabelTv.text = "Update Item"
-        selectedIngredient = args.currGrocery
-        selectedIngredient.let { setupIngredientView(it) }
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = GroceryComponentUpdateBinding.inflate(inflater, container, false)
-        groceryViewModel = ViewModelProvider(this)[GrocerySharedViewModel::class.java]
-        containerViewModel = ViewModelProvider(this)[ContainerSharedViewModel::class.java]
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Following does not need data loaded in
+        // Readying text inputs on current data
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+                groceryViewModel.findGrocery(args.currGrocery.ingredientID).collect { ingredient ->
+                    selectedIngredient = ingredient
+                    setupIngredientView(ingredient)
+                    originalContainerId = ingredient.attachedContainerId
+                    setupRecycler()
+                }
+            }
+        }
         setupConditionRadios()
-
         setupDropdowns()
-
-        //Following functions require data loaded in
-
-
-        readyForEdit() // initializes originalContainerId
         setupTakePhotoFromGalleryOrCamera()
-        setupRecycler()
 
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+                groceryViewModel.findGrocery(args.currGrocery.ingredientID).collect { ingredient ->
+                    selectedIngredient = ingredient
+                    binding.headerActionItemLabelTv.text = "Update Item"
+                    setupIngredientView(ingredient)
+                    setupRecycler()
+                    originalContainerId = ingredient.attachedContainerId
+                }
+            }
+        }
 
-        //Saving information for original container it was stored in
-        originalContainerId = selectedIngredient.attachedContainerId
 
         // TODO: Setup actual user that logs in for the contrainers.
 //        lifecycleScope.launch {
@@ -406,33 +415,39 @@ class GroceryActivityFragmentEdit: Fragment() {
     }
 
     private fun setupContainerTypeDropDownActv(userId: Int) {
-        containerViewModel.readAllData.observe(viewLifecycleOwner) { containerList ->
-            if (containerList.isEmpty()) {
-                Toast.makeText(requireContext(), "No containers found.", Toast.LENGTH_SHORT).show()
-            }
-            // Build ID-to-name and name-to-ID maps
-            idToNameMap = containerList.associate { it.containerId to it.name }
-            val nameToIdMap = containerList.associate { it.name to it.containerId }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                containerViewModel.readAllData.collect { containerList ->
+                    if (containerList.isEmpty()) {
+                        Toast.makeText(requireContext(), "No containers found.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
 
-            // Set the selected container ID to original
-            selectedContainerId = originalContainerId
+                    // Build ID-to-name and name-to-ID maps
+                    idToNameMap = containerList.associate { it.containerId to it.name }
+                    val nameToIdMap = containerList.associate { it.name to it.containerId }
 
-            val containerNames = containerList.map { it.name }
-            val adapter = ArrayAdapter(
-                requireContext(),
-                R.layout.dropdown_item_for_update,
-                containerNames
-            )
-            binding.containerTypeDropDownActv.setAdapter(adapter)
+                    // Set the selected container ID to original
+                    selectedContainerId = originalContainerId
 
-            // Pre-fill the dropdown field with the original container's name
-            val originalName = idToNameMap[originalContainerId]
-            binding.containerTypeDropDownActv.setText(originalName)
+                    val containerNames = containerList.map { it.name }
+                    val adapter = ArrayAdapter(
+                        requireContext(),
+                        R.layout.dropdown_item_for_update,
+                        containerNames
+                    )
+                    binding.containerTypeDropDownActv.setAdapter(adapter)
 
-            // Set up listener for future dropdown selection
-            binding.containerTypeDropDownActv.setOnItemClickListener { _, _, position, _ ->
-                val selectedName = containerNames[position]
-                selectedContainerId = nameToIdMap[selectedName]!!
+                    // Pre-fill the dropdown field with the original container's name
+                    val originalName = idToNameMap[originalContainerId]
+                    binding.containerTypeDropDownActv.setText(originalName, false)
+
+                    // Set up listener for dropdown selection
+                    binding.containerTypeDropDownActv.setOnItemClickListener { _, _, position, _ ->
+                        val selectedName = containerNames[position]
+                        selectedContainerId = nameToIdMap[selectedName] ?: originalContainerId
+                    }
+                }
             }
         }
 

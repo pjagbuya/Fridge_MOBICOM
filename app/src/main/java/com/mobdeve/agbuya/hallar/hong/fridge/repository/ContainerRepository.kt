@@ -6,23 +6,20 @@ import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerIdName
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 
-class ContainerRepository(private val containerDao: ContainerDao) {
-    val readAllData : LiveData<List<ContainerEntity>> = containerDao.getAllContainers()
 
-    suspend fun addContainer(container : ContainerEntity){
-        containerDao.insertContainer(container)
-    }
-    suspend fun deleteContainer(containerId: Int){
-        containerDao.deleteContainerById(containerId)
-    }
-    suspend fun updateContainer(container: ContainerEntity){
-        containerDao.updateContainer(container)
-    }
-    suspend fun decreaseCurrCap(containerId: Int){
-        containerDao.decreaseCurrCap(containerId)
-    }
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-    suspend fun getContainerIdNameMap(userId: Int): List<ContainerIdName> {
-        return containerDao.getContainerIdNameMap(userId)
-    }
+class ContainerRepository @Inject constructor(
+    private val containerDao: ContainerDao
+) {
+    val readAllData: Flow<List<ContainerEntity>> = containerDao.getAllContainers()
+
+    suspend fun addContainer(container: ContainerEntity) = containerDao.insertContainer(container)
+    suspend fun updateContainer(container: ContainerEntity) = containerDao.updateContainer(container)
+    suspend fun deleteContainer(containerId: Int) = containerDao.deleteContainerById(containerId)
+    suspend fun decreaseCurrCap(containerId: Int) = containerDao.decreaseCurrCap(containerId)
+
+    suspend fun getContainerIdNameMap(userId: Int): List<ContainerIdName> =
+        containerDao.getContainerIdNameMap(userId)
 }

@@ -29,6 +29,8 @@ enum class EditType{
     ADD,
     EDIT
 }
+
+
 class ContainerActivityFragmentAdd : Fragment(){
 
     private var containerName: String = ""

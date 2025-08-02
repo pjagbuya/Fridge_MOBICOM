@@ -6,20 +6,34 @@ import com.mobdeve.agbuya.hallar.hong.fridge.dao.IngredientDao
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 
-class GroceryRepository(private val groceryDao: IngredientDao) {
-    val readAllData : LiveData<List<IngredientEntity>> = groceryDao.getAllIngredients()
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-    suspend fun addGrocery(grocery : IngredientEntity){
+class GroceryRepository @Inject constructor(
+    private val groceryDao: IngredientDao
+) {
+
+    // Flow for observing all groceries
+    val readAllData: Flow<List<IngredientEntity>> = groceryDao.getAllIngredients()
+
+    suspend fun addGrocery(grocery: IngredientEntity) {
         groceryDao.insertAndUpdateCapacity(grocery)
     }
 
-    suspend fun updateGrocery(grocery: IngredientEntity){
+    // Flow for observing a single grocery item by ID
+    fun findGrocery(id: Int): Flow<IngredientEntity> {
+        return groceryDao.getIngredientById(id)
+    }
+
+    suspend fun updateGrocery(grocery: IngredientEntity) {
         groceryDao.updateIngredient(grocery)
     }
-    suspend fun deleteAllGroceryAtContainer(containerId : Int){
+
+    suspend fun deleteAllGroceryAtContainer(containerId: Int) {
         groceryDao.deleteAllIngredientsByContainerId(containerId)
     }
-    suspend fun deleteGrocery(groceryId : Int){
+
+    suspend fun deleteGrocery(groceryId: Int) {
         groceryDao.deleteIngredientById(groceryId)
     }
 }

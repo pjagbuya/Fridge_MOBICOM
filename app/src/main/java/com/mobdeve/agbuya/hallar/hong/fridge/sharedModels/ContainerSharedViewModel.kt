@@ -1,72 +1,77 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.sharedModels
 
-import android.content.Context
+
+import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
-import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
-import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
-import android.app.Application
 import androidx.lifecycle.viewModelScope
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerIdName
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
+import javax.inject.Inject
 
-class ContainerSharedViewModel(application : Application): AndroidViewModel(application){
-    val readAllData : LiveData<List<ContainerEntity>>
+
+@HiltViewModel
+class ContainerSharedViewModel @Inject constructor(
     private val repository: ContainerRepository
-    val containerIdNameMap = MutableLiveData<List<ContainerIdName>>() // Live observable result
+) : ViewModel() {
 
+    val containerIdNameMap = MutableStateFlow<List<ContainerIdName>>(emptyList())
 
+    private val _readAllData = MutableStateFlow<List<ContainerEntity>>(emptyList())
+    val readAllData: StateFlow<List<ContainerEntity>> = _readAllData
 
     init {
-        val containerDao = AppDatabase.getInstance(application).containerDao()
-        repository = ContainerRepository(containerDao)
-        readAllData = repository.readAllData
+        viewModelScope.launch {
+            repository.readAllData.collect {
+                _readAllData.value = it
+            }
+        }
     }
 
-    fun addContainer(container : ContainerEntity){
-        // viewModel Scope a coroutine, Dispatchers.IO sets it as background process
+    fun addContainer(container: ContainerEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addContainer(container)
         }
     }
 
-    fun updateContainer(container : ContainerEntity){
+    fun updateContainer(container: ContainerEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateContainer(container)
         }
     }
 
-    fun deleteContainer(containerId : Int){
+    fun deleteContainer(containerId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteContainer(containerId)
         }
     }
-    fun decreaseCurrCap(containerId: Int){
+
+    fun decreaseCurrCap(containerId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.decreaseCurrCap(containerId)
         }
     }
 
     fun getContainerIdNameMapDirect(userId: Int): List<ContainerIdName> {
-        return readAllData.value
-            ?.filter { it.ownerUserId == userId }
-            ?.map { ContainerIdName(it.containerId, it.name) }
-            ?: emptyList()
+        return _readAllData.value
+            .filter { it.ownerUserId == userId }
+            .map { ContainerIdName(it.containerId, it.name) }
     }
 
     fun fetchContainerIdNameMap(userId: Int) {
         viewModelScope.launch {
             val result = repository.getContainerIdNameMap(userId)
-            containerIdNameMap.postValue(result)
+            containerIdNameMap.value = result
         }
     }
-
 }
