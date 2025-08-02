@@ -26,10 +26,11 @@ import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
+@AndroidEntryPoint
 class PaulMainActivity : AppCompatActivity() {
     companion object{
         const val EDIT_TYPE_KEY = "EDIT_TYPE"

@@ -14,6 +14,8 @@
         android:hint="Search"
         android:includeFontPadding="true"
         android:inputType="text"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:paddingStart="10dp"
         android:textSize="14sp" />
 

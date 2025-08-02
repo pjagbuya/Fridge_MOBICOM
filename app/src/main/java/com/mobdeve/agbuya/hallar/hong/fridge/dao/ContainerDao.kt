@@ -4,20 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ContainerDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertContainer(container: ContainerEntity) : Long
+    suspend fun insertContainer(container: ContainerEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(containers: List<ContainerEntity>)
 
     @Update
     suspend fun updateContainer(container: ContainerEntity)
+
     @Query("DELETE FROM ContainerEntity WHERE containerId = :containerId")
     suspend fun deleteContainerById(containerId: Int)
+
     @Delete
     suspend fun deleteContainer(container: ContainerEntity)
 
@@ -25,16 +28,11 @@ interface ContainerDao {
     suspend fun deleteAll()
 
     @Query("SELECT * FROM ContainerEntity ORDER BY timeStamp DESC")
-    fun getAllContainers(): LiveData<List<ContainerEntity>>
+    fun getAllContainers(): Flow<List<ContainerEntity>>
 
-
-
-
-    // Increase currCap by a value
     @Query("UPDATE ContainerEntity SET currCap = currCap + 1 WHERE containerId = :containerId")
     suspend fun increaseCurrCap(containerId: Int)
 
-    // Decrease currCap by a value
     @Query("UPDATE ContainerEntity SET currCap = currCap - 1 WHERE containerId = :containerId")
     suspend fun decreaseCurrCap(containerId: Int)
 
@@ -44,11 +42,8 @@ interface ContainerDao {
     @Query("SELECT containerId, name FROM ContainerEntity WHERE ownerUserId = :userId")
     suspend fun getContainerIdNameMap(userId: Int): List<ContainerIdName>
 
-
-    //TODO: This is for the final sharedViewmodel to integrate so that it can know which userId it needs to find
     @Query("SELECT * FROM ContainerEntity WHERE ownerUserId = :userId ORDER BY timeStamp DESC")
-    fun getAllContainersByUserId(userId: Int): LiveData<List<ContainerEntity>>
-    //Features below
+    fun getAllContainersByUserId(userId: Int): Flow<List<ContainerEntity>>
 }
 
 data class ContainerIdName(

@@ -8,7 +8,11 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
@@ -17,9 +21,15 @@ import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceriesActivityMainBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlin.getValue
 
+@AndroidEntryPoint
 
 class GroceryActivityFragmentMain : Fragment() {
     companion object{
@@ -30,8 +40,11 @@ class GroceryActivityFragmentMain : Fragment() {
     private var _binding: GroceriesActivityMainBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var groceryViewModel: GrocerySharedViewModel
-    private val groceryList = mutableListOf<Ingredient>()
+
+
+    private val groceryViewModel: GrocerySharedViewModel by viewModels()
+
+    private var originalGroceryList: List<IngredientEntity> = emptyList()
     private lateinit var adapter: GroceryActivityMainAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +52,6 @@ class GroceryActivityFragmentMain : Fragment() {
     ): View {
         _binding = GroceriesActivityMainBinding.inflate(inflater, container, false)
 
-        groceryViewModel = ViewModelProvider(this)[GrocerySharedViewModel::class.java]
 
         return binding.root
     }
@@ -51,26 +63,25 @@ class GroceryActivityFragmentMain : Fragment() {
 
         val topBarBinding: BaseSearchbarContainerBinding = binding.searchBarContainer
         topBarBinding.headerTitleTv.setText(R.string.my_groceries)
-
-
-        setupSortTypeDropDown()
-        setupSortItemType()
+        setupSortDropdowns()
         setupRecycler()
-
-        // Make a mutable groceryList with reflected changes
-        groceryViewModel.readAllData.observe(viewLifecycleOwner) { groceryList ->
-
-
-            if (groceryList.isEmpty()) {
-                showEmptyState()
-            } else {
-                binding.containerRecyclerView.visibility = View.VISIBLE
-            }
-
-        }
-
         setupAddButton()
 
+        // Launch lifecycle-aware collector for grocery list
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                groceryViewModel.filteredAndSortedData.collectLatest { updatedList ->
+                    if (updatedList.isEmpty()) {
+                        showEmptyState()
+                    } else {
+                        removeEmptyState()
+                        binding.containerRecyclerView.visibility = View.VISIBLE
+                        updateRecyclerView(updatedList)
+                    }
+
+                }
+            }
+        }
     }
 
     private fun setupAddButton(){
@@ -83,7 +94,14 @@ class GroceryActivityFragmentMain : Fragment() {
             findNavController().navigate(action, bundle)
         }
     }
-
+    private fun removeEmptyState() {
+        val existingFragment = childFragmentManager.findFragmentById(R.id.displayFrame)
+        if (existingFragment is EmptyActivityFragment) {
+            childFragmentManager.beginTransaction()
+                .remove(existingFragment)
+                .commit()
+        }
+    }
     private fun showEmptyState(){
         binding.containerRecyclerView.visibility = View.GONE
         val emptyFragment = EmptyActivityFragment.newInstance("Add your \nGroceries")
@@ -92,45 +110,72 @@ class GroceryActivityFragmentMain : Fragment() {
             .commit()
     }
 
-    private fun setupSortTypeDropDown()
-    {
+
+    private fun updateRecyclerView(sortedList: List<IngredientEntity>) {
+        adapter.setData(sortedList)
+    }
+    private fun setupSortDropdowns() {
+        // Sort type (A-Z, Quantity, etc.)
         val sortOptions = resources.getStringArray(R.array.sort_by_array)
-        val sortAdapter =
-            ArrayAdapter(requireContext(), R.layout.dropdown_item, sortOptions)
+        val sortAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, sortOptions)
         binding.sortByDropdown.setAdapter(sortAdapter)
 
-        // TODO: Setup sorting algos for SortType
-//        binding.sortByDropdown.setOnItemClickListener { _, _, position, _ ->
-//            val selected = sortOptions[position]
-//            // Handle sorting logic
-//        }
-    }
-    private fun setupSortItemType()
-    {
-        val sortOptions = resources.getStringArray(R.array.item_type_array)
-        val sortAdapter =
-            ArrayAdapter(requireContext(), R.layout.dropdown_item, sortOptions)
-        binding.itemTypeDropDowm.setAdapter(sortAdapter)
-
-        // TODO: Setup sorting algos for SortItemType
-//        binding.sortByDropdown.setOnItemClickListener { _, _, position, _ ->
-//            val selected = sortOptions[position]
-//            // Handle sorting logic
-//        }
-    }
-
-    private fun onComponentClickBehavior()
-    {
-
-    }
-    private fun setupRecycler() {
-        val tempAdapter = GroceryActivityMainAdapter()
-
-        groceryViewModel.readAllData.observe(viewLifecycleOwner) { groceryList ->
-            tempAdapter.setData(groceryList)
+        // Item type (Vegetable, Meat, etc.)
+        val itemTypes = resources.getStringArray(R.array.item_type_array)
+        val typeAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, itemTypes)
+        binding.itemTypeDropDowm.setAdapter(typeAdapter)
+// Clear text only on touch (before selection)
+        binding.sortByDropdown.setOnTouchListener { _, _ ->
+            binding.sortByDropdown.text.clear()
+            false // Let the click event continue (to show dropdown)
         }
 
-        binding.containerRecyclerView.adapter = tempAdapter
+// When an item is selected, do not clear
+        binding.sortByDropdown.setOnItemClickListener { _, _, pos, _ ->
+            val selectedSort = binding.sortByDropdown.adapter.getItem(pos).toString()
+            groceryViewModel.setSort(selectedSort)
+        }
+
+// Same for itemTypeDropdown
+        binding.itemTypeDropDowm.setOnTouchListener { _, _ ->
+            binding.itemTypeDropDowm.text.clear()
+            false
+        }
+
+        binding.itemTypeDropDowm.setOnItemClickListener { _, _, pos, _ ->
+            val selectedType = binding.itemTypeDropDowm.adapter.getItem(pos).toString()
+            groceryViewModel.setItemTypeFilter(selectedType)
+        }
+    }
+    private fun applySorting() {
+        val selectedSort = binding.sortByDropdown.text.toString()
+        val selectedType = binding.itemTypeDropDowm.text.toString()
+
+        var sortedList = groceryViewModel.readAllData.value ?: emptyList()
+
+        // Filter by item type (only if not "All")
+        if (selectedType.isNotEmpty() && selectedType != "All") {
+            sortedList = sortedList.filter { it.itemType.equals(selectedType, ignoreCase = true) }
+        }
+
+        // Sorting of key attributes
+        sortedList = when (selectedSort) {
+            "A-Z" -> sortedList.sortedBy { it.name.lowercase() }
+            "Quantity ↑" -> sortedList.sortedBy { it.quantity }
+            "Quantity ↓" -> sortedList.sortedByDescending { it.quantity }
+            "Date Added" -> sortedList.sortedByDescending { it.dateAdded }
+            "Expiry" -> sortedList.sortedBy { it.expirationDate }
+            else -> sortedList
+        }
+
+        updateRecyclerView(sortedList)
+    }
+
+
+
+    private fun setupRecycler() {
+        adapter = GroceryActivityMainAdapter()
+        binding.containerRecyclerView.adapter = adapter
         binding.containerRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 

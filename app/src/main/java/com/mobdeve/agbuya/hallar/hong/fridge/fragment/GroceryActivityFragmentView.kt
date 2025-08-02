@@ -9,7 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -26,20 +30,25 @@ import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentViewBin
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.ADD_INGREDIENT_KEY
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.EDIT_INGREDIENT_KEY
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.SELECTED_INGREDIENT_KEY
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
 import kotlin.getValue
 
+@AndroidEntryPoint
 class GroceryActivityFragmentView : Fragment() {
 
     private val args by navArgs<GroceryActivityFragmentViewArgs>()
     private var _binding: GroceryComponentViewBinding? = null
     private val binding get() = _binding!!
-    private lateinit var groceryViewModel : GrocerySharedViewModel
-    private lateinit var containerViewModel : ContainerSharedViewModel
+    // Info for data models to modify
+    private val containerViewModel: ContainerSharedViewModel by viewModels()
+    private val groceryViewModel: GrocerySharedViewModel by viewModels()
     private lateinit var groceryList: ArrayList<Ingredient>
-    private lateinit var selectedIngredient : Ingredient
+    private lateinit var selectedIngredient : IngredientEntity
 
     inline fun <reified T : Parcelable> Intent.parcelableArrayList(key: String): ArrayList<T>? = when {
         SDK_INT >= 33 -> getParcelableArrayListExtra(key, T::class.java)
@@ -54,9 +63,6 @@ class GroceryActivityFragmentView : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = GroceryComponentViewBinding.inflate(inflater, container, false)
-        groceryViewModel = ViewModelProvider(this)[GrocerySharedViewModel::class.java]
-        containerViewModel = ViewModelProvider(this)[ContainerSharedViewModel::class.java]
-
 
         return binding.root
     }
@@ -64,31 +70,33 @@ class GroceryActivityFragmentView : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                groceryViewModel.findGrocery(args.currGrocery.ingredientID).collect { ingredient ->
+                    selectedIngredient = ingredient
+                    setupIngredientView()
+                    setupRecycler()
 
-        setupIngredientView()
-        setupRecycler()
+                    binding.updateBtn.setOnClickListener {
+                        val action = GroceryActivityFragmentViewDirections.actionGroceriesViewToGroceriesEdit(selectedIngredient)
+                        findNavController().navigate(action)
+                    }
 
-        // TODO: setup button edit
-        binding.updateBtn.setOnClickListener {
-            val action = GroceryActivityFragmentViewDirections.actionGroceriesViewToGroceriesEdit(args.currGrocery)
-            findNavController().navigate(action)
+                    binding.deleteBtn.setOnClickListener {
+                        containerViewModel.decreaseCurrCap(selectedIngredient.attachedContainerId)
+                        groceryViewModel.deleteGrocery(selectedIngredient.ingredientID)
+                        findNavController().navigateUp()
+                    }
+                }
+            }
         }
 
-
-        // TODO: setup button delete
-
-        binding.deleteBtn.setOnClickListener {
-            containerViewModel.decreaseCurrCap(args.currGrocery.attachedContainerId)
-            groceryViewModel.deleteGrocery(args.currGrocery.ingredientID)
-            findNavController().navigateUp()
-
-        }
 
 
     }
 
     private fun setupIngredientView(){
-        args.currGrocery.let {
+        selectedIngredient.let {
             binding.groceryTitleTv.text = it.name
             binding.quantityLabelTv.text = "Quantity: ${it.quantity} ${it.unit}"
             binding.dateBoughtTv.text = "Date bought: ${it.dateAdded}"
@@ -109,8 +117,8 @@ class GroceryActivityFragmentView : Fragment() {
 
         val isEditable = arguments?.getBoolean(GroceryActivityFragmentMain.EDIT_INGREDIENT_KEY)!!
 
-        val groceryCopy = args.currGrocery.copy(
-            imageList = args.currGrocery.imageList
+        val groceryCopy = selectedIngredient.copy(
+            imageList = selectedIngredient.imageList
         )
 
         groceryCopy.let {

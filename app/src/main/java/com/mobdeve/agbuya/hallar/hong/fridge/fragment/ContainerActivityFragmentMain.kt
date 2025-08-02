@@ -11,8 +11,11 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
@@ -21,8 +24,10 @@ import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityMainAdapte
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class ContainerActivityFragmentMain : Fragment() {
     companion object{
         val CONTAINERS_KEY : String = "CONTAINER_DATA_KEY"
@@ -33,8 +38,8 @@ class ContainerActivityFragmentMain : Fragment() {
     }
     private var _binding:ContainerActivityMainBinding? = null
     private val binding get() = _binding!!
-    private lateinit var containerViewModel: ContainerSharedViewModel
-    private lateinit var groceryViewModel: GrocerySharedViewModel
+    private val containerViewModel: ContainerSharedViewModel by viewModels()
+    private val groceryViewModel: GrocerySharedViewModel by viewModels()
 
     private val newContainerResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -59,8 +64,7 @@ class ContainerActivityFragmentMain : Fragment() {
     ): View?{
         _binding = ContainerActivityMainBinding.inflate(inflater, container, false)
         val view = binding.root
-        containerViewModel = ViewModelProvider(this).get(ContainerSharedViewModel::class.java)
-        groceryViewModel = ViewModelProvider(this).get(GrocerySharedViewModel::class.java)
+
 
 
 
@@ -73,15 +77,30 @@ class ContainerActivityFragmentMain : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTopBar()
+        val tempAdapter = ContainerActivityMainAdapter { container ->
+            groceryViewModel.deleteAllGroceryAtContainer(container.containerId)
+            containerViewModel.deleteContainer(container.containerId)
+        }
+
+
+        // Setup recycler below
+        binding.containerRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = tempAdapter
+        }
         //TODO: Now not using test data but live data of shared view models. Only looks at the data again
 //        containerList.clear()
-        containerViewModel.readAllData.observe(viewLifecycleOwner) { containerList ->
-            if (containerList.isNullOrEmpty()) {
-                // 🔴 LiveData is empty
-                showEmptyState()
-            } else {
-                // ✅ LiveData has data
-                setupRecycler()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+                containerViewModel.readAllData.collect { containerList ->
+                    if (containerList.isNullOrEmpty()) {
+                        showEmptyState()
+                    } else {
+                        checkAndPlaceRecyclerViewSpot()
+                        binding.containerRecyclerView.visibility = View.VISIBLE
+                        tempAdapter.setData(containerList)
+                    }
+                }
             }
         }
 
@@ -126,29 +145,6 @@ class ContainerActivityFragmentMain : Fragment() {
                 .commit()
         }
     }
-    private fun setupRecycler() {
 
-        // If empty activity is still hogging
-        checkAndPlaceRecyclerViewSpot()
-        val tempAdapter = ContainerActivityMainAdapter() {
-            container->
-            groceryViewModel.deleteAllGroceryAtContainer(container.containerId)
-            containerViewModel.deleteContainer(container.containerId)
-        }
-
-        binding.containerRecyclerView.visibility = View.VISIBLE
-        binding.containerRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = tempAdapter
-
-
-        }
-
-        containerViewModel.readAllData.observe(viewLifecycleOwner, Observer { container ->
-            tempAdapter.setData(container)
-        })
-
-
-    }
 
 }
