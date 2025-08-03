@@ -92,11 +92,13 @@ class AddIngredient : Fragment() {
     }
 
     private fun setupButtons() {
-        if (sharedViewModel.ingredients.value.isNullOrEmpty()) {
-            Toast.makeText(requireContext(), "No ingredients added!", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(requireContext(), "Ingredients added to recipe", Toast.LENGTH_SHORT).show()
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+        binding.doneBtn.setOnClickListener {
+            if (sharedViewModel.ingredients.value.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "No ingredients added!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Ingredients added to recipe", Toast.LENGTH_SHORT).show()
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
         }
 
         binding.addIngredientNotFoundBtn.setOnClickListener {
