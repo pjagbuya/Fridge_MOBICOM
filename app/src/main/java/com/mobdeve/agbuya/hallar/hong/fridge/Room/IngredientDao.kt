@@ -20,8 +20,10 @@ interface IngredientDao {
 
     @Query("SELECT * FROM IngredientEntity WHERE attachedContainerId = :containerId")
     suspend fun getIngredientsByContainer(containerId: Int): List<IngredientEntity>
+
     @Query("SELECT * FROM IngredientEntity")
     suspend fun getAllIngredients(): List<IngredientEntity>
+
     @Transaction
     suspend fun insertAndUpdateCapacity(ingredient: IngredientEntity) {
         insertIngredient(ingredient)

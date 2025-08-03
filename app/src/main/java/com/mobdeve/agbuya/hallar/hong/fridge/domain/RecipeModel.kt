@@ -31,7 +31,6 @@ data class RecipeModel(
         GRAM("gram"),
         KG("kg"),
         UNSPECIFIED("");
-
         override fun toString(): String = displayName
     }
 

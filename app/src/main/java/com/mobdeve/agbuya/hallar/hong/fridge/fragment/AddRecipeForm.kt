@@ -65,8 +65,7 @@ class AddRecipeFragment : Fragment() {
             binding.recipeNameEt.setText(recipe.name)
             binding.recipeDescriptionEt.setText(recipe.description)
             sharedViewModel.clearIngredients()
-            sharedViewModel.ingredients.value?.addAll(recipe.ingredients)
-            adapter.updateData(recipe.ingredients)
+            sharedViewModel.setIngredients(ArrayList(recipe.ingredients))
         }
     }
 

@@ -26,6 +26,10 @@ class SharedRecipeViewModel : ViewModel() {
         }
     }
 
+    fun setIngredients(list: ArrayList<RecipeModel.RecipeIngredient>) {
+        _ingredients.value = list
+    }
+
     fun clearIngredients() {
         _ingredients.value = arrayListOf()
     }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -16,6 +17,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeIngredientAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentRecipeDetailsBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.SharedRecipeViewModel
 import kotlinx.coroutines.launch
 
 class RecipeDetails : Fragment() {
@@ -25,6 +27,10 @@ class RecipeDetails : Fragment() {
 
     private val args: RecipeDetailsArgs by navArgs()
     private lateinit var recipe: RecipeModel
+
+    // new
+    private val sharedViewModel: SharedRecipeViewModel by activityViewModels()
+    private lateinit var adapter: RecipeIngredientAdapter
 
     private lateinit var recipeRepository: RecipeRepository
 
@@ -53,15 +59,32 @@ class RecipeDetails : Fragment() {
 
         setupRecyclerView()
         setupButtons()
+
+        sharedViewModel.clearIngredients()
+        sharedViewModel.ingredients.value?.addAll(recipe.ingredients)
+        adapter.updateData(recipe.ingredients)
     }
 
     private fun setupRecyclerView() {
-        binding.ingredientListRv.layoutManager = LinearLayoutManager(requireContext())
-        binding.ingredientListRv.adapter = RecipeIngredientAdapter(
-            recipe.ingredients,
+//        binding.ingredientListRv.layoutManager = LinearLayoutManager(requireContext())
+//        binding.ingredientListRv.adapter = RecipeIngredientAdapter(
+//            recipe.ingredients,
+//            onDeleteClick = {},
+//            showDeleteButton = false
+//        )
+
+        // new
+        adapter = RecipeIngredientAdapter(
+            arrayListOf(),
             onDeleteClick = {},
             showDeleteButton = false
         )
+        binding.ingredientListRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.ingredientListRv.adapter = adapter
+
+        sharedViewModel.ingredients.observe(viewLifecycleOwner) { updatedIngredients ->
+            adapter.updateData(updatedIngredients)
+        }
     }
 
     private fun setupButtons() {

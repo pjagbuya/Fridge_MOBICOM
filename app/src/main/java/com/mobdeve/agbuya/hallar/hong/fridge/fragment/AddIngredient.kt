@@ -10,14 +10,21 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
+import com.mobdeve.agbuya.hallar.hong.fridge.Repository.IngredientRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeIngredientAdapter
+import com.mobdeve.agbuya.hallar.hong.fridge.adapter.SearchIngredientAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentAddIngredientBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.SharedRecipeViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.Mappers.toRecipeIngredient
+import kotlinx.coroutines.launch
 
 class AddIngredient : Fragment() {
 
@@ -25,6 +32,9 @@ class AddIngredient : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: RecipeIngredientAdapter
+    private lateinit var searchAdapter: SearchIngredientAdapter
+    private lateinit var ingredientRepository: IngredientRepository
+    private var allIngredients = listOf<RecipeModel.RecipeIngredient>()
     private val sharedViewModel: SharedRecipeViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -37,8 +47,12 @@ class AddIngredient : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val db = AppDatabase.getInstance(requireContext())
+        ingredientRepository = IngredientRepository(db.ingredientDao())
+
         setupRecyclerView()
         setupButtons()
+        setupSearchRecyclerView()
 
         sharedViewModel.ingredients.observe(viewLifecycleOwner) { updatedList ->
             adapter.updateData(updatedList)
@@ -53,6 +67,23 @@ class AddIngredient : Fragment() {
         )
         binding.addedIngredientsRv.layoutManager = LinearLayoutManager(requireContext())
         binding.addedIngredientsRv.adapter = adapter
+    }
+
+    private fun setupSearchRecyclerView() {
+        searchAdapter = SearchIngredientAdapter(
+            listOf(),
+            onAddClick = { ingredient ->
+                sharedViewModel.addIngredient(ingredient)
+                Toast.makeText(requireContext(), "${ingredient.name} added", Toast.LENGTH_SHORT).show()
+            }
+        )
+        binding.searchIngredientsRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.searchIngredientsRv.adapter = searchAdapter
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            allIngredients = ingredientRepository.getAllIngredientsAsRecipeIngredients()
+            searchBarListener()
+        }
     }
 
     private fun setupButtons() {
@@ -118,6 +149,22 @@ class AddIngredient : Fragment() {
         }
 
         dialog.show()
+    }
+
+    private fun searchBarListener() {
+        binding.searchRecipeEt.addTextChangedListener {
+            val query = it.toString().trim()
+            if (query.isEmpty()) {
+                binding.searchIngredientsRv.visibility = View.GONE
+            } else {
+                val results = allIngredients.filter { ingredient ->
+                    ingredient.name.contains(query, ignoreCase = true)
+                }
+                searchAdapter.updateData(results)
+                binding.searchIngredientsRv.visibility =
+                    if (results.isEmpty()) View.GONE else View.VISIBLE
+            }
+        }
     }
 
     override fun onDestroyView() {

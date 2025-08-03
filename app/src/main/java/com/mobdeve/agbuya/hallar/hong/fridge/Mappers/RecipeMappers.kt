@@ -1,5 +1,6 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.Mappers
 
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.IngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
@@ -45,5 +46,14 @@ fun RecipeEntity.toModel(ingredients: List<RecipeIngredientEntity>): RecipeModel
                 )
             }
         )
+    )
+}
+
+fun IngredientEntity.toRecipeIngredient(): RecipeModel.RecipeIngredient {
+    return RecipeModel.RecipeIngredient(
+        name = this.name,
+        amount = this.price,
+        unit = RecipeModel.RecipeUnit.valueOf(this.unit.uppercase()),
+        isCustom = false
     )
 }
