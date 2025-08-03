@@ -61,4 +61,8 @@ interface IngredientDao {
 
     @Query("SELECT * FROM IngredientEntity ORDER BY dateAdded ASC")
     fun getAllIngredientsSortedByDateAsc(): Flow<List<IngredientEntity>>
+
+    // Database searching:
+    @Query("SELECT * FROM IngredientEntity WHERE name LIKE :searchQuery")
+    fun searchContainers(searchQuery: String): Flow<List<IngredientEntity>>
 }

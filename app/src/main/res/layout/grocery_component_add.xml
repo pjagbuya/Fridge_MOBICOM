@@ -72,12 +72,12 @@
                     android:id="@+id/editIcon_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/form_field_corner"
-                    android:backgroundTint="#CDDC39"
+                    app:background="@drawable/form_field_corner"
+                    app:backgroundTint="@color/white"
                     android:fontFamily="@font/poppins"
                     android:text="+ Edit Icon"
                     android:textAllCaps="false"
-                    android:textColor="#000000"
+                    android:textColor="@color/brown"
                     android:textSize="12sp" />
             </LinearLayout>
 
