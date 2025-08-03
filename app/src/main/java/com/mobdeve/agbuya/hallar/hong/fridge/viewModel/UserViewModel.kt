@@ -58,7 +58,12 @@ class UserViewModel @Inject constructor(
             }
         }
     }
-
+    fun clearLoggedInUser() {
+        viewModelScope.launch {
+            _user.value = null // Clear the StateFlow
+            // Potentially clear other related states if needed
+        }
+    }
     fun onLogout() {
         //TODO
     }
