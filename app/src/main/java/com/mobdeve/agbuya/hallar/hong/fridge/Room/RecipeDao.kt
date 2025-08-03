@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 
 
 @Dao
@@ -13,6 +14,9 @@ interface RecipeDao {
 
     @Insert
     suspend fun insertIngredients(ingredients: List<RecipeIngredientEntity>)
+
+    @Update
+    suspend fun updateRecipe(recipe: RecipeEntity)
 
     @Transaction
     suspend fun insertRecipeWithIngredients(
@@ -30,6 +34,9 @@ interface RecipeDao {
     //get ingredients of a specific recipe
     @Query("SELECT * FROM RecipeIngredientEntity WHERE recipeId = :recipeId")
     suspend fun getIngredientsForRecipe(recipeId: Int): List<RecipeIngredientEntity>
+
+    @Query("SELECT * FROM RecipeEntity WHERE id = :recipeId")
+    abstract suspend fun getRecipeById(recipeId: Int): RecipeEntity
 
 //     delete a recipe by ID
     @Query("DELETE FROM RecipeEntity WHERE id = :recipeId")

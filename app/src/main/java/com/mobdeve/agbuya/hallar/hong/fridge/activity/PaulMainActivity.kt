@@ -24,7 +24,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
-import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.Repository.RecipeRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.UserRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ActivityMainBinding

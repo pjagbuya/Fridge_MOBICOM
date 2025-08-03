@@ -1,13 +1,11 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -36,6 +34,7 @@ interface IngredientDao {
 
     @Query("SELECT * FROM IngredientEntity ORDER BY ingredientID DESC")
     fun getAllIngredients(): Flow<List<IngredientEntity>>
+
     @Query("""
 SELECT i.* FROM IngredientEntity AS i
 JOIN ContainerEntity AS c
@@ -43,6 +42,7 @@ JOIN ContainerEntity AS c
 WHERE c.ownerUserId = :userId
 """)
     fun getAllIngredients(userId: String): Flow<List<IngredientEntity>>
+
     @Transaction
     suspend fun insertAndUpdateCapacity(ingredient: IngredientEntity) {
         insertIngredient(ingredient)
@@ -74,6 +74,7 @@ WHERE c.ownerUserId = :userId
         WHERE u.fireAuthId = :firebaseUid
     """)
     fun getAllIngredientsByFirebaseUid(firebaseUid: String): Flow<List<IngredientEntity>>
+
     // Database searching:
     @Query("SELECT * FROM IngredientEntity WHERE name LIKE :searchQuery")
     fun searchContainers(searchQuery: String): Flow<List<IngredientEntity>>

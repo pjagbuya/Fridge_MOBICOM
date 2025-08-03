@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.Repository.RecipeRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeMainAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentRecipeMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
@@ -63,9 +63,12 @@ class RecipeMainFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        recipeAdapter = RecipeMainAdapter(arrayListOf()) { recipe ->
-            onRecipeSelected(recipe)
-        }
+        recipeAdapter = RecipeMainAdapter(
+            arrayListOf(),
+            onRecipeClick = { recipe -> onRecipeSelected(recipe) },
+            onEditClick = { recipe -> onEditRecipe(recipe) },
+            onDeleteClick = { recipe -> deleteRecipe(recipe) }
+        )
         binding.recipeListRv.layoutManager = LinearLayoutManager(requireContext())
         binding.recipeListRv.adapter = recipeAdapter
     }
@@ -93,6 +96,20 @@ class RecipeMainFragment : Fragment() {
             recipeRepository.seedData(sampleRecipes)
             val recipes = recipeRepository.getAllRecipes()
             recipeAdapter.updateData(recipes)
+        }
+    }
+
+    private fun onEditRecipe(recipe: RecipeModel) {
+        val action = RecipeMainFragmentDirections
+            .actionRecipeMainFragmentToAddRecipeFragment(recipe)
+        findNavController().navigate(action)
+    }
+
+    private fun deleteRecipe(recipe: RecipeModel) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            recipeRepository.deleteRecipe(recipe)
+            val updatedRecipes = recipeRepository.getAllRecipes()
+            recipeAdapter.updateData(updatedRecipes)
         }
     }
 

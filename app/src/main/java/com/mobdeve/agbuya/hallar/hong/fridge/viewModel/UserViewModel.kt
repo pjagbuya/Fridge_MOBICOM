@@ -2,7 +2,7 @@ package com.mobdeve.agbuya.hallar.hong.fridge.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.Repository.RecipeRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.UserRepository
