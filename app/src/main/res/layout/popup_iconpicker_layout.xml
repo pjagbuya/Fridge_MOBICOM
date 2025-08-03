@@ -82,20 +82,19 @@
             android:src="@mipmap/ic_itemtype_condiments_seasoning" />
 
 
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/grain_bread_btn"
-            android:padding="5dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/shape_circle_thinstroke"
-            android:layout_margin="10dp"
-            app:strokeWidth="2dp"
-            app:strokeColor="@color/black"
-            android:scaleType="fitCenter"
-            android:backgroundTint="@color/white"
-            app:shapeAppearance="@style/CircleImage"
-            android:src="@mipmap/ic_itemtype_condiments_seasoning" />
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/grain_bread_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_circle_thinstroke"
+        android:backgroundTint="@color/white"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_itemtype_grain_bread"
+        app:shapeAppearance="@style/CircleImage"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/dairyBtn"

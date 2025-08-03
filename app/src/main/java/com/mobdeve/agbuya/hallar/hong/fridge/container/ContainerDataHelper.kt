@@ -5,6 +5,8 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.colorGeneratorComponents.ColorGenerator
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+
 val FIXED_EXCLUDED_COLOR_HEX_LIST = listOf(
     "#FF000000", // black
     "#FFFFFFFF", // white
@@ -38,26 +40,36 @@ class ContainerDataHelper {
         }
 
         val containerModelsSelection = arrayListOf(
-            ContainerModel(
+            ContainerEntity(
                 containerId = -3,
                 name = "My Fridge1",
                 imageContainer = ImageContainer(R.drawable.container_type_1_fridge, R.color.red),
                 currCap = 5,
-                maxCap = 10
+                maxCap = 10,
+                ContainerModel.getTimeStamp(),
+                ownerUserId = -1,
+                fireAuthId = ""
             ),
-            ContainerModel(
+            ContainerEntity(
                 containerId = -2,
                 name = "My Fridge2",
                 imageContainer = ImageContainer(R.drawable.container_type_2_cabinet, R.color.red),
                 currCap = 5,
-                maxCap = 10
+                maxCap = 10,
+                ContainerModel.getTimeStamp(),
+                ownerUserId = -1,
+                fireAuthId = ""
+
             ),
-            ContainerModel(
+            ContainerEntity(
                 containerId = -1,
                 name = "My Fridge3",
                 imageContainer = ImageContainer(R.drawable.container_type_3_freezer, R.color.red),
                 currCap = 5,
-                maxCap = 10
+                maxCap = 10,
+                ContainerModel.getTimeStamp(),
+                ownerUserId = -1,
+                fireAuthId = ""
             )
         )
         fun initializeContainers(context: Context): ArrayList<ContainerModel> {

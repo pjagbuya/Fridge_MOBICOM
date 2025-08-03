@@ -90,7 +90,7 @@ class GroceryActivityFragmentView : Fragment() {
                         containerViewModel.decreaseCurrCap(selectedIngredient.attachedContainerId)
                         groceryViewModel.deleteGrocery(selectedIngredient.ingredientID)
                         val firestoreHelper = FirestoreHelper(requireContext())
-                        groceryViewModel.syncDeletedIngredient(selectedIngredient.ingredientID) // Assuming it uses ID only now
+                        groceryViewModel.syncDeletedIngredient(selectedIngredient.ingredientID, requireContext()) // Assuming it uses ID only now
                         lifecycleScope.launch {
                             try {
                                 // Sync groceries - ONE TIME sync

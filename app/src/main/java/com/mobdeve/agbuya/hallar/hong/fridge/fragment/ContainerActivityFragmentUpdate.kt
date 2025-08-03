@@ -28,10 +28,13 @@ import com.mobdeve.agbuya.hallar.hong.fridge.customInterface.ContainerEditAction
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityUpdateBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.firestoreHelper.FirestoreHelper
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
+@AndroidEntryPoint
 
 class ContainerActivityFragmentUpdate : Fragment(){
 
@@ -50,7 +53,7 @@ class ContainerActivityFragmentUpdate : Fragment(){
     private var isEdit: Boolean = false
     private val binding get() = _binding!!
 
-    private lateinit var containerList:ArrayList<ContainerModel>
+    private lateinit var containerList:ArrayList<ContainerEntity>
     private val containerViewModel: ContainerSharedViewModel by viewModels()
 
     // These two inlines suppresses deprecation errors
@@ -64,9 +67,6 @@ class ContainerActivityFragmentUpdate : Fragment(){
     }
 
 
-    fun getcontainerList():ArrayList<ContainerModel>{
-        return containerList
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -160,21 +160,10 @@ class ContainerActivityFragmentUpdate : Fragment(){
                 containerList,
                 requireActivity(),
                 object : ContainerEditActionListener {
-                    override fun onOkClick(position: Int) {
+                    override fun onOkClick(position: Int, model: ContainerEntity) {
                         val firestoreHelper = FirestoreHelper(requireContext())
-                        lifecycleScope.launch {
-                            try {
-                                // Sync groceries - ONE TIME sync
-                                val containers = containerViewModel.readAllData.value
-                                containers.forEach { container ->
-                                    val firestoreContainer = container.toFirestoreContainer()
-                                    // Use grocery ID as document ID, not user ID
-                                    firestoreHelper.syncToFirestore("containers", container.containerId.toString(), firestoreContainer)
-                                }
-                            } catch (e: Exception) {
-                                // Handle error
-                            }
-                        }
+                        containerViewModel.updateContainer(model)
+                        containerViewModel.syncUpdateContainer(model, requireContext())
                         findNavController().navigateUp()
                     }
 

@@ -32,7 +32,7 @@ interface IngredientDao {
     suspend fun deleteAllIngredientsByContainerId(containerId: Int)
 
     @Query("SELECT * FROM IngredientEntity WHERE attachedContainerId = :containerId")
-    suspend fun getIngredientsByContainer(containerId: Int): List<IngredientEntity>
+    fun getIngredientsByContainer(containerId: Int): Flow<List<IngredientEntity>>
 
     @Query("SELECT * FROM IngredientEntity ORDER BY ingredientID DESC")
     fun getAllIngredients(): Flow<List<IngredientEntity>>

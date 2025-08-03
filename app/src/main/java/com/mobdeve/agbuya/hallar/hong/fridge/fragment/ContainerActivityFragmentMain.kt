@@ -86,35 +86,11 @@ class ContainerActivityFragmentMain : Fragment() {
 
 
         val tempAdapter = ContainerActivityMainAdapter { container ->
-            groceryViewModel.deleteAllGroceryAtContainer(container.containerId)
+            groceryViewModel.deleteAllGroceryAtContainer(container.containerId, requireContext())
             containerViewModel.deleteContainer(container.containerId)
             val firestoreHelper = FirestoreHelper(requireContext())
-            lifecycleScope.launch {
-                try {
-                    // Sync groceries - ONE TIME sync
-                    val groceries = groceryViewModel.readAllData.value
-                    groceries.forEach { grocery ->
-                        val firestoreIngredient = grocery.toFirestoreIngredient()
-                        // Use grocery ID as document ID, not user ID
-                        firestoreHelper.syncToFirestore("ingredients", grocery.ingredientID.toString(), firestoreIngredient)
-                    }
-                } catch (e: Exception) {
-                    // Handle error
-                }
-            }
-            lifecycleScope.launch {
-                try {
-                    // Sync groceries - ONE TIME sync
-                    val containers = containerViewModel.readAllData.value
-                    containers.forEach { container ->
-                        val firestoreContainer = container.toFirestoreContainer()
-                        // Use grocery ID as document ID, not user ID
-                        firestoreHelper.syncToFirestore("containers", container.containerId.toString(), firestoreContainer)
-                    }
-                } catch (e: Exception) {
-                    // Handle error
-                }
-            }
+
+            containerViewModel.syncDeleteContainer(container.containerId)
         }
 
 
