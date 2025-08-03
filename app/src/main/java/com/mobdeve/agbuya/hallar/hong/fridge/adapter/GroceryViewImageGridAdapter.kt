@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ImageLayoutViewBinding
-
 class GroceryViewImageGridAdapter(
     private val images: List<ImageRaw>,
     private val isEditable: Boolean

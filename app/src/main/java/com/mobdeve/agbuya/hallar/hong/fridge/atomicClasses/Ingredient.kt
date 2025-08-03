@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
@@ -46,7 +47,15 @@ class Ingredient(
             }
 
         }
-
+        fun getSimpleDateStamp(): String {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
+                LocalDate.now().format(formatter)
+            } else {
+                val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                formatter.format(Date())
+            }
+        }
         enum class ItemType(val displayName: String) {
             // Vegetable
             VEGETABLE("Vegetable"),

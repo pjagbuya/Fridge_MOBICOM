@@ -1,9 +1,12 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.Room
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(
 //    foreignKeys = [ForeignKey(
 //        entity = ContainerEntity::class,
@@ -25,4 +28,4 @@ data class IngredientEntity(
     val expirationDate: String,
     val attachedContainerId: Int,
     val imageList: ArrayList<ImageRaw>
-)
+): Parcelable

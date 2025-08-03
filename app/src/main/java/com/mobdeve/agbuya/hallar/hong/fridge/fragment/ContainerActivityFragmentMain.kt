@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityMainAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityMainBinding
-import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.ContainerSharedViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 
 
 class ContainerActivityFragmentMain : Fragment() {

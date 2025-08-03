@@ -1,7 +1,6 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.Room
 
 import androidx.room.*
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 
 @Dao
 interface UserDao {
@@ -29,4 +28,8 @@ interface UserDao {
     // get all users
     @Query("SELECT * FROM UserEntity")
     suspend fun getAllUsers(): List<UserEntity>
+
+    @Query("DELETE FROM UserEntity")
+    suspend fun deleteAll()
+
 }

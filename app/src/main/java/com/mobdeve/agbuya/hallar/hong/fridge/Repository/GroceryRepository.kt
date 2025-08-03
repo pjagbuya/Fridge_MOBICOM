@@ -1,0 +1,36 @@
+package com.mobdeve.agbuya.hallar.hong.fridge.repository
+
+import androidx.lifecycle.LiveData
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.*
+
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+
+class GroceryRepository @Inject constructor(
+    private val groceryDao: IngredientDao
+) {
+
+    // Flow for observing all groceries
+    val readAllData: Flow<List<IngredientEntity>> = groceryDao.getAllIngredients()
+
+    suspend fun addGrocery(grocery: IngredientEntity) {
+        groceryDao.insertAndUpdateCapacity(grocery)
+    }
+
+    // Flow for observing a single grocery item by ID
+    fun findGrocery(id: Int): Flow<IngredientEntity> {
+        return groceryDao.getIngredientById(id)
+    }
+
+    suspend fun updateGrocery(grocery: IngredientEntity) {
+        groceryDao.updateIngredient(grocery)
+    }
+
+    suspend fun deleteAllGroceryAtContainer(containerId: Int) {
+        groceryDao.deleteAllIngredientsByContainerId(containerId)
+    }
+
+    suspend fun deleteGrocery(groceryId: Int) {
+        groceryDao.deleteIngredientById(groceryId)
+    }
+}

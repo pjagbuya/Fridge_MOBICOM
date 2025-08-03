@@ -45,17 +45,40 @@
         android:id="@+id/groceriesMain"
         android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain"
         android:label="Fridge: Grocery List View"
-        tools:layout="@layout/groceries_activity_main" />
+        tools:layout="@layout/groceries_activity_main" >
+        <action
+            android:id="@+id/action_groceriesMain_to_groceriesView"
+            app:destination="@id/groceriesView" />
+        <action
+            android:id="@+id/action_groceriesMain_to_groceriesAdd2"
+            app:destination="@id/groceriesAdd" />
+    </fragment>
     <fragment
         android:id="@+id/groceriesView"
         android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentView"
         android:label="Fridge: Grocery View"
-        tools:layout="@layout/grocery_component_view" />
+        tools:layout="@layout/grocery_component_view" >
+        <action
+            android:id="@+id/action_groceriesView_to_groceriesEdit"
+            app:destination="@id/groceriesEdit" />
+        <argument
+            android:name="currGrocery"
+            app:argType="com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity" />
+    </fragment>
     <fragment
         android:id="@+id/groceriesEdit"
         android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentEdit"
         android:label="Fridge: Grocery"
-        tools:layout="@layout/grocery_component_update" />
+        tools:layout="@layout/grocery_component_update" >
+        <argument
+            android:name="currGrocery"
+            app:argType="com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity" />
+    </fragment>
+    <fragment
+        android:id="@+id/groceriesAdd"
+        android:name="com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentAdd"
+        android:label="Fridge: Grocery List View"
+        tools:layout="@layout/grocery_component_add" />
     <!--This section are arguments that EDIT_TYPE can be passed towards -->
     <argument
         android:name="EDIT_TYPE"
@@ -88,7 +111,14 @@
         app:popEnterAnim="@anim/slide_in_left"
         app:popExitAnim="@anim/slide_out_right"
         />
-
+    <action
+        android:id="@+id/gotoGroceriesAdd"
+        app:destination="@id/groceriesAdd"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"
+        />
 <!--    for recipe-->
     <fragment
         android:id="@+id/recipeMainFragment"

@@ -11,7 +11,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.fragment.ContainerActivityFragmentM
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
 
 class ContainerActivityMainAdapter(
-    private val onClick: () -> Unit
+    private val onDeleteContainer: (ContainerEntity) -> Unit
 ) : RecyclerView.Adapter<ContainerViewHolder>() {
     private var containerData: List<ContainerEntity> = emptyList<ContainerEntity>()
 
@@ -29,7 +29,11 @@ class ContainerActivityMainAdapter(
         holder.editBtn.setOnClickListener {
             val action = ContainerActivityFragmentMainDirections.actionContainerMainToContainerUpdate(currCont)
             holder.itemView.findNavController().navigate(action)
-            onClick()
+
+        }
+
+        holder.deleteBtn.setOnClickListener {
+            onDeleteContainer(currCont)
         }
 
     }

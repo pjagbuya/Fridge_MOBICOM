@@ -1,11 +1,6 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.Room
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface IngredientDao {
@@ -20,10 +15,8 @@ interface IngredientDao {
 
     @Query("SELECT * FROM IngredientEntity WHERE attachedContainerId = :containerId")
     suspend fun getIngredientsByContainer(containerId: Int): List<IngredientEntity>
-
     @Query("SELECT * FROM IngredientEntity")
     suspend fun getAllIngredients(): List<IngredientEntity>
-
     @Transaction
     suspend fun insertAndUpdateCapacity(ingredient: IngredientEntity) {
         insertIngredient(ingredient)

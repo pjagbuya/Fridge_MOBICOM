@@ -16,7 +16,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.databinding.NavigationbarBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.IngredientEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.GrocerySharedViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

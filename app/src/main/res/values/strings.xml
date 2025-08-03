@@ -152,6 +152,7 @@
     </string-array>
 
     <string-array name="item_type_array">
+        <item>All items</item>
         <!-- Produce -->
         <item>Vegetable</item>
         <item>Fruit</item>
@@ -193,5 +194,5 @@
         <!-- Misc -->
         <item>Other</item>
     </string-array>
-
+    <string name="formatted_price">Php %.2f</string>
 </resources>

@@ -8,8 +8,6 @@ import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.ImageContainerTypeConverter
 import kotlinx.parcelize.Parcelize
 
-
-
 @Parcelize
 @Entity(
 //    foreignKeys = [ForeignKey(
