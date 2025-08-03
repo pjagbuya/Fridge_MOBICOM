@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerIdName
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
@@ -22,7 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ContainerSharedViewModel @Inject constructor(
-    private val repository: ContainerRepository
+    private val repository: ContainerRepository,
+    private val auth: FirebaseAuth
 ) : ViewModel() {
 
     val containerIdNameMap = MutableStateFlow<List<ContainerIdName>>(emptyList())

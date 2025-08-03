@@ -36,7 +36,13 @@ interface IngredientDao {
 
     @Query("SELECT * FROM IngredientEntity ORDER BY ingredientID DESC")
     fun getAllIngredients(): Flow<List<IngredientEntity>>
-
+    @Query("""
+SELECT i.* FROM IngredientEntity AS i
+JOIN ContainerEntity AS c
+  ON i.attachedContainerId = c.containerId
+WHERE c.ownerUserId = :userId
+""")
+    fun getAllIngredients(userId: String): Flow<List<IngredientEntity>>
     @Transaction
     suspend fun insertAndUpdateCapacity(ingredient: IngredientEntity) {
         insertIngredient(ingredient)

@@ -8,6 +8,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.IngredientDao
@@ -33,7 +34,8 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class GrocerySharedViewModel @Inject constructor(
-    private val repository: GroceryRepository
+    private val repository: GroceryRepository,
+    private val auth: FirebaseAuth
 ) : ViewModel() {
 
     private val _selectedSortBy = MutableStateFlow("")
