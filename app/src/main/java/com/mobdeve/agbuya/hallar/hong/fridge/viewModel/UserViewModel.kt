@@ -6,17 +6,20 @@ import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 // handles the connection between UserRepository + UserEntity
-class UserViewModel(
+@HiltViewModel
+class UserViewModel @Inject constructor(
     private val repository: UserRepository,
-    private val containerRepo : ContainerRepository,
-    private val recipeRepo : RecipeRepository
-) : ViewModel() {
+    private val containerRepository: ContainerRepository,
+    private val recipeRepository: RecipeRepository
+) : ViewModel()  {
 
     private val _registrationResult = MutableStateFlow<Result<Long>?>(null)
     val registrationResult: StateFlow<Result<Long>?> = _registrationResult
@@ -47,8 +50,8 @@ class UserViewModel(
                 // Update the user in repositories
                 repository.updateCurrentUserFireAuthId(userAuthId)
                 repository.updateUserName(userDisplayName)
-                recipeRepo.assignUserAuthId(userAuthId)
-                containerRepo.assignFireAuthId(userAuthId)
+                recipeRepository.assignUserAuthId(userAuthId)
+                containerRepository.assignFireAuthId(userAuthId)
 
                 // Set the logged in user
                 _user.value = user

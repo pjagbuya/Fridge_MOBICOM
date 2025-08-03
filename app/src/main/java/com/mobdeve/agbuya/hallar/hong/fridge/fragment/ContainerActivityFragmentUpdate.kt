@@ -11,7 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,10 +23,15 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityEditAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.container.ContainerDataHelper.Companion.containerModelsSelection
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.customInterface.ContainerEditActionListener
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityUpdateBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.ContainerModel
+import com.mobdeve.agbuya.hallar.hong.fridge.firestoreHelper.FirestoreHelper
+import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
+import kotlinx.coroutines.launch
+import kotlin.getValue
 
 class ContainerActivityFragmentUpdate : Fragment(){
 
@@ -44,7 +51,7 @@ class ContainerActivityFragmentUpdate : Fragment(){
     private val binding get() = _binding!!
 
     private lateinit var containerList:ArrayList<ContainerModel>
-
+    private val containerViewModel: ContainerSharedViewModel by viewModels()
 
     // These two inlines suppresses deprecation errors
     inline fun <reified T : Parcelable> Intent.parcelableArrayList(key: String): ArrayList<T>? = when {
@@ -154,7 +161,20 @@ class ContainerActivityFragmentUpdate : Fragment(){
                 requireActivity(),
                 object : ContainerEditActionListener {
                     override fun onOkClick(position: Int) {
-
+                        val firestoreHelper = FirestoreHelper(requireContext())
+                        lifecycleScope.launch {
+                            try {
+                                // Sync groceries - ONE TIME sync
+                                val containers = containerViewModel.readAllData.value
+                                containers.forEach { container ->
+                                    val firestoreContainer = container.toFirestoreContainer()
+                                    // Use grocery ID as document ID, not user ID
+                                    firestoreHelper.syncToFirestore("containers", container.containerId.toString(), firestoreContainer)
+                                }
+                            } catch (e: Exception) {
+                                // Handle error
+                            }
+                        }
                         findNavController().navigateUp()
                     }
 

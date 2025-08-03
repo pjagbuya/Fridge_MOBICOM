@@ -2,6 +2,8 @@ package com.mobdeve.agbuya.hallar.hong.fridge.sharedModels
 
 
 import android.app.Application
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,11 +14,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerIdName
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreContainer
+import com.mobdeve.agbuya.hallar.hong.fridge.firestoreHelper.FirestoreHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -59,7 +64,38 @@ class ContainerSharedViewModel @Inject constructor(
             data
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    fun syncUpdatedContainerCapacity(containerId: Int, context: Context) {
+        val TAG = "SYNC_CONT_CAP"
+        if (containerId <= 0) {
+            Log.w(TAG, "Invalid container ID for sync: $containerId")
+            return
+        }
 
+        viewModelScope.launch {
+            try {
+                delay(2000) // Give Room/Flow time to update
+                val currentContainers = readAllData.value // Get user-specific containers
+                val containerToUpdate = currentContainers.find { it.containerId == containerId }
+
+                if (containerToUpdate != null) {
+                    Log.d(TAG, "Syncing updated capacity for container ID: $containerId")
+                    val firestoreHelper = FirestoreHelper(context)
+                    val firestoreContainer = containerToUpdate.toFirestoreContainer()
+                    firestoreHelper.syncToFirestore(
+                        "containers",
+                        containerToUpdate.containerId.toString(),
+                        firestoreContainer,
+                        "Container capacity synced",
+                        "Failed to sync container capacity"
+                    )
+                } else {
+                    Log.w(TAG, "Container ID $containerId not found for sync.")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error syncing container capacity for ID: $containerId", e)
+            }
+        }
+    }
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
     }
@@ -85,6 +121,11 @@ class ContainerSharedViewModel @Inject constructor(
     fun decreaseCurrCap(containerId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.decreaseCurrCap(containerId)
+        }
+    }
+    fun increaseCurrCap(containerId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.increaseCurrCap(containerId)
         }
     }
 

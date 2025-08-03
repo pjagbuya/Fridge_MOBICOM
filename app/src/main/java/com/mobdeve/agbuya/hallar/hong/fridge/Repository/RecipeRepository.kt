@@ -6,8 +6,9 @@ import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeDao
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RecipeRepository(private val recipeDao: RecipeDao) {
+class RecipeRepository @Inject constructor(private val recipeDao: RecipeDao) {
 
     //fetch all recipes from the database as RecipeModel list
     suspend fun getAllRecipes(): List<RecipeModel> = withContext(Dispatchers.IO) {

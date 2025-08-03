@@ -40,7 +40,10 @@ import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentUpdateB
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentViewBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.retrofitCall.RetrofitInstanceOPF
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.OpenFoodFactsApi
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreContainer
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreIngredient
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerIdName
+import com.mobdeve.agbuya.hallar.hong.fridge.firestoreHelper.FirestoreHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
@@ -57,7 +60,7 @@ class GroceryActivityFragmentEdit: Fragment() {
     private val args by navArgs<GroceryActivityFragmentEditArgs>()
     private var _binding: GroceryComponentUpdateBinding? = null
     private var selectedIconId : Int = -1
-
+    private var originalIconId : Int = -1
     private var selectedContainerId : Int = -1
 
     private val binding get() = _binding!!
@@ -117,32 +120,21 @@ class GroceryActivityFragmentEdit: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Readying text inputs on current data
-        lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
-                groceryViewModel.findGrocery(args.currGrocery.ingredientID).collect { ingredient ->
-                    selectedIngredient = ingredient
-                    setupIngredientView(ingredient)
-                    originalContainerId = ingredient.attachedContainerId
-                    setupRecycler()
-                }
-            }
-        }
         setupConditionRadios()
         setupDropdowns()
         setupTakePhotoFromGalleryOrCamera()
-
         lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 groceryViewModel.findGrocery(args.currGrocery.ingredientID).collect { ingredient ->
                     selectedIngredient = ingredient
-                    binding.headerActionItemLabelTv.text = "Update Item"
-                    setupIngredientView(ingredient)
-                    setupRecycler()
-                    originalContainerId = ingredient.attachedContainerId
+                    binding.headerActionItemLabelTv.text = "Update Item" // Set title
+                    setupIngredientView(ingredient) // Setup views with data
+                    originalContainerId = ingredient.attachedContainerId // Store original container ID
+                    setupRecycler() // Setup recycler view
+                    // Any other initialization that depends on the ingredient data
                 }
             }
         }
-
 
         // TODO: Setup actual user that logs in for the contrainers.
 //        lifecycleScope.launch {
@@ -230,6 +222,12 @@ class GroceryActivityFragmentEdit: Fragment() {
         val containerType = binding.containerTypeDropDownActv.text.toString()
         if(idToNameMap[originalContainerId] != containerType){
             containerViewModel.decreaseCurrCap(selectedIngredient.attachedContainerId)
+            containerViewModel.increaseCurrCap(selectedContainerId)
+
+            containerViewModel.syncUpdatedContainerCapacity(originalContainerId, requireContext())
+            containerViewModel.syncUpdatedContainerCapacity(selectedContainerId, requireContext())
+        }else{
+            selectedContainerId = originalContainerId
         }
 
         if (!isValid) {
@@ -255,6 +253,7 @@ class GroceryActivityFragmentEdit: Fragment() {
 
         groceryViewModel.updateGrocery(newIngredientEntity)
         Toast.makeText(requireContext(), "Grocery Edited!", Toast.LENGTH_SHORT).show()
+        groceryViewModel.syncUpdatedIngredient(newIngredientEntity, requireContext())
         findNavController().navigateUp()
 
     }
@@ -378,6 +377,7 @@ class GroceryActivityFragmentEdit: Fragment() {
 
         }else{
             binding.iconImageIv.setImageResource(ingredient.iconResId)
+            selectedIconId = ingredient.iconResId
 
         }
         binding.itemNameEt.setText(ingredient.name)
@@ -388,6 +388,7 @@ class GroceryActivityFragmentEdit: Fragment() {
         binding.priceEt.setText(formatted)
         binding.dateBoughtEt.setText(ingredient.dateAdded)
         binding.expirationDateEt.setText(ingredient.expirationDate)
+        binding.containerTypeDropDownActv.setText(idToNameMap[ingredient.attachedContainerId])
 
         when (ingredient.conditionType.lowercase()) {
             "very ok" -> binding.radioVeryOk.isChecked = true

@@ -9,8 +9,9 @@ import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class UserRepository(private val userDao: UserDao) {
+class UserRepository @Inject constructor(private val userDao: UserDao) {
 
     // insert user with error handling for duplicate user
     suspend fun registerUser(user: UserEntity): Result<Long> {

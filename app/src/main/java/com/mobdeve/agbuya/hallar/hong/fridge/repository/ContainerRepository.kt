@@ -17,7 +17,7 @@ class ContainerRepository @Inject constructor(
     suspend fun updateContainer(container: ContainerEntity) = containerDao.updateContainer(container)
     suspend fun deleteContainer(containerId: Int) = containerDao.deleteContainerById(containerId)
     suspend fun decreaseCurrCap(containerId: Int) = containerDao.decreaseCurrCap(containerId)
-
+    suspend fun increaseCurrCap(containerId: Int) = containerDao.increaseCurrCap(containerId)
     suspend fun getContainerIdNameMap(userId: Int): List<ContainerIdName> =
         containerDao.getContainerIdNameMap(userId)
 

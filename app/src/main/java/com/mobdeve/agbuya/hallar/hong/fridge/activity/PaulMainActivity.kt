@@ -53,7 +53,7 @@ class PaulMainActivity : AppCompatActivity() {
     lateinit var userViewModel: UserViewModel
 
     private val groceryViewModel: GrocerySharedViewModel by viewModels()
-//    private val newContainerResultLauncher = registerForActivityResult(
+    //    private val newContainerResultLauncher = registerForActivityResult(
 //        ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
 //        // Check to see if the result returned is appropriate (i.e. OK)
 //        if (result.resultCode == RESULT_OK) {
@@ -65,32 +65,32 @@ class PaulMainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-            val firestore = Firebase.firestore
+        val firestore = Firebase.firestore
 
 
-            val userDao = AppDatabase.getInstance(this).userDao()
-            val recipeDao = AppDatabase.getInstance(this).recipeDao()
-            val containerDao = AppDatabase.getInstance(this).containerDao()
+        val userDao = AppDatabase.getInstance(this).userDao()
+        val recipeDao = AppDatabase.getInstance(this).recipeDao()
+        val containerDao = AppDatabase.getInstance(this).containerDao()
 
-            val userRepository = UserRepository(userDao)
-            val recipeRepository = RecipeRepository(recipeDao)
-            val containerRepository = ContainerRepository(containerDao)
+        val userRepository = UserRepository(userDao)
+        val recipeRepository = RecipeRepository(recipeDao)
+        val containerRepository = ContainerRepository(containerDao)
 
-            val factory = UserViewModelFactory(userRepository, recipeRepository, containerRepository)
-            userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
+        val factory = UserViewModelFactory(userRepository, recipeRepository, containerRepository)
+        userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
 
 
 
-            activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-            setContentView(activityMainBinding.root)
-            Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
+        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(activityMainBinding.root)
+        Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
 //            wipeAllData(applicationContext)
 //            initializeUser(applicationContext)
-            initSampleData(applicationContext)
+//            initSampleData(applicationContext)
 
-            navBarBinding = activityMainBinding.navigationBar
+        navBarBinding = activityMainBinding.navigationBar
 
-            setupNavigation()
+        setupNavigation()
 
     }
 

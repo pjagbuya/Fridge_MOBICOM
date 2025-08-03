@@ -36,6 +36,7 @@ class ContainerActivityMainAdapter(
 
         holder.deleteBtn.setOnClickListener {
             onDeleteContainer(currCont)
+
         }
 
     }

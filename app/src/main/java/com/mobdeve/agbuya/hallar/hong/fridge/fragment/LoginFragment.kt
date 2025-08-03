@@ -80,65 +80,76 @@ class LoginFragment : Fragment() {
 //            findNavController().navigate(R.id.action_loginMain_to_signupMain)
 //        }
     }
-
     private fun loginUser(email: String, password: String) {
+        binding.userLoginBtn.isEnabled = false
+        binding.userLoginBtn.text = "Logging in..."
+
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    FirebaseAuth.getInstance().currentUser?.uid?.let { userId ->
-                        viewModel.onLogin(userId, auth.currentUser?.displayName)
+                    val firebaseUser = auth.currentUser
+                    if (firebaseUser != null) {
+                        // Login locally first
+                        viewModel.onLogin(firebaseUser.uid, firebaseUser.displayName)
+
+                        // Small delay to ensure local user is created
+                        lifecycleScope.launch {
+                            kotlinx.coroutines.delay(500)
+                            syncToFirestore()
+                        }
+
+                        Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.action_loginMain_to_loginUserMain)
                     }
-
-                    val firestoreHelper = FirestoreHelper(requireContext())
-
-                    //sync user to firestore
-                    lifecycleScope.launch {
-                        viewModel.loggedInUser.collectLatest { userEntity ->
-                            if (userEntity != null) {
-                                val firestoreUser = userEntity.toFirestoreUser()
-                                val documentId: String? = firestoreUser.fireAuthId//use the stored fireAuthId of user as docId
-                                firestoreHelper.syncToFirestore("users", documentId,firestoreUser)
-                            }
-                        }
-
-                        //sync containers
-                        containerViewModel.readAllData.collectLatest { containers ->
-                            containers.forEach { container ->
-                                val firestoreContainer = container.toFirestoreContainer()
-                                val documentId: String? = container.fireAuthId //use the stored fireAuthId of user as docId
-                                firestoreHelper.syncToFirestore("containers", documentId, firestoreContainer)
-                            }
-                        }
-
-                        //sync groceries
-                        groceryViewModel.readAllData.collectLatest { groceries ->
-                            groceries.forEach { grocery ->
-                                val firestoreIngredient = grocery.toFirestoreIngredient()
-                                val documentId: String? = auth.currentUser?.uid //use the stored fireAuthId of user as docId
-                                firestoreHelper.syncToFirestore("containers", documentId, firestoreIngredient)
-                        }
-
-                            //sync groceries, needs to fix the sharedRecipeViewModel first
-//                        recipeViewModel. .collectLatest { groceries ->
-//                            groceries.forEach { grocery ->
-//                                val firestoreIngredient = grocery.toFirestoreIngredient()
-//                                val documentId: String? = auth.currentUser?.uid //use the stored fireAuthId of user as docId
-//                                firestoreHelper.syncToFirestore("containers", documentId, firestoreIngredient)
-//                            }
-
-                        }
-                    }
-
-
-
-
-
-                    Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_loginMain_to_loginUserMain)
                 } else {
                     binding.loginErrorTv.text = "Login failed: ${task.exception?.message}"
                     binding.loginErrorTv.visibility = View.VISIBLE
+                    binding.userLoginBtn.isEnabled = true
+                    binding.userLoginBtn.text = "Login"
                 }
             }
+    }
+    private fun syncToFirestore() {
+        val firestoreHelper = FirestoreHelper(requireContext())
+
+        lifecycleScope.launch {
+            try {
+                // Sync user data - ONE TIME sync, not continuous collection
+                viewModel.loggedInUser.value?.let { userEntity ->
+                    val firestoreUser = userEntity.toFirestoreUser()
+                    firestoreHelper.syncToFirestore("users", userEntity.fireAuthId, firestoreUser)
+                }
+            } catch (e: Exception) {
+                // Handle error
+            }
+        }
+
+        lifecycleScope.launch {
+            try {
+                // Sync containers - ONE TIME sync
+                val containers = containerViewModel.readAllData.value
+                containers.forEach { container ->
+                    val firestoreContainer = container.toFirestoreContainer()
+                    // Use container ID as document ID, not user ID
+                    firestoreHelper.syncToFirestore("containers", container.containerId.toString(), firestoreContainer)
+                }
+            } catch (e: Exception) {
+                // Handle error
+            }
+        }
+
+        lifecycleScope.launch {
+            try {
+                // Sync groceries - ONE TIME sync
+                val groceries = groceryViewModel.readAllData.value
+                groceries.forEach { grocery ->
+                    val firestoreIngredient = grocery.toFirestoreIngredient()
+                    // Use grocery ID as document ID, not user ID
+                    firestoreHelper.syncToFirestore("ingredients", grocery.ingredientID.toString(), firestoreIngredient)
+                }
+            } catch (e: Exception) {
+                // Handle error
+            }
+        }
     }
 }

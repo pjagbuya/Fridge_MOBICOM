@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GroceryRepository @Inject constructor(
-    private val groceryDao: IngredientDao,
-    private val userDao: UserDao
+    private val groceryDao: IngredientDao
 ) {
 
     // Flow for observing all groceries

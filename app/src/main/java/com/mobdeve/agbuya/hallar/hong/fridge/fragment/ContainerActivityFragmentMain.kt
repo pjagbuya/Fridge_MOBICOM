@@ -22,9 +22,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityMainAdapter
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreContainer
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreIngredient
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityMainBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.firestoreHelper.FirestoreHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -85,6 +88,33 @@ class ContainerActivityFragmentMain : Fragment() {
         val tempAdapter = ContainerActivityMainAdapter { container ->
             groceryViewModel.deleteAllGroceryAtContainer(container.containerId)
             containerViewModel.deleteContainer(container.containerId)
+            val firestoreHelper = FirestoreHelper(requireContext())
+            lifecycleScope.launch {
+                try {
+                    // Sync groceries - ONE TIME sync
+                    val groceries = groceryViewModel.readAllData.value
+                    groceries.forEach { grocery ->
+                        val firestoreIngredient = grocery.toFirestoreIngredient()
+                        // Use grocery ID as document ID, not user ID
+                        firestoreHelper.syncToFirestore("ingredients", grocery.ingredientID.toString(), firestoreIngredient)
+                    }
+                } catch (e: Exception) {
+                    // Handle error
+                }
+            }
+            lifecycleScope.launch {
+                try {
+                    // Sync groceries - ONE TIME sync
+                    val containers = containerViewModel.readAllData.value
+                    containers.forEach { container ->
+                        val firestoreContainer = container.toFirestoreContainer()
+                        // Use grocery ID as document ID, not user ID
+                        firestoreHelper.syncToFirestore("containers", container.containerId.toString(), firestoreContainer)
+                    }
+                } catch (e: Exception) {
+                    // Handle error
+                }
+            }
         }
 
 
