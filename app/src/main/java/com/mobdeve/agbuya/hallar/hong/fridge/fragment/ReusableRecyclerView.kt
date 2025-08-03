@@ -50,9 +50,12 @@ class ReusableRecyclerView : Fragment() {
         recyclerView = view.findViewById(R.id.addedIngredientsRv)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        adapter = RecipeMainAdapter(recipeList) { selectedRecipe ->
-            listener?.onRecipeSelected(selectedRecipe)
-        }
+        adapter = RecipeMainAdapter(
+            recipeList = recipeList,
+            onRecipeClick = { selectedRecipe ->
+                listener?.onRecipeSelected(selectedRecipe)
+            }
+        )
         recyclerView.adapter = adapter
 
         return view

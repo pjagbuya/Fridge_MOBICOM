@@ -24,6 +24,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.UserRepository
@@ -34,6 +36,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.SharedRecipeViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +54,8 @@ class PaulMainActivity : AppCompatActivity() {
 
     private lateinit var navBarBinding: NavigationbarBinding
     lateinit var userViewModel: UserViewModel
+
+    lateinit var sharedRecipeViewModel: SharedRecipeViewModel
 
     private val groceryViewModel: GrocerySharedViewModel by viewModels()
     //    private val newContainerResultLauncher = registerForActivityResult(
@@ -77,6 +82,8 @@ class PaulMainActivity : AppCompatActivity() {
         val containerRepository = ContainerRepository(containerDao)
 
         val factory = UserViewModelFactory(userRepository, recipeRepository, containerRepository)
+        val sharedRecipeViewModel: SharedRecipeViewModel by viewModels()
+
         userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
 
 
@@ -86,7 +93,7 @@ class PaulMainActivity : AppCompatActivity() {
         Log.d("ViewModelTest", "GroceryViewModel instance: $groceryViewModel")
 //            wipeAllData(applicationContext)
 //            initializeUser(applicationContext)
-//            initSampleData(applicationContext)
+            initSampleData(applicationContext)
 
         navBarBinding = activityMainBinding.navigationBar
 
@@ -190,6 +197,7 @@ class PaulMainActivity : AppCompatActivity() {
         val userDao = db.userDao()
         val containerDao = db.containerDao()
         val ingredientDao = db.ingredientDao()
+        val recipeDao = db.recipeDao()
 
         CoroutineScope(Dispatchers.IO).launch {
 
@@ -238,6 +246,45 @@ class PaulMainActivity : AppCompatActivity() {
                 )
                 ingredientDao.insertAndUpdateCapacity(ingredient)
             }
+
+            val sampleRecipes = listOf(
+                Pair("Pancake", "Soft and fluffy breakfast delight"),
+                Pair("Spaghetti", "Classic tomato pasta"),
+                Pair("Fried Rice", "Quick and hearty rice dish"),
+                Pair("Fruit Salad", "Colorful mix of fresh fruits"),
+                Pair("Grilled Cheese", "Melted cheesy sandwich")
+            )
+
+            sampleRecipes.forEachIndexed { index, (name, description) ->
+                val recipe = RecipeEntity(
+                    name = name,
+                    description = description,
+                    userId = userId
+                )
+
+                val sampleIngredients = listOf(
+                    RecipeIngredientEntity(
+                        name = "Ingredient A${index + 1}",
+                        amount = 1.0 + index,
+                        unit = "cup",
+                        recipeId = 0 // will be set by insertRecipeWithIngredients
+                    ),
+                    RecipeIngredientEntity(
+                        name = "Ingredient B${index + 1}",
+                        amount = 2.5,
+                        unit = "tbsp",
+                        recipeId = 0
+                    ),
+                    RecipeIngredientEntity(
+                        name = "Ingredient C${index + 1}",
+                        amount = 3.0,
+                        unit = "piece",
+                        recipeId = 0
+                    )
+                )
+                recipeDao.insertRecipeWithIngredients(recipe, sampleIngredients)
+            }
+
         }
     }
 

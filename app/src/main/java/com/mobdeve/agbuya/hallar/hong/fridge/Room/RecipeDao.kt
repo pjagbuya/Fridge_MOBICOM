@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 
 
 @Dao
@@ -11,6 +12,8 @@ interface RecipeDao {
     @Insert
     suspend fun insertRecipe(recipe: RecipeEntity): Long
 
+    @Insert
+    suspend fun insertIngredient(ingredient: RecipeIngredientEntity)
     @Insert
     suspend fun insertIngredients(ingredients: List<RecipeIngredientEntity>)
 
@@ -42,4 +45,10 @@ interface RecipeDao {
     //update authId if null only
     @Query("UPDATE RecipeEntity SET userAuthId = :fireAuthId WHERE userAuthId IS NULL")
     suspend fun assignFireAuthId(fireAuthId: String?)
+
+    @Update
+    suspend fun updateRecipe(recipe: RecipeEntity)
+
+    @Query("SELECT * FROM RecipeEntity WHERE id = :recipeId")
+    abstract suspend fun getRecipeById(recipeId: Int): RecipeEntity
 }

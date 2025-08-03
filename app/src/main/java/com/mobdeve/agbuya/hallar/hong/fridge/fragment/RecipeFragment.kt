@@ -26,24 +26,24 @@ class RecipeMainFragment : Fragment() {
     private lateinit var recipeRepository: RecipeRepository
 
     // Sample data for seeding
-    private val sampleRecipes = arrayListOf(
-        RecipeModel(
-            name = "Pancakes",
-            description = "Fluffy homemade pancakes",
-            ingredients = arrayListOf(
-                RecipeIngredient(name = "Flour", amount = 2.0, unit = RecipeUnit.CUP),
-                RecipeIngredient(name = "Eggs", amount = 2.0, unit = RecipeUnit.PIECE)
-            )
-        ),
-        RecipeModel(
-            name = "Adobo",
-            description = "Classic Filipino dish",
-            ingredients = arrayListOf(
-                RecipeIngredient(name = "Chicken", amount = 1.0, unit = RecipeUnit.KG),
-                RecipeIngredient(name = "Soy Sauce", amount = 1.0, unit = RecipeUnit.CUP)
-            )
-        )
-    )
+//    private val sampleRecipes = arrayListOf(
+//        RecipeModel(
+//            name = "Pancakes",
+//            description = "Fluffy homemade pancakes",
+//            ingredients = arrayListOf(
+//                RecipeIngredient(name = "Flour", amount = 2.0, unit = RecipeUnit.CUP),
+//                RecipeIngredient(name = "Eggs", amount = 2.0, unit = RecipeUnit.PIECE)
+//            )
+//        ),
+//        RecipeModel(
+//            name = "Adobo",
+//            description = "Classic Filipino dish",
+//            ingredients = arrayListOf(
+//                RecipeIngredient(name = "Chicken", amount = 1.0, unit = RecipeUnit.KG),
+//                RecipeIngredient(name = "Soy Sauce", amount = 1.0, unit = RecipeUnit.CUP)
+//            )
+//        )
+//    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,9 +63,12 @@ class RecipeMainFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        recipeAdapter = RecipeMainAdapter(arrayListOf()) { recipe ->
-            onRecipeSelected(recipe)
-        }
+        recipeAdapter = RecipeMainAdapter(
+            arrayListOf(),
+            onRecipeClick = { recipe -> onRecipeSelected(recipe) },
+            onEditClick = { recipe -> onEditRecipe(recipe) },
+            onDeleteClick = { recipe -> deleteRecipe(recipe) }
+        )
         binding.recipeListRv.layoutManager = LinearLayoutManager(requireContext())
         binding.recipeListRv.adapter = recipeAdapter
     }
@@ -90,9 +93,23 @@ class RecipeMainFragment : Fragment() {
 
     private fun loadRecipes() {
         viewLifecycleOwner.lifecycleScope.launch {
-            recipeRepository.seedData(sampleRecipes)
+//            recipeRepository.seedData(sampleRecipes)
             val recipes = recipeRepository.getAllRecipes()
             recipeAdapter.updateData(recipes)
+        }
+    }
+
+    private fun onEditRecipe(recipe: RecipeModel) {
+        val action = RecipeMainFragmentDirections
+            .actionRecipeMainFragmentToAddRecipeFragment(recipe)
+        findNavController().navigate(action)
+    }
+
+    private fun deleteRecipe(recipe: RecipeModel) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            recipeRepository.deleteRecipe(recipe)
+            val updatedRecipes = recipeRepository.getAllRecipes()
+            recipeAdapter.updateData(updatedRecipes)
         }
     }
 
