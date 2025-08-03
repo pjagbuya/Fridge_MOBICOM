@@ -3,19 +3,25 @@ package com.mobdeve.agbuya.hallar.hong.fridge.sharedModels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerIdName
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,7 +35,26 @@ class ContainerSharedViewModel @Inject constructor(
 
     private val _readAllData = MutableStateFlow<List<ContainerEntity>>(emptyList())
     val readAllData: StateFlow<List<ContainerEntity>> = _readAllData
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery
 
+    private val _selectedSortBy = MutableStateFlow("A-Z")
+    val selectedSortBy: StateFlow<String> = _selectedSortBy
+
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
+    fun setSort(sort: String) {
+        _selectedSortBy.value = sort
+    }
+    val filteredData: StateFlow<List<ContainerEntity>> =
+        combine(readAllData, _searchQuery) { data, search ->
+            if (search.isNotBlank()) {
+                data.filter { it.name.contains(search, ignoreCase = true) }
+            } else {
+                data
+            }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     init {
         viewModelScope.launch {
             repository.readAllData.collect {
@@ -73,5 +98,9 @@ class ContainerSharedViewModel @Inject constructor(
             val result = repository.getContainerIdNameMap(userId)
             containerIdNameMap.value = result
         }
+    }
+
+    fun searchDatabase(searchQuery:String): LiveData<List<ContainerEntity>>{
+        return repository.searchDatabase(searchQuery).asLiveData()
     }
 }

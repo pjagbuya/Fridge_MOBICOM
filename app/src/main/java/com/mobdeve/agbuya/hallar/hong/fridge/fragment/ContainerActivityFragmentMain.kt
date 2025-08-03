@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -21,6 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.ContainerActivityMainAdapter
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.ContainerActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
@@ -77,6 +80,8 @@ class ContainerActivityFragmentMain : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTopBar()
+
+
         val tempAdapter = ContainerActivityMainAdapter { container ->
             groceryViewModel.deleteAllGroceryAtContainer(container.containerId)
             containerViewModel.deleteContainer(container.containerId)
@@ -90,9 +95,15 @@ class ContainerActivityFragmentMain : Fragment() {
         }
         //TODO: Now not using test data but live data of shared view models. Only looks at the data again
 //        containerList.clear()
+        val searchBar = binding.searchBarContainer.searchbar.searchTextEt
+        searchBar.addTextChangedListener {
+            val query = it.toString().trim()
+            containerViewModel.setSearchQuery(query)
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
-                containerViewModel.readAllData.collect { containerList ->
+                containerViewModel.filteredData.collect { containerList ->
                     if (containerList.isNullOrEmpty()) {
                         showEmptyState()
                     } else {

@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
@@ -38,7 +39,12 @@ class GrocerySharedViewModel @Inject constructor(
 
     private val _selectedSortBy = MutableStateFlow("")
     private val _selectedItemType = MutableStateFlow("All items")
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery
 
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
     val selectedSortBy: StateFlow<String> = _selectedSortBy
     val selectedItemType: StateFlow<String> = _selectedItemType
 
@@ -50,22 +56,31 @@ class GrocerySharedViewModel @Inject constructor(
     val filteredAndSortedData: StateFlow<List<IngredientEntity>> = combine(
         repository.readAllData,
         _selectedSortBy,
-        _selectedItemType
-    ) { data, sortBy, itemType ->
-        val filteredList = if (itemType != "All items") {
+        _selectedItemType,
+        _searchQuery
+    ) { data, sortBy, itemType, search ->
+
+        val filteredByType = if (itemType != "All items") {
             data.filter { it.itemType.equals(itemType, ignoreCase = true) }
         } else data
 
-        when (sortBy) {
-            "A-Z" -> filteredList.sortedBy { it.name.lowercase() }
-            "Quantity ↑" -> filteredList.sortedBy { it.quantity }
-            "Quantity ↓" -> filteredList.sortedByDescending { it.quantity }
-            "Date Added" -> filteredList.sortedByDescending { it.dateAdded }
-            "Expiry" -> filteredList.sortedBy { it.expirationDate }
-            else -> filteredList
-        }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        val filteredBySearch = if (search.isNotBlank()) {
+            filteredByType.filter {
+                it.name.contains(search, ignoreCase = true) ||
+                        it.itemType.contains(search, ignoreCase = true)
+            }
+        } else filteredByType
 
+        when (sortBy) {
+            "A-Z" -> filteredBySearch.sortedBy { it.name.lowercase() }
+            "Quantity ↑" -> filteredBySearch.sortedBy { it.quantity }
+            "Quantity ↓" -> filteredBySearch.sortedByDescending { it.quantity }
+            "Date Added" -> filteredBySearch.sortedByDescending { it.dateAdded }
+            "Expiry" -> filteredBySearch.sortedBy { it.expirationDate }
+            else -> filteredBySearch
+        }
+
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     fun setSort(sort: String) {
         _selectedSortBy.value = sort
     }
@@ -100,5 +115,9 @@ class GrocerySharedViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateGrocery(grocery)
         }
+    }
+
+    fun searchDatabase(searchQuery:String): LiveData<List<IngredientEntity>>{
+        return repository.searchDatabase(searchQuery).asLiveData()
     }
 }
