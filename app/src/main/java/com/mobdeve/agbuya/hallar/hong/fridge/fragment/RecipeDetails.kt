@@ -7,15 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeIngredientAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentRecipeDetailsBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.SharedRecipeViewModel
 import kotlinx.coroutines.launch
 
 class RecipeDetails : Fragment() {
@@ -25,6 +27,10 @@ class RecipeDetails : Fragment() {
 
     private val args: RecipeDetailsArgs by navArgs()
     private lateinit var recipe: RecipeModel
+
+    // new
+    private val sharedViewModel: SharedRecipeViewModel by activityViewModels()
+    private lateinit var adapter: RecipeIngredientAdapter
 
     private lateinit var recipeRepository: RecipeRepository
 
@@ -47,21 +53,35 @@ class RecipeDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Bind recipe details
-        binding.recipeTitleTv.text = recipe.name
-        binding.recipeDescriptionTv.text = recipe.description
+        val recipeId = args.recipe.id
 
-        setupRecyclerView()
-        setupButtons()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val freshRecipe = recipeRepository.getRecipeById(recipeId)
+            recipe = freshRecipe
+
+            binding.recipeTitleTv.text = recipe.name
+            binding.recipeDescriptionTv.text = recipe.description
+
+            setupRecyclerView()
+            setupButtons()
+
+            sharedViewModel.clearIngredients()
+            sharedViewModel.setIngredients(ArrayList(recipe.ingredients))
+        }
     }
 
     private fun setupRecyclerView() {
-        binding.ingredientListRv.layoutManager = LinearLayoutManager(requireContext())
-        binding.ingredientListRv.adapter = RecipeIngredientAdapter(
-            recipe.ingredients,
+        adapter = RecipeIngredientAdapter(
+            arrayListOf(),
             onDeleteClick = {},
             showDeleteButton = false
         )
+        binding.ingredientListRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.ingredientListRv.adapter = adapter
+
+        sharedViewModel.ingredients.observe(viewLifecycleOwner) { updatedIngredients ->
+            adapter.updateData(updatedIngredients)
+        }
     }
 
     private fun setupButtons() {
