@@ -36,4 +36,6 @@ class GroceryRepository @Inject constructor(
     suspend fun deleteGrocery(groceryId: Int) {
         groceryDao.deleteIngredientById(groceryId)
     }
+
+    fun searchDatabase(searchQuery : String) : Flow<List<IngredientEntity>> = groceryDao.searchContainers(searchQuery)
 }

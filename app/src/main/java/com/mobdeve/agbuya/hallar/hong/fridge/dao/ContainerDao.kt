@@ -45,6 +45,11 @@ interface ContainerDao {
     @Query("SELECT * FROM ContainerEntity WHERE ownerUserId = :userId ORDER BY timeStamp DESC")
     fun getAllContainersByUserId(userId: Int): Flow<List<ContainerEntity>>
 
+
+    // Database searching:
+    @Query("SELECT * FROM ContainerEntity WHERE name LIKE :searchQuery OR timeStamp LIKE :searchQuery")
+    fun searchContainers(searchQuery: String): Flow<List<ContainerEntity>>
+
     @Query("UPDATE ContainerEntity SET fireAuthId = :newFireAuthId WHERE fireAuthId IS NULL")
     suspend fun assignFireAuthId(newFireAuthId: String?)
 }

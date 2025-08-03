@@ -21,6 +21,8 @@ class ContainerRepository @Inject constructor(
     suspend fun getContainerIdNameMap(userId: Int): List<ContainerIdName> =
         containerDao.getContainerIdNameMap(userId)
 
+    fun searchDatabase(searchQuery : String) : Flow<List<ContainerEntity>> = containerDao.searchContainers(searchQuery)
+
     suspend fun assignFireAuthId(authId: String?) {
         return containerDao.assignFireAuthId(authId)
     }

@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -19,6 +21,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.GroceryActivityMainAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
+import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceriesActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
@@ -43,6 +46,7 @@ class GroceryActivityFragmentMain : Fragment() {
 
 
     private val groceryViewModel: GrocerySharedViewModel by viewModels()
+    private lateinit var  searchBar : EditText
 
     private var originalGroceryList: List<IngredientEntity> = emptyList()
     private lateinit var adapter: GroceryActivityMainAdapter
@@ -63,6 +67,14 @@ class GroceryActivityFragmentMain : Fragment() {
 
         val topBarBinding: BaseSearchbarContainerBinding = binding.searchBarContainer
         topBarBinding.headerTitleTv.setText(R.string.my_groceries)
+
+        val baseSearchBarContainerBinding : BaseSearchbarContainerBinding = binding.searchBarContainer
+        val searchBarBinding : BaseSearchbarBinding = baseSearchBarContainerBinding.searchbar
+        searchBar = searchBarBinding.searchTextEt
+        searchBar.addTextChangedListener {
+            val query = it.toString().trim()
+            groceryViewModel.setSearchQuery(query)
+        }
         setupSortDropdowns()
         setupRecycler()
         setupAddButton()
