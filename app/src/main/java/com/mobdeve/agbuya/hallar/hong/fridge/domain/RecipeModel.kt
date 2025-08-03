@@ -35,7 +35,6 @@ data class RecipeModel(
     }
 
     companion object {
-
         // if the added ingredient is available in any containers
         fun fromIngredient(
             ingredient: Ingredient,

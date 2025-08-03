@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobdeve.agbuya.hallar.hong.fridge.Repository.RecipeRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeIngredientAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentAddRecipeFormBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
@@ -55,7 +56,6 @@ class AddRecipeFragment : Fragment() {
         setupRecyclerView()
         setupButtons()
 
-        // Observe the ingredient list from the shared ViewModel
         sharedViewModel.ingredients.observe(viewLifecycleOwner) { updatedList ->
             adapter.updateData(updatedList)
         }
@@ -113,7 +113,6 @@ class AddRecipeFragment : Fragment() {
             try {
                 recipeRepository.saveRecipe(newRecipe)
                 Toast.makeText(requireContext(), "Recipe added successfully!", Toast.LENGTH_SHORT).show()
-                sharedViewModel.clearIngredients()
                 findNavController().popBackStack()
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -25,7 +25,6 @@ class SearchIngredientAdapter(
             onAddClick(ingredient)
         }
     }
-
     override fun getItemCount(): Int = ingredientList.size
 
     fun updateData(newList: List<RecipeModel.RecipeIngredient>) {

@@ -19,7 +19,8 @@ fun RecipeModel.toEntity(): RecipeEntity {
 // RecipeIngredient to RecipeIngredientEntity
 fun RecipeModel.RecipeIngredient.toEntity(recipeId: Int): RecipeIngredientEntity {
     return RecipeIngredientEntity(
-        ingredientId = if (this.ingredientID == 0) 0 else this.ingredientID,
+//        ingredientId = if (this.ingredientID == 0) 0 else this.ingredientID,
+        ingredientId = 0, // always force new row to auto-gen ID
         recipeId = recipeId,
         name = this.name,
         amount = this.amount,
@@ -49,10 +50,12 @@ fun RecipeEntity.toModel(ingredients: List<RecipeIngredientEntity>): RecipeModel
     )
 }
 
+// IngredientEntity to Recipe Ingredient
 fun IngredientEntity.toRecipeIngredient(): RecipeModel.RecipeIngredient {
     return RecipeModel.RecipeIngredient(
+        ingredientID = this.ingredientID,
         name = this.name,
-        amount = this.price,
+        amount = 0.0,
         unit = RecipeModel.RecipeUnit.valueOf(this.unit.uppercase()),
         isCustom = false
     )

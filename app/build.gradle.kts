@@ -72,6 +72,7 @@ configurations.all{
 dependencies {
     implementation("xmlpull:xmlpull:1.1.3.4d_b4_min")
     implementation("androidx.room:room-common-jvm:2.7.2")
+    implementation("com.google.android.engage:engage-core:1.5.8")
 
 
     val room_version = "2.6.1"

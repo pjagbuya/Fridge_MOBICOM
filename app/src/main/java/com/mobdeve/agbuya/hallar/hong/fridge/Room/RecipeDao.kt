@@ -18,6 +18,9 @@ abstract class RecipeDao {
     @Query("SELECT * FROM recipes")
     abstract suspend fun getAllRecipes(): List<RecipeEntity>
 
+    @Query("SELECT * FROM recipes WHERE id = :recipeId")
+    abstract suspend fun getRecipeById(recipeId: Int): RecipeEntity
+
     @Query("SELECT * FROM recipe_ingredients WHERE recipeId = :recipeId")
     abstract suspend fun getIngredientsForRecipe(recipeId: Int): List<RecipeIngredientEntity>
 
@@ -26,6 +29,10 @@ abstract class RecipeDao {
 
     @Query("DELETE FROM recipe_ingredients WHERE recipeId = :recipeId")
     abstract suspend fun deleteIngredientsByRecipeId(recipeId: Int)
+
+    @Transaction
+    @Query("SELECT * FROM recipes WHERE id = :recipeId")
+    abstract suspend fun getRecipeWithIngredients(recipeId: Int): RecipeWithIngredients
 
     @Transaction
     open suspend fun insertRecipeWithIngredients(

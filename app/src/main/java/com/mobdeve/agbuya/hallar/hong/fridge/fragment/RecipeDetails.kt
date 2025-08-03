@@ -53,27 +53,24 @@ class RecipeDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Bind recipe details
-        binding.recipeTitleTv.text = recipe.name
-        binding.recipeDescriptionTv.text = recipe.description
+        val recipeId = args.recipe.id
 
-        setupRecyclerView()
-        setupButtons()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val freshRecipe = recipeRepository.getRecipeById(recipeId)
+            recipe = freshRecipe
 
-        sharedViewModel.clearIngredients()
-        sharedViewModel.ingredients.value?.addAll(recipe.ingredients)
-        adapter.updateData(recipe.ingredients)
+            binding.recipeTitleTv.text = recipe.name
+            binding.recipeDescriptionTv.text = recipe.description
+
+            setupRecyclerView()
+            setupButtons()
+
+            sharedViewModel.clearIngredients()
+            sharedViewModel.setIngredients(ArrayList(recipe.ingredients))
+        }
     }
 
     private fun setupRecyclerView() {
-//        binding.ingredientListRv.layoutManager = LinearLayoutManager(requireContext())
-//        binding.ingredientListRv.adapter = RecipeIngredientAdapter(
-//            recipe.ingredients,
-//            onDeleteClick = {},
-//            showDeleteButton = false
-//        )
-
-        // new
         adapter = RecipeIngredientAdapter(
             arrayListOf(),
             onDeleteClick = {},

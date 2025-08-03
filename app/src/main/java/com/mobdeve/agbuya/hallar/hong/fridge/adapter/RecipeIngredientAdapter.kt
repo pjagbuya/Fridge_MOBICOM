@@ -44,11 +44,11 @@ class RecipeIngredientAdapter(
         }
     }
 
-    override fun getItemCount(): Int = ingredientList.size
-
     fun updateData(newList: List<RecipeModel.RecipeIngredient>) {
         ingredientList.clear()
         ingredientList.addAll(newList)
         notifyDataSetChanged()
     }
+
+    override fun getItemCount(): Int = ingredientList.size
 }
