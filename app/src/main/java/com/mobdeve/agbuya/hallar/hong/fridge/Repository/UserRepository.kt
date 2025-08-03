@@ -1,38 +1,78 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.Room
+package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
 import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
+import androidx.room.Query
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.MemberEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserDao
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class UserRepository(private val userDao: UserDao) {
+class UserRepository @Inject constructor(private val userDao: UserDao) {
 
-    // insert user with error handling for duplicate email
+    // insert user with error handling for duplicate user
     suspend fun registerUser(user: UserEntity): Result<Long> {
         return try {
             withContext(Dispatchers.IO) {
                 val id = userDao.insertUser(user)
-                Log.d("UserRepository", "Inserted user: ${user.email}") // for debugging
+                Log.d("UserRepository", "Inserted user: ${user.name}") // for debugging
                 Result.success(id)
             }
         } catch (e: SQLiteConstraintException) {
-            Log.d("UserRepository", "Failed to insert user: ${user.email}, email already exists.") // for debugging
-            Result.failure(Exception("Email already exists."))
+            Log.d("UserRepository", "Failed to insert user: ${user.name}") // for debugging
+            Result.failure(Exception("user already exists"))
         }
     }
 
-    // get user by email
-    suspend fun getUserByEmail(email: String): UserEntity? {
+    //get user
+    suspend fun getUser() : Flow<UserEntity?> {
         return withContext(Dispatchers.IO) {
-            userDao.getUserByEmail(email)
+            userDao.getUser()
         }
     }
+
+    //update fireAuthId
+    suspend fun updateCurrentUserFireAuthId(fireAuthId: String?) {
+        userDao.updateFireAuthId(fireAuthId)
+    }
+
+
+
+    // get user by fireAuth
+    suspend fun getUserByAuthId(userAuthId: String): UserEntity? {
+        return withContext(Dispatchers.IO) {
+            userDao.getUserByAuthId(userAuthId)
+        }
+    }
+
+    suspend fun getMembers(userAuthId: String): MemberEntity? {
+        return withContext(context = Dispatchers.IO){
+            userDao.getMembers(userAuthId)
+        }
+    }
+
+    suspend fun getLoggedInUser(userAuthId: String?): UserEntity? {
+        return withContext(context = Dispatchers.IO){
+            userDao.getLoggedInUser(userAuthId)
+        }
+    }
+
+    suspend fun updateUserName(name: String?) {
+        return userDao.updateName(name)
+    }
+
 
     // get user by ID
     suspend fun getUserById(id: Int): UserEntity? {
         return withContext(Dispatchers.IO) {
             userDao.getUserById(id)
         }
+    }
+    suspend fun insertUser(user: UserEntity) {
+        userDao.insertUser(user)
     }
 
     // get a user by name
@@ -41,14 +81,18 @@ class UserRepository(private val userDao: UserDao) {
             userDao.getUserByName(name)
         }
     }
-
-    // get all users
-    suspend fun getAllUsers(): List<UserEntity> {
-        return withContext(Dispatchers.IO) {
-            userDao.getAllUsers()
-        }
+    suspend fun getUserByFirebaseId(firebaseId: String): UserEntity? {
+        return userDao.getUserByFirebaseId(firebaseId)
     }
 
+
+    suspend fun getLoggedInFirebaseUser(firebaseId: String?): UserEntity? {
+        return if (firebaseId != null) {
+            userDao.getUserByFirebaseId(firebaseId)
+        } else {
+            null
+        }
+    }
 //    // update user
 //    suspend fun updateUser(user: UserEntity) {
 //        withContext(Dispatchers.IO) {

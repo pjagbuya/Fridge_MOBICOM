@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mobdeve.agbuya.hallar.hong.fridge.R
-import com.mobdeve.agbuya.hallar.hong.fridge.Repository.InventoryRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.InventoryRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentProfileAddMemberBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.InventoryViewModel
@@ -39,14 +39,20 @@ class AddMemberFragment: Fragment() {
         inventoryViewModel = ViewModelProvider(this, factory)[InventoryViewModel::class.java]
 
         binding.inviteBtn.setOnClickListener {
+
             val email = binding.emailInput.text.toString()
             val nickname = binding.nicknameInput.text.toString()
             val inventoryName = binding.inventoryNameInput.text.toString()
+            val inventoryId = "tempID_not_yet_implemented"
 
             binding.addMemberErrorTv.visibility = View.INVISIBLE
 
             viewLifecycleOwner.lifecycleScope.launch {
-                inventoryViewModel.inviteMember(inventoryName, email, nickname)
+//                inventoryViewModel.inviteMember(
+//                    inventoryName, email, nickname, inventoryId
+//                )
+                //TODO
+
             }
         }
 

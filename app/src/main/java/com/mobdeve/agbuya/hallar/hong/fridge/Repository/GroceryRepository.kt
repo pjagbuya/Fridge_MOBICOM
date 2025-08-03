@@ -1,6 +1,7 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
 import androidx.lifecycle.LiveData
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.IngredientDao
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
@@ -36,6 +37,8 @@ class GroceryRepository @Inject constructor(
     suspend fun deleteGrocery(groceryId: Int) {
         groceryDao.deleteIngredientById(groceryId)
     }
-
+    fun getIngredientsByFirebaseUid(firebaseUid: String): Flow<List<IngredientEntity>> {
+        return groceryDao.getAllIngredientsByFirebaseUid(firebaseUid)
+    }
     fun searchDatabase(searchQuery : String) : Flow<List<IngredientEntity>> = groceryDao.searchContainers(searchQuery)
 }

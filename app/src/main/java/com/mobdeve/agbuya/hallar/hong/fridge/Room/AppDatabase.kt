@@ -24,7 +24,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
         InventoryEntity::class,
         MemberEntity::class, ContainerEntity::class, IngredientEntity::class, ContainerImageEntity::class
     ],
-    version = 6,
+    version = 8,
     exportSchema = false
 )
 
@@ -45,7 +45,7 @@ abstract class AppDatabase : RoomDatabase(){
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "app_database"
+                    "fridge_db"
                 )
                     .fallbackToDestructiveMigration()
                     .build()

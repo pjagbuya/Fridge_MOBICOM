@@ -1,4 +1,4 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.Repository
+package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
 import com.mobdeve.agbuya.hallar.hong.fridge.Mappers.toEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Mappers.toModel
@@ -6,8 +6,9 @@ import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeDao
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RecipeRepository(private val recipeDao: RecipeDao) {
+class RecipeRepository @Inject constructor(private val recipeDao: RecipeDao) {
 
     //fetch all recipes from the database as RecipeModel list
     suspend fun getAllRecipes(): List<RecipeModel> = withContext(Dispatchers.IO) {
@@ -35,4 +36,10 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
         recipeDao.deleteIngredientsByRecipeId(recipe.id)
         recipeDao.deleteRecipeById(recipe.id)
     }
+
+    suspend fun assignUserAuthId(fireAuthId: String?){
+        return recipeDao.assignFireAuthId(fireAuthId)
+    }
+
+
 }

@@ -33,14 +33,20 @@ import com.mobdeve.agbuya.hallar.hong.fridge.adapter.GroceryViewImageGridAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.ImageRaw
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.OpenFoodFactsApi
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreContainer
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreIngredient
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentAddBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentUpdateBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.firestoreHelper.FirestoreHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.getValue
@@ -224,11 +230,54 @@ class GroceryActivityFragmentAdd : Fragment() {
 
         groceryViewModel.addGrocery(newIngredientEntity)
         Toast.makeText(requireContext(), "Grocery added!", Toast.LENGTH_SHORT).show()
+        val firestoreHelper = FirestoreHelper(requireContext())
+        // Give a small delay for the database insert and ViewModel update
+        groceryViewModel.syncNewlyAddedIngredient(name, requireContext())
+        lifecycleScope.launch {
+            try {
+                // Sync groceries - ONE TIME sync
+                val containers = containerViewModel.readAllData.value
+                containers.forEach { container ->
+                    val firestoreContainer = container.toFirestoreContainer()
+                    // Use grocery ID as document ID, not user ID
+                    firestoreHelper.syncToFirestore("containers", container.containerId.toString(), firestoreContainer)
+                }
+            } catch (e: Exception) {
+                // Handle error
+                Log.d("ERRORS in CONTAINER","Conversion error: ${e.message}")
+
+            }
+        }
+
         findNavController().navigateUp()
 
     }
 
+    // Add this as a separate debug method
+    private fun debugGroceryData() {
+        lifecycleScope.launch {
+            Log.d("GROCERY_DEBUG", "=== DEBUGGING GROCERY DATA ===")
+            delay(3000) // Wait for everything to load
 
+            val groceries = groceryViewModel.readAllData.value
+            Log.d("GROCERY_DEBUG", "Current grocery count: ${groceries.size}")
+
+            if (groceries.isEmpty()) {
+                Log.d("GROCERY_DEBUG", "⚠️ NO GROCERIES FOUND!")
+                Log.d("GROCERY_DEBUG", "This explains why no grocery success messages appear")
+                return@launch
+            }
+
+            groceries.forEachIndexed { index, grocery ->
+                Log.d("GROCERY_DEBUG", "Grocery [$index]:")
+                Log.d("GROCERY_DEBUG", "  ID: ${grocery.ingredientID}")
+                Log.d("GROCERY_DEBUG", "  Name: ${grocery.name}")
+                Log.d("GROCERY_DEBUG", "  Valid ID: ${grocery.ingredientID > 0}")
+                Log.d("GROCERY_DEBUG", "  Container: ${grocery.attachedContainerId}")
+                Log.d("GROCERY_DEBUG", "---")
+            }
+        }
+    }
     private fun setupBarcodeLauncher(){
         barcodeLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {

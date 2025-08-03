@@ -1,55 +1,65 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 // handles the connection between UserRepository + UserEntity
-class UserViewModel(private val repository: UserRepository) : ViewModel() {
+@HiltViewModel
+class UserViewModel @Inject constructor(
+    private val repository: UserRepository,
+    private val containerRepository: ContainerRepository,
+    private val recipeRepository: RecipeRepository
+) : ViewModel()  {
 
     private val _registrationResult = MutableStateFlow<Result<Long>?>(null)
     val registrationResult: StateFlow<Result<Long>?> = _registrationResult
 
     private val _user = MutableStateFlow<UserEntity?>(null)
     val user: StateFlow<UserEntity?> = _user
+    val loggedInUser: StateFlow<UserEntity?> = _user.asStateFlow()
 
-    // register user
-    fun registerUser(user: UserEntity) {
+    // Save user to entity
+    fun onLogin(userAuthId: String?, userDisplayName: String?) {
         viewModelScope.launch {
-            val existingUser = repository.getUserByEmail(user.email)
-            if (existingUser != null) {
-                _registrationResult.value = Result.failure(Exception("Email already exists"))
-            } else {
-                val result = repository.registerUser(user)
-                _registrationResult.value = result
+            if (userAuthId != null) {
+                // First, check if user exists
+                var user = repository.getUserByFirebaseId(userAuthId)
 
-                // for debugging check
-                if (result.isSuccess) {
-                    val id = result.getOrNull()
-                    Log.d("SIGNUP_SUCCESS", "User inserted with ID: $id, email: ${user.email}")
+                // If user doesn't exist, create them
+                if (user == null) {
+                    user = UserEntity(
+                        fireAuthId = userAuthId,
+                        name = userDisplayName!!
+                    )
+                    // Insert the new user
+                    repository.insertUser(user)
+                    // Get the inserted user
+                    user = repository.getUserByFirebaseId(userAuthId)
                 }
+
+                // Update the user in repositories
+                repository.updateCurrentUserFireAuthId(userAuthId)
+                repository.updateUserName(userDisplayName)
+                recipeRepository.assignUserAuthId(userAuthId)
+                containerRepository.assignFireAuthId(userAuthId)
+
+                // Set the logged in user
+                _user.value = user
             }
         }
     }
 
-    // login user by email and password
-    fun loginUser(email: String, password: String) {
-        viewModelScope.launch {
-            val foundUser = repository.getUserByEmail(email)
-            if (foundUser != null && foundUser.password == password) {
-                _user.value = foundUser
-            } else {
-                _user.value = null // user invalid login
-            }
-        }
-    }
-
-    fun logoutUser() {
-        _user.value = null
+    fun onLogout() {
+        //TODO
     }
 }

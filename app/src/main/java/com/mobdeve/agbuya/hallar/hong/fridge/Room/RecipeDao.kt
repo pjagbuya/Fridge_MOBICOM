@@ -24,18 +24,22 @@ interface RecipeDao {
     }
 
     //get all recipes
-    @Query("SELECT * FROM recipes")
+    @Query("SELECT * FROM RecipeEntity")
     suspend fun getAllRecipes(): List<RecipeEntity>
 
     //get ingredients of a specific recipe
-    @Query("SELECT * FROM recipe_ingredients WHERE recipeId = :recipeId")
+    @Query("SELECT * FROM RecipeIngredientEntity WHERE recipeId = :recipeId")
     suspend fun getIngredientsForRecipe(recipeId: Int): List<RecipeIngredientEntity>
 
 //     delete a recipe by ID
-    @Query("DELETE FROM recipes WHERE id = :recipeId")
+    @Query("DELETE FROM RecipeEntity WHERE id = :recipeId")
     suspend fun deleteRecipeById(recipeId: Int)
 
 //    also delete the recipe's ingredient when deleting a recipe
-    @Query("DELETE FROM recipe_ingredients WHERE recipeId = :recipeId")
+    @Query("DELETE FROM RecipeIngredientEntity WHERE recipeId = :recipeId")
     suspend fun deleteIngredientsByRecipeId(recipeId: Int)
+
+    //update authId if null only
+    @Query("UPDATE RecipeEntity SET userAuthId = :fireAuthId WHERE userAuthId IS NULL")
+    suspend fun assignFireAuthId(fireAuthId: String?)
 }

@@ -36,7 +36,13 @@ interface IngredientDao {
 
     @Query("SELECT * FROM IngredientEntity ORDER BY ingredientID DESC")
     fun getAllIngredients(): Flow<List<IngredientEntity>>
-
+    @Query("""
+SELECT i.* FROM IngredientEntity AS i
+JOIN ContainerEntity AS c
+  ON i.attachedContainerId = c.containerId
+WHERE c.ownerUserId = :userId
+""")
+    fun getAllIngredients(userId: String): Flow<List<IngredientEntity>>
     @Transaction
     suspend fun insertAndUpdateCapacity(ingredient: IngredientEntity) {
         insertIngredient(ingredient)
@@ -61,7 +67,13 @@ interface IngredientDao {
 
     @Query("SELECT * FROM IngredientEntity ORDER BY dateAdded ASC")
     fun getAllIngredientsSortedByDateAsc(): Flow<List<IngredientEntity>>
-
+    @Query("""
+        SELECT i.* FROM IngredientEntity AS i
+        JOIN ContainerEntity AS c ON i.attachedContainerId = c.containerId
+        JOIN UserEntity AS u ON c.ownerUserId = u.id
+        WHERE u.fireAuthId = :firebaseUid
+    """)
+    fun getAllIngredientsByFirebaseUid(firebaseUid: String): Flow<List<IngredientEntity>>
     // Database searching:
     @Query("SELECT * FROM IngredientEntity WHERE name LIKE :searchQuery")
     fun searchContainers(searchQuery: String): Flow<List<IngredientEntity>>

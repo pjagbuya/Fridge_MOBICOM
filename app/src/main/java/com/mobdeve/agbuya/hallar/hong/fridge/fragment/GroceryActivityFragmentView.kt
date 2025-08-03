@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,9 +25,12 @@ import com.mobdeve.agbuya.hallar.hong.fridge.adapter.GroceryViewImageGridAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.GroceryViewImageGridAdapterDefault
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.container.GroceryDataHelper
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreContainer
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreIngredient
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.BaseSearchbarContainerBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceriesActivityMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.GroceryComponentViewBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.firestoreHelper.FirestoreHelper
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.ADD_INGREDIENT_KEY
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.EDIT_INGREDIENT_KEY
 import com.mobdeve.agbuya.hallar.hong.fridge.fragment.GroceryActivityFragmentMain.Companion.SELECTED_INGREDIENT_KEY
@@ -85,6 +89,23 @@ class GroceryActivityFragmentView : Fragment() {
                     binding.deleteBtn.setOnClickListener {
                         containerViewModel.decreaseCurrCap(selectedIngredient.attachedContainerId)
                         groceryViewModel.deleteGrocery(selectedIngredient.ingredientID)
+                        val firestoreHelper = FirestoreHelper(requireContext())
+                        groceryViewModel.syncDeletedIngredient(selectedIngredient.ingredientID) // Assuming it uses ID only now
+                        lifecycleScope.launch {
+                            try {
+                                // Sync groceries - ONE TIME sync
+                                val containers = containerViewModel.readAllData.value
+                                containers.forEach { container ->
+                                    val firestoreContainer = container.toFirestoreContainer()
+                                    // Use grocery ID as document ID, not user ID
+                                    firestoreHelper.syncToFirestore("containers", container.containerId.toString(), firestoreContainer)
+                                }
+                            } catch (e: Exception) {
+                                // Handle error
+                                Log.d("ERRORS in CONTAINERS","Conversion error: ${e.message}")
+
+                            }
+                        }
                         findNavController().navigateUp()
                     }
                 }
