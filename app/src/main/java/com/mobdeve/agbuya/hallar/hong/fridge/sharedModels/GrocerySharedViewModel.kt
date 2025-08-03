@@ -25,9 +25,11 @@ import com.mobdeve.agbuya.hallar.hong.fridge.repository.GroceryRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.IngredientEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -113,7 +115,6 @@ class GrocerySharedViewModel @Inject constructor(
         val firestoreHelper = FirestoreHelper(context)
 
         viewModelScope.launch {
-            delay(5000) // Consistent delay
 
             try {
                 val firestoreIngredient = ingredientEntity.toFirestoreIngredient()
@@ -133,7 +134,7 @@ class GrocerySharedViewModel @Inject constructor(
         }
     }
 
-    fun syncDeletedIngredient(ingredientId: Int) {
+    fun syncDeletedIngredient(ingredientId: Int, context : Context) {
         val TAG = "SYNC_DELETE"
 
         if (ingredientId <= 0) {
@@ -145,76 +146,54 @@ class GrocerySharedViewModel @Inject constructor(
 
         viewModelScope.launch {
             Log.d(TAG, "Starting sync delete for ingredient ID: $ingredientId (Doc ID: $documentId)")
-            delay(200) // Consistent delay
             Log.d(TAG, "Delay finished, attempting Firestore delete for Doc ID: $documentId")
 
             try {
-                FirebaseFirestore.getInstance()
-                    .collection("ingredients")
-                    .document(documentId)
-                    .delete()
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Successfully deleted ingredient document: $documentId from Firestore")
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e(TAG, "Failed to delete ingredient document: $documentId from Firestore", exception)
-                    }
+                val firestoreHelper = FirestoreHelper(context) // You'd need context passed in or instantiated differently
+                // OR, if you instantiate FirestoreHelper elsewhere and pass it in...
+                firestoreHelper.deleteFromFirestore(
+                    collectionName = "ingredients",
+                    documentId = documentId,
+                    successMessage = "Ingredient deleted from cloud", // Customize as needed
+                    failureMessage = "Failed to delete ingredient from cloud" // Customize as needed
+                )
+                // Note: The Toast messages are handled inside deleteFromFirestore based on the example above.
 
             } catch (e: Exception) {
+                // Catch unexpected errors during setup/launch
                 Log.e(TAG, "Error initiating delete sync for ingredient ID: $ingredientId", e)
+                // Optionally show a general error Toast here if not handled in deleteFromFirestore
+                // Toast.makeText(context, "Sync error for delete", Toast.LENGTH_SHORT).show()
             } finally {
                 Log.d(TAG, "Sync delete attempt finished for ingredient ID: $ingredientId")
             }
         }
     }
-    fun syncNewlyAddedIngredient(addedItemName: String, context: Context) {
+    fun syncNewlyAddedIngredient(ingredientEntity: IngredientEntity, context: Context) {
+        // Basic validation - Ensure the entity has a valid ID
+        if (ingredientEntity.ingredientID <= 0) {
+            return // Silently ignore items without a valid ID
+        }
+
         val firestoreHelper = FirestoreHelper(context)
 
         viewModelScope.launch {
-            delay(5000) // Give time for Room insert and Flow emission
+            delay(5000)
+            val firestoreIngredient = ingredientEntity.toFirestoreIngredient()
+            val documentId = ingredientEntity.ingredientID.toString()
 
-            try {
-                val currentGroceries = readAllData.value
+            firestoreHelper.syncToFirestore(
+                collectionName = "ingredients",
+                documentId = documentId,
+                data = firestoreIngredient,
+                successMessage = "Ingredient '${ingredientEntity.name}' synced successfully",
+                failureMessage = "Failed to sync ingredient '${ingredientEntity.name}'"
+            )
 
-                // Find the item we just added by name and valid ID
-                val addedItem = currentGroceries.find { it.name == addedItemName && it.ingredientID > 0 }
-
-                if (addedItem != null) {
-                    syncSingleIngredientToFirestore(addedItem, firestoreHelper)
-                } else {
-                    // Optional: Handle case where item isn't found
-                }
-            } catch (e: CancellationException) {
-                // viewModelScope job was cancelled
-            } catch (e: Exception) {
-                // Handle general errors
-            }
         }
     }
 
-    fun syncSingleIngredientToFirestore(ingredientEntity: IngredientEntity, firestoreHelper: FirestoreHelper) {
-        viewModelScope.launch {
-            try {
-                if (ingredientEntity.ingredientID <= 0) {
-                    return@launch
-                }
 
-                val firestoreIngredient = ingredientEntity.toFirestoreIngredient()
-                val documentId = ingredientEntity.ingredientID.toString()
-
-                firestoreHelper.syncToFirestore(
-                    collectionName = "ingredients",
-                    documentId = documentId,
-                    data = firestoreIngredient,
-                    successMessage = "Ingredient '${ingredientEntity.name}' synced successfully",
-                    failureMessage = "Failed to sync ingredient '${ingredientEntity.name}'"
-                )
-
-            } catch (e: Exception) {
-                // Handle errors during sync
-            }
-        }
-    }
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
     }
@@ -243,12 +222,83 @@ class GrocerySharedViewModel @Inject constructor(
         }
     }
 
-    fun deleteAllGroceryAtContainer(id: Int) {
+    fun deleteAllGroceryAtContainer(id: Int, context: Context) {
+        val TAG = "DELETE_ALL_ING"
+
+        if (id <= 0) {
+            Log.w(TAG, "Invalid container ID provided for delete all: $id")
+            return
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteAllGroceryAtContainer(id)
+            try {
+                Log.d(TAG, "Starting local delete for all groceries in container ID: $id")
+                // 1. Perform the local database deletion first
+                repository.deleteAllGroceryAtContainer(id)
+                Log.d(TAG, "Local delete completed for container ID: $id")
+
+                // 2. Attempt to sync deletions to Firestore
+                // Option A: Use readAllData Flow and filter (if no specific DAO method)
+                Log.d(TAG, "Fetching ingredients for container ID: $id from readAllData for Firestore sync")
+                // Note: collectLatest might not be ideal here as we want the current list once.
+                // Using first() or firstOrNull() from the Flow is better for a one-time read.
+                // However, readAllData might be user-filtered. Ensure it includes items for container 'id'.
+                // If readAllData is filtered by user, and the container belongs to this user,
+                // then this should work. Otherwise, a direct DAO query is better.
+                val currentIngredients = readAllData.value // Get current value
+                val ingredientsToDelete = currentIngredients.filter { it.attachedContainerId == id }
+                Log.d(TAG, "Found ${ingredientsToDelete.size} ingredients to delete from Firestore for container ID: $id")
+
+                // Launch separate coroutines for each delete to avoid blocking this IO thread
+                // and to allow parallel processing (if Firestore allows/it's efficient).
+                // Using SupervisorJob so one failure doesn't cancel others.
+                val syncDeleteScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+                for (ingredient in ingredientsToDelete) {
+                    // Launch each delete sync in the shared viewModelScope or a sub-scope
+                    // Using viewModelScope.launch ensures it's tied to ViewModel lifecycle.
+                    // Delay might still be needed inside syncDeletedIngredient.
+                    // Consider if launching many delayed coroutines is ideal.
+                    // Alternative: Call syncDeletedIngredient without delay here, or use WorkManager.
+                    viewModelScope.launch {
+                        Log.d(TAG, "Scheduling Firestore delete for ingredient ID: ${ingredient.ingredientID}")
+                        // Call the existing syncDeletedIngredient function for each item
+                        // It handles its own delay and logging (assuming it uses FirestoreHelper)
+                        // Pass context if needed, or modify syncDeletedIngredient to not require it
+                        // if it uses FirebaseFirestore.getInstance() directly.
+                        syncDeletedIngredient(ingredient.ingredientID, context) // Use existing function
+                        // If syncDeletedIngredient requires context:
+                        // syncDeletedIngredient(ingredient.ingredientID, getApplication<Application>().applicationContext)
+                    }
+                }
+                // syncDeleteScope.coroutineContext.cancel() // Not needed if using viewModelScope.launch
+
+                // Option B: If you added getIngredientsByContainerId to repository:
+                /*
+                try {
+                    // Collect the first emission (or timeout) to get the list
+                    val ingredientsToDelete = withTimeout(5000) { // 5 second timeout
+                        repository.getIngredientsByContainerId(id).first()
+                    }
+                    Log.d(TAG, "Found ${ingredientsToDelete.size} ingredients to delete from Firestore")
+                    for (ingredient in ingredientsToDelete) {
+                        viewModelScope.launch {
+                            syncDeletedIngredient(ingredient.ingredientID)
+                        }
+                    }
+                } catch (e: TimeoutCancellationException) {
+                    Log.e(TAG, "Timeout getting ingredients for container ID: $id for Firestore sync", e)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error getting ingredients for container ID: $id for Firestore sync", e)
+                }
+                */
+
+            } catch (e: Exception) {
+                // Catch errors during local delete or sync initiation
+                Log.e(TAG, "Error in deleteAllGroceryAtContainer for container ID: $id", e)
+                // Depending on requirements, you might want to retry or notify user
+            }
         }
     }
-
     fun updateGrocery(grocery: IngredientEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateGrocery(grocery)

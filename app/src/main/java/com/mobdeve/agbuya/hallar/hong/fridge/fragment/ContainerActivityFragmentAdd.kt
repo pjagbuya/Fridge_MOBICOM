@@ -33,12 +33,15 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.Converters
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreContainer
+import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
+import dagger.hilt.android.AndroidEntryPoint
 
 enum class EditType{
     ADD,
     EDIT
 }
 
+@AndroidEntryPoint
 
 class ContainerActivityFragmentAdd : Fragment(){
 
@@ -55,7 +58,7 @@ class ContainerActivityFragmentAdd : Fragment(){
     private var isEdit: Boolean = false
     private val binding get() = _binding!!
 
-    private lateinit var containerList:ArrayList<ContainerModel>
+    private lateinit var containerList:ArrayList<ContainerEntity>
     private val containerViewModel: ContainerSharedViewModel by viewModels()
 
     // These two inlines suppresses deprecation errors
@@ -69,9 +72,6 @@ class ContainerActivityFragmentAdd : Fragment(){
     }
 
 
-    fun getcontainerList():ArrayList<ContainerModel>{
-        return containerList
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -159,22 +159,9 @@ class ContainerActivityFragmentAdd : Fragment(){
                 containerList,
                 requireActivity(),
                 object : ContainerEditActionListener {
-                    override fun onOkClick(position: Int) {
+                    override fun onOkClick(position: Int, model: ContainerEntity) {
                         val firestoreHelper = FirestoreHelper(requireContext())
-                        lifecycleScope.launch {
-                            try {
-                                // Sync groceries - ONE TIME sync
-                                val containers = containerViewModel.readAllData.value
-                                containers.forEach { container ->
-                                    val firestoreContainer = container.toFirestoreContainer()
-                                    // Use grocery ID as document ID, not user ID
-                                    firestoreHelper.syncToFirestore("containers", container.containerId.toString(), firestoreContainer)
-                                }
-                            } catch (e: Exception) {
-                                // Handle error
-                                Log.d("ERRORS in CONTADD","Conversion error: ${e.message}")
-                            }
-                        }
+                        containerViewModel.syncAddContainer(model, requireContext())
                         findNavController().navigateUp()
                     }
 

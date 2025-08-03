@@ -21,7 +21,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 
 class ContainerActivityEditAdapter(
-    private val data: ArrayList<ContainerModel>,
+    private val data: ArrayList<ContainerEntity>,
     private val activity: FragmentActivity,
     private val listener: ContainerEditActionListener,
     private val getContainerName: () -> String,
@@ -52,8 +52,9 @@ class ContainerActivityEditAdapter(
         holder.bindData(model, selectedPosition, position)
 
         holder.okBtn.setOnClickListener {
-            updateDataToDatabase(position)
-            listener.onOkClick(position)
+
+            val model = updateDataToDatabase(position)
+            listener.onOkClick(position, model)
         }
 
         holder.cancelBtn.setOnClickListener {
@@ -68,7 +69,7 @@ class ContainerActivityEditAdapter(
         }
     }
 
-    private fun updateDataToDatabase(position: Int) {
+    private fun updateDataToDatabase(position: Int): ContainerEntity {
         val containerName = getContainerName()
         val model = data[position]
 
@@ -85,9 +86,11 @@ class ContainerActivityEditAdapter(
 
             sharedContainerViewModel.updateContainer(containerEntity)
             Toast.makeText(activity, "Successfully updated Container", Toast.LENGTH_LONG).show()
+            return containerEntity
         } else {
             Toast.makeText(activity, "ERROR: Please fill in an appropriate name", Toast.LENGTH_LONG).show()
         }
+        return model
     }
 
     override fun getItemCount(): Int {

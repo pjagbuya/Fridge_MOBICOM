@@ -232,7 +232,7 @@ class GroceryActivityFragmentAdd : Fragment() {
         Toast.makeText(requireContext(), "Grocery added!", Toast.LENGTH_SHORT).show()
         val firestoreHelper = FirestoreHelper(requireContext())
         // Give a small delay for the database insert and ViewModel update
-        groceryViewModel.syncNewlyAddedIngredient(name, requireContext())
+        groceryViewModel.syncNewlyAddedIngredient(newIngredientEntity, requireContext())
         lifecycleScope.launch {
             try {
                 // Sync groceries - ONE TIME sync

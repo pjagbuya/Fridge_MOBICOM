@@ -18,7 +18,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.ContainerActivityEditHold
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
 
 class ContainerActivityAddAdapter(
-    private val data: ArrayList<ContainerModel>,
+    private val data: ArrayList<ContainerEntity>,
     private val activity: FragmentActivity,
     private val listener: ContainerEditActionListener,
     private val getContainerName: () -> String
@@ -38,8 +38,8 @@ class ContainerActivityAddAdapter(
 
         // TODO: Test Container Saving mechanisms
         holder.okBtn.setOnClickListener {
-            insertDataToDatabase(position)
-            listener.onOkClick(position)
+            val model = insertDataToDatabase(position)
+            listener.onOkClick(position, model)
         }
 
         holder.cancelBtn.setOnClickListener {
@@ -59,7 +59,7 @@ class ContainerActivityAddAdapter(
     }
 
 
-    private fun insertDataToDatabase(position: Int) {
+    private fun insertDataToDatabase(position: Int) : ContainerEntity{
         val containerName = getContainerName()
         val model = data[position]
 
@@ -68,26 +68,28 @@ class ContainerActivityAddAdapter(
                 resId = model.imageContainer.getResId(),
                 colorId = model.imageContainer.getColorId()
             )
+            val containerEntity = ContainerEntity(
+                name = containerName,
+                imageContainer = imageContainer,
+                currCap = 0,
+                maxCap = 30,
+                timeStamp = ContainerModel.getTimeStamp(),
+                ownerUserId = userViewModel.loggedInUser.value?.id!! // Use actual logged-in user ID
+            )
+
+            sharedContainerViewModel.addContainer(containerEntity)
 
             // Get current user ID from UserViewModel
-            userViewModel.loggedInUser.value?.id?.let { userId ->
-                val containerEntity = ContainerEntity(
-                    name = containerName,
-                    imageContainer = imageContainer,
-                    currCap = 0,
-                    maxCap = 30,
-                    timeStamp = ContainerModel.getTimeStamp(),
-                    ownerUserId = userId // Use actual logged-in user ID
-                )
 
-                sharedContainerViewModel.addContainer(containerEntity)
-                Toast.makeText(activity, "Successfully created Container", Toast.LENGTH_LONG).show()
-            } ?: run {
-                Toast.makeText(activity, "Error: User not logged in", Toast.LENGTH_LONG).show()
-            }
+            Toast.makeText(activity, "Successfully created Container", Toast.LENGTH_LONG).show()
+
+            return containerEntity
+
         } else {
             Toast.makeText(activity, "ERROR: Please fill in an appropriate name", Toast.LENGTH_LONG).show()
         }
+
+        return  model
     }
 
 

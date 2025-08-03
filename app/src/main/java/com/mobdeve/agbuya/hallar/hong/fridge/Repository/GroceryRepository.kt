@@ -25,7 +25,9 @@ class GroceryRepository @Inject constructor(
     fun findGrocery(id: Int): Flow<IngredientEntity> {
         return groceryDao.getIngredientById(id)
     }
-
+    fun getIngredientsByContainerId(containerId: Int): Flow<List<IngredientEntity>> {
+        return groceryDao.getIngredientsByContainer(containerId)
+    }
     suspend fun updateGrocery(grocery: IngredientEntity) {
         groceryDao.updateIngredient(grocery)
     }
