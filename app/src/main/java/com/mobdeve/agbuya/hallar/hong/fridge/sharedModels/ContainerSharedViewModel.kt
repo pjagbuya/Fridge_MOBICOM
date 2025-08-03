@@ -22,11 +22,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-
 @HiltViewModel
 class ContainerSharedViewModel @Inject constructor(
     private val repository: ContainerRepository,
@@ -35,34 +34,34 @@ class ContainerSharedViewModel @Inject constructor(
 
     val containerIdNameMap = MutableStateFlow<List<ContainerIdName>>(emptyList())
 
-    private val _readAllData = MutableStateFlow<List<ContainerEntity>>(emptyList())
-    val readAllData: StateFlow<List<ContainerEntity>> = _readAllData
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
-    private val _selectedSortBy = MutableStateFlow("A-Z")
-    val selectedSortBy: StateFlow<String> = _selectedSortBy
+    // Get current user's Firebase UID
+    private val currentFirebaseUid: String?
+        get() = auth.currentUser?.uid
+
+    // User-specific container data
+    val readAllData: StateFlow<List<ContainerEntity>> =
+        (currentFirebaseUid?.let { uid ->
+            repository.getContainersByFirebaseUid(uid)
+        } ?: emptyFlow())
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    // Filtered data (user-specific) - only search filtering
+    val filteredData: StateFlow<List<ContainerEntity>> = combine(
+        readAllData,
+        _searchQuery
+    ) { data, search ->
+        if (search.isNotBlank()) {
+            data.filter { it.name.contains(search, ignoreCase = true) }
+        } else {
+            data
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
-    }
-    fun setSort(sort: String) {
-        _selectedSortBy.value = sort
-    }
-    val filteredData: StateFlow<List<ContainerEntity>> =
-        combine(readAllData, _searchQuery) { data, search ->
-            if (search.isNotBlank()) {
-                data.filter { it.name.contains(search, ignoreCase = true) }
-            } else {
-                data
-            }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-    init {
-        viewModelScope.launch {
-            repository.readAllData.collect {
-                _readAllData.value = it
-            }
-        }
     }
 
     fun addContainer(container: ContainerEntity) {
@@ -89,20 +88,39 @@ class ContainerSharedViewModel @Inject constructor(
         }
     }
 
-    fun getContainerIdNameMapDirect(userId: Int): List<ContainerIdName> {
-        return _readAllData.value
-            .filter { it.ownerUserId == userId }
+    fun getContainerIdNameMapDirect(): List<ContainerIdName> {
+        return readAllData.value
             .map { ContainerIdName(it.containerId, it.name) }
     }
 
-    fun fetchContainerIdNameMap(userId: Int) {
+    fun fetchContainerIdNameMap() {
         viewModelScope.launch {
-            val result = repository.getContainerIdNameMap(userId)
-            containerIdNameMap.value = result
+            currentFirebaseUid?.let { uid ->
+                val result = repository.getContainerIdNameMapByFirebaseUid(uid)
+                containerIdNameMap.value = result
+            }
         }
     }
 
-    fun searchDatabase(searchQuery:String): LiveData<List<ContainerEntity>>{
-        return repository.searchDatabase(searchQuery).asLiveData()
+    // Return Flow instead of LiveData for API 23 compatibility
+    fun searchDatabase(searchQuery: String): Flow<List<ContainerEntity>> {
+        return currentFirebaseUid?.let { uid ->
+            repository.searchDatabaseByFirebaseUid(searchQuery, uid)
+        } ?: emptyFlow()
+    }
+
+    // Alternative: Manual LiveData creation
+    fun searchDatabaseAsLiveData(searchQuery: String): LiveData<List<ContainerEntity>> {
+        val liveData = MutableLiveData<List<ContainerEntity>>()
+
+        viewModelScope.launch {
+            currentFirebaseUid?.let { uid ->
+                repository.searchDatabaseByFirebaseUid(searchQuery, uid).collect { result ->
+                    liveData.postValue(result)
+                }
+            } ?: liveData.postValue(emptyList())
+        }
+
+        return liveData
     }
 }

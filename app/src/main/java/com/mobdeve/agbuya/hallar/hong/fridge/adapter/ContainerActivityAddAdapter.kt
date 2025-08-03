@@ -15,6 +15,7 @@ import com.mobdeve.agbuya.hallar.hong.fridge.fragment.ColorPickerDialogFragment
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.ContainerActivityEditHolder
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
 
 class ContainerActivityAddAdapter(
     private val data: ArrayList<ContainerModel>,
@@ -22,8 +23,8 @@ class ContainerActivityAddAdapter(
     private val listener: ContainerEditActionListener,
     private val getContainerName: () -> String
 ) : RecyclerView.Adapter<ContainerActivityEditHolder>() {
-    val sharedContainerViewModel = ViewModelProvider(activity).get(ContainerSharedViewModel::class.java)
-
+    private val sharedContainerViewModel = ViewModelProvider(activity).get(ContainerSharedViewModel::class.java)
+    private val userViewModel = ViewModelProvider(activity).get(UserViewModel::class.java) // Add UserViewModel
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContainerActivityEditHolder {
         val binding =
             ContainerComponentEditBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -58,8 +59,7 @@ class ContainerActivityAddAdapter(
     }
 
 
-    private fun insertDataToDatabase(position : Int){
-
+    private fun insertDataToDatabase(position: Int) {
         val containerName = getContainerName()
         val model = data[position]
 
@@ -69,31 +69,26 @@ class ContainerActivityAddAdapter(
                 colorId = model.imageContainer.getColorId()
             )
 
+            // Get current user ID from UserViewModel
+            userViewModel.loggedInUser.value?.id?.let { userId ->
+                val containerEntity = ContainerEntity(
+                    name = containerName,
+                    imageContainer = imageContainer,
+                    currCap = 0,
+                    maxCap = 30,
+                    timeStamp = ContainerModel.getTimeStamp(),
+                    ownerUserId = userId // Use actual logged-in user ID
+                )
 
-            // TODO:  Make ownerUserId of this entity be attached to a user that is in session. currently the entity is defaulting to user 0
-            val containerEntity = ContainerEntity(
-                name = containerName,
-                imageContainer = imageContainer,
-                currCap = 0,
-                maxCap = 30,
-                timeStamp = ContainerModel.getTimeStamp(),
-                ownerUserId = 1
-            )
-
-            sharedContainerViewModel.addContainer(containerEntity)
-            Toast.makeText(activity, "Successfully created Container", Toast.LENGTH_LONG).show()
-
-
-
-        }else{
+                sharedContainerViewModel.addContainer(containerEntity)
+                Toast.makeText(activity, "Successfully created Container", Toast.LENGTH_LONG).show()
+            } ?: run {
+                Toast.makeText(activity, "Error: User not logged in", Toast.LENGTH_LONG).show()
+            }
+        } else {
             Toast.makeText(activity, "ERROR: Please fill in an appropriate name", Toast.LENGTH_LONG).show()
-
         }
-
-
     }
-
-
 
 
     override fun getItemCount(): Int {

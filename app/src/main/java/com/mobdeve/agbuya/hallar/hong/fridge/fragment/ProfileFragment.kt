@@ -11,9 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.mobdeve.agbuya.hallar.hong.fridge.R
-import com.mobdeve.agbuya.hallar.hong.fridge.Repository.RecipeRepository
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserRepository
+
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentProfileMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.helper.SessionManager
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository

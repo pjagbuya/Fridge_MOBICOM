@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mobdeve.agbuya.hallar.hong.fridge.R
-import com.mobdeve.agbuya.hallar.hong.fridge.Repository.InventoryRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.InventoryRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentProfileAddMemberBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.InventoryViewModel

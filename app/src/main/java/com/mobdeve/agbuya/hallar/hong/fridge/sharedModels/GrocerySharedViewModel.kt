@@ -12,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.IngredientDao
 import kotlinx.coroutines.launch
 import com.mobdeve.agbuya.hallar.hong.fridge.extensions.toDomainModel
@@ -32,11 +33,11 @@ import kotlinx.coroutines.flow.stateIn
 
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-
 @HiltViewModel
 class GrocerySharedViewModel @Inject constructor(
     private val repository: GroceryRepository,
-    private val auth: FirebaseAuth
+    private val userDao: UserDao, // Inject UserDao
+    private val auth: FirebaseAuth // Inject FirebaseAuth
 ) : ViewModel() {
 
     private val _selectedSortBy = MutableStateFlow("")
@@ -44,19 +45,18 @@ class GrocerySharedViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
-    fun setSearchQuery(query: String) {
-        _searchQuery.value = query
-    }
-    val selectedSortBy: StateFlow<String> = _selectedSortBy
-    val selectedItemType: StateFlow<String> = _selectedItemType
+    private val currentFirebaseUid: String?
+        get() = auth.currentUser?.uid
 
-    // Expose all data
-    val readAllData: StateFlow<List<IngredientEntity>> = repository.readAllData
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-
-    // Combine filters and sorting
+    // Updated readAllData - filtered by current user
+    val readAllData: StateFlow<List<IngredientEntity>> =
+        (currentFirebaseUid?.let { uid ->
+            repository.getIngredientsByFirebaseUid(uid)
+        } ?: emptyFlow())
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    // Updated filteredAndSortedData
     val filteredAndSortedData: StateFlow<List<IngredientEntity>> = combine(
-        repository.readAllData,
+        readAllData,
         _selectedSortBy,
         _selectedItemType,
         _searchQuery
@@ -83,6 +83,11 @@ class GrocerySharedViewModel @Inject constructor(
         }
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
+
     fun setSort(sort: String) {
         _selectedSortBy.value = sort
     }
@@ -119,7 +124,7 @@ class GrocerySharedViewModel @Inject constructor(
         }
     }
 
-    fun searchDatabase(searchQuery:String): LiveData<List<IngredientEntity>>{
+    fun searchDatabase(searchQuery: String): LiveData<List<IngredientEntity>> {
         return repository.searchDatabase(searchQuery).asLiveData()
     }
 }

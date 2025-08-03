@@ -1,4 +1,4 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.Repository
+package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
 import com.mobdeve.agbuya.hallar.hong.fridge.Mappers.toEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.Mappers.toModel

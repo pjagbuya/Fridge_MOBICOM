@@ -1,7 +1,11 @@
-package com.mobdeve.agbuya.hallar.hong.fridge.Room
+package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
 import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
+import androidx.room.Query
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.MemberEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserDao
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -66,6 +70,9 @@ class UserRepository(private val userDao: UserDao) {
             userDao.getUserById(id)
         }
     }
+    suspend fun insertUser(user: UserEntity) {
+        userDao.insertUser(user)
+    }
 
     // get a user by name
     suspend fun getUserByName(name: String): UserEntity? {
@@ -73,14 +80,18 @@ class UserRepository(private val userDao: UserDao) {
             userDao.getUserByName(name)
         }
     }
-
-    // get all users
-    suspend fun getAllUsers(): List<UserEntity> {
-        return withContext(Dispatchers.IO) {
-            userDao.getAllUsers()
-        }
+    suspend fun getUserByFirebaseId(firebaseId: String): UserEntity? {
+        return userDao.getUserByFirebaseId(firebaseId)
     }
 
+
+    suspend fun getLoggedInFirebaseUser(firebaseId: String?): UserEntity? {
+        return if (firebaseId != null) {
+            userDao.getUserByFirebaseId(firebaseId)
+        } else {
+            null
+        }
+    }
 //    // update user
 //    suspend fun updateUser(user: UserEntity) {
 //        withContext(Dispatchers.IO) {

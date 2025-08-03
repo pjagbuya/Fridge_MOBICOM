@@ -20,16 +20,19 @@ import com.mobdeve.agbuya.hallar.hong.fridge.fragment.ColorPickerDialogFragment
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
 
-
 class ContainerActivityEditAdapter(
     private val data: ArrayList<ContainerModel>,
     private val activity: FragmentActivity,
     private val listener: ContainerEditActionListener,
     private val getContainerName: () -> String,
     private val selectedPosition: Int,
-    private val selectedContainer : ContainerEntity
+    private val selectedContainer: ContainerEntity
 ) : RecyclerView.Adapter<ContainerActivityEditHolder>() {
-    val sharedContainerViewModel = ViewModelProvider(activity).get(ContainerSharedViewModel::class.java)
+
+    // Use activityViewModels instead of ViewModelProvider for better Hilt integration
+    private val sharedContainerViewModel: ContainerSharedViewModel by lazy {
+        ViewModelProvider(activity)[ContainerSharedViewModel::class.java]
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContainerActivityEditHolder {
         val binding =
@@ -39,77 +42,55 @@ class ContainerActivityEditAdapter(
 
     override fun onBindViewHolder(holder: ContainerActivityEditHolder, position: Int) {
         val model = data[position]
-        // Given a presence of selected position
+
         if (position == selectedPosition) {
-            // Highlight color using container.imageContainer.getColorId()
             model.imageContainer.setColorId(selectedContainer.imageContainer.getColorId())
         } else {
-            // Random Color selected
             model.imageContainer.setColorId(model.imageContainer.getColorId())
         }
 
         holder.bindData(model, selectedPosition, position)
 
-
-        // TODO: Test Container Saving mechanisms
         holder.okBtn.setOnClickListener {
             updateDataToDatabase(position)
-
             listener.onOkClick(position)
         }
 
         holder.cancelBtn.setOnClickListener {
             listener.onCancelClick(position)
         }
+
         holder.containerIv.setOnClickListener {
             ColorPickerDialogFragment { selectedColor ->
-                // Update model
                 model.imageContainer.setColorId(selectedColor)
                 model.imageContainer.loadImageView(holder.containerIv)
             }.show(activity.supportFragmentManager, "colorPickerDialog")
-
         }
-
-
-
     }
 
-    private fun updateDataToDatabase(position : Int){
+    private fun updateDataToDatabase(position: Int) {
         val containerName = getContainerName()
-        val model = data[position] // selected new type of image container
+        val model = data[position]
 
         if (!TextUtils.isEmpty(containerName)) {
-
-
-            // TODO:  Make ownerUserId of this entity be attached to a user that is in session. currently the entity is defaulting to user 0
             val containerEntity = ContainerEntity(
                 containerId = selectedContainer.containerId,
                 name = containerName,
-                imageContainer = model.imageContainer,          // Selected container
+                imageContainer = model.imageContainer,
                 currCap = selectedContainer.currCap,
                 maxCap = selectedContainer.maxCap,
                 timeStamp = ContainerModel.getTimeStamp(),
-                ownerUserId = selectedContainer.ownerUserId
+                ownerUserId = selectedContainer.ownerUserId // This is now user-specific
             )
 
             sharedContainerViewModel.updateContainer(containerEntity)
             Toast.makeText(activity, "Successfully updated Container", Toast.LENGTH_LONG).show()
-
-
-
-        }else{
+        } else {
             Toast.makeText(activity, "ERROR: Please fill in an appropriate name", Toast.LENGTH_LONG).show()
-
         }
     }
-
-
-
-
-
 
     override fun getItemCount(): Int {
         return data.size
     }
-
 }

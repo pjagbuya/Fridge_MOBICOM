@@ -52,6 +52,30 @@ interface ContainerDao {
 
     @Query("UPDATE ContainerEntity SET fireAuthId = :newFireAuthId WHERE fireAuthId IS NULL")
     suspend fun assignFireAuthId(newFireAuthId: String?)
+    // New query for containers by Firebase UID
+    @Query("""
+        SELECT c.* FROM ContainerEntity c
+        JOIN UserEntity u ON c.ownerUserId = u.id
+        WHERE u.fireAuthId = :firebaseUid
+    """)
+    fun getContainersByFirebaseUid(firebaseUid: String): Flow<List<ContainerEntity>>
+
+    // New query for container ID/name mapping by Firebase UID
+    @Query("""
+        SELECT c.containerId, c.name FROM ContainerEntity c
+        JOIN UserEntity u ON c.ownerUserId = u.id
+        WHERE u.fireAuthId = :firebaseUid
+    """)
+    suspend fun getContainerIdNameMapByFirebaseUid(firebaseUid: String): List<ContainerIdName>
+
+    // New search query by Firebase UID
+    @Query("""
+        SELECT c.* FROM ContainerEntity c
+        JOIN UserEntity u ON c.ownerUserId = u.id
+        WHERE u.fireAuthId = :firebaseUid 
+        AND c.name LIKE '%' || :searchQuery || '%'
+    """)
+    fun searchContainersByFirebaseUid(searchQuery: String, firebaseUid: String): Flow<List<ContainerEntity>>
 }
 
 data class ContainerIdName(

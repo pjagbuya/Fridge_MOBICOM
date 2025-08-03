@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mobdeve.agbuya.hallar.hong.fridge.Repository.RecipeRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.adapter.RecipeMainAdapter
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentRecipeMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase

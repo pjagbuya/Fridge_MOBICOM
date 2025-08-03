@@ -2,9 +2,9 @@ package com.mobdeve.agbuya.hallar.hong.fridge.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.mobdeve.agbuya.hallar.hong.fridge.Repository.RecipeRepository
-import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.RecipeRepository
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.UserRepository
 
 class UserViewModelFactory(private val repository: UserRepository,
                            private val recipeRepo: RecipeRepository,

@@ -52,5 +52,8 @@ interface UserDao {
 
     @Query("DELETE FROM UserEntity")
     suspend fun deleteAll()
+    @Query("SELECT * FROM UserEntity WHERE fireAuthId = :firebaseId LIMIT 1")
+    suspend fun getUserByFirebaseId(firebaseId: String): UserEntity?
+
 
 }

@@ -2,8 +2,8 @@ package com.mobdeve.agbuya.hallar.hong.fridge.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mobdeve.agbuya.hallar.hong.fridge.Repository.InventoryRepository
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.InviteStatus
+import com.mobdeve.agbuya.hallar.hong.fridge.repository.InventoryRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

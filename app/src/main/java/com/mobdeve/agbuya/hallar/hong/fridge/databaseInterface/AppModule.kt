@@ -1,7 +1,9 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.databaseInterface
 import android.content.Context
 import androidx.room.Room
+import com.google.firebase.auth.FirebaseAuth
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.IngredientDao
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
@@ -20,7 +22,16 @@ object AppModule {
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return AppDatabase.getInstance(context)
     }
-
+    @Provides
+    @Singleton
+    fun provideUserDao(appDatabase: AppDatabase): UserDao {
+        return appDatabase.userDao()
+    }
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
     @Provides
     fun provideIngredientDao(appDatabase: AppDatabase): IngredientDao {
         return appDatabase.ingredientDao()

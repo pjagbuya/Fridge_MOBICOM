@@ -23,6 +23,20 @@ class ContainerRepository @Inject constructor(
 
     fun searchDatabase(searchQuery : String) : Flow<List<ContainerEntity>> = containerDao.searchContainers(searchQuery)
 
+    // New method for user-specific containers
+    fun getContainersByFirebaseUid(firebaseUid: String): Flow<List<ContainerEntity>> {
+        return containerDao.getContainersByFirebaseUid(firebaseUid)
+    }
+
+    // New method for container ID/name mapping by Firebase UID
+    suspend fun getContainerIdNameMapByFirebaseUid(firebaseUid: String): List<ContainerIdName> {
+        return containerDao.getContainerIdNameMapByFirebaseUid(firebaseUid)
+    }
+
+    // New search method by Firebase UID
+    fun searchDatabaseByFirebaseUid(searchQuery: String, firebaseUid: String): Flow<List<ContainerEntity>> {
+        return containerDao.searchContainersByFirebaseUid(searchQuery, firebaseUid)
+    }
     suspend fun assignFireAuthId(authId: String?) {
         return containerDao.assignFireAuthId(authId)
     }
