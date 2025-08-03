@@ -6,15 +6,35 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentProfileLoginMainBinding
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
+import kotlin.getValue
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.*
+import com.mobdeve.agbuya.hallar.hong.fridge.firestoreHelper.FirestoreHelper
+import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.ContainerSharedViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.sharedModels.GrocerySharedViewModel
+import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.SharedRecipeViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileLoginMainBinding
     private lateinit var auth: FirebaseAuth
+
+
+    //viewModels
+    private val viewModel: UserViewModel by activityViewModels()
+    private val containerViewModel : ContainerSharedViewModel by activityViewModels()
+    private val groceryViewModel : GrocerySharedViewModel by activityViewModels()
+    private val recipeViewModel : SharedRecipeViewModel by activityViewModels()
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,6 +47,17 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        val userDao = AppDatabase.getInstance(requireContext()).userDao()
+//        val recipeDao = AppDatabase.getInstance(requireContext()).recipeDao()
+//        val containerDao = AppDatabase.getInstance(requireContext()).containerDao()
+//
+//        val userRepository = UserRepository(userDao)
+//        val recipeRepository = RecipeRepository(recipeDao)
+//        val containerRepository = ContainerRepository(containerDao)
+//
+//        val factory = UserViewModelFactory(userRepository, recipeRepository, containerRepository)
+//        viewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
+
         auth = FirebaseAuth.getInstance()
 
         // LOGIN button click
@@ -35,6 +66,7 @@ class LoginFragment : Fragment() {
             val password = binding.passwordEt.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty()) {
+
                 binding.loginErrorTv.text = getString(R.string.login_error_msg)
                 binding.loginErrorTv.visibility = View.VISIBLE
             } else {
@@ -53,6 +85,54 @@ class LoginFragment : Fragment() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    FirebaseAuth.getInstance().currentUser?.uid?.let { userId ->
+                        viewModel.onLogin(userId, auth.currentUser?.displayName)
+                    }
+
+                    val firestoreHelper = FirestoreHelper(requireContext())
+
+                    //sync user to firestore
+                    lifecycleScope.launch {
+                        viewModel.loggedInUser.collectLatest { userEntity ->
+                            if (userEntity != null) {
+                                val firestoreUser = userEntity.toFirestoreUser()
+                                val documentId: String? = firestoreUser.fireAuthId//use the stored fireAuthId of user as docId
+                                firestoreHelper.syncToFirestore("users", documentId,firestoreUser)
+                            }
+                        }
+
+                        //sync containers
+                        containerViewModel.readAllData.collectLatest { containers ->
+                            containers.forEach { container ->
+                                val firestoreContainer = container.toFirestoreContainer()
+                                val documentId: String? = container.fireAuthId //use the stored fireAuthId of user as docId
+                                firestoreHelper.syncToFirestore("containers", documentId, firestoreContainer)
+                            }
+                        }
+
+                        //sync groceries
+                        groceryViewModel.readAllData.collectLatest { groceries ->
+                            groceries.forEach { grocery ->
+                                val firestoreIngredient = grocery.toFirestoreIngredient()
+                                val documentId: String? = auth.currentUser?.uid //use the stored fireAuthId of user as docId
+                                firestoreHelper.syncToFirestore("containers", documentId, firestoreIngredient)
+                        }
+
+                            //sync groceries, needs to fix the sharedRecipeViewModel first
+//                        recipeViewModel. .collectLatest { groceries ->
+//                            groceries.forEach { grocery ->
+//                                val firestoreIngredient = grocery.toFirestoreIngredient()
+//                                val documentId: String? = auth.currentUser?.uid //use the stored fireAuthId of user as docId
+//                                firestoreHelper.syncToFirestore("containers", documentId, firestoreIngredient)
+//                            }
+
+                        }
+                    }
+
+
+
+
+
                     Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_loginMain_to_loginUserMain)
                 } else {

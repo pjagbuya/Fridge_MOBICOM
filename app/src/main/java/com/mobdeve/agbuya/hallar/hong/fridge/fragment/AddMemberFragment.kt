@@ -39,14 +39,20 @@ class AddMemberFragment: Fragment() {
         inventoryViewModel = ViewModelProvider(this, factory)[InventoryViewModel::class.java]
 
         binding.inviteBtn.setOnClickListener {
+
             val email = binding.emailInput.text.toString()
             val nickname = binding.nicknameInput.text.toString()
             val inventoryName = binding.inventoryNameInput.text.toString()
+            val inventoryId = "tempID_not_yet_implemented"
 
             binding.addMemberErrorTv.visibility = View.INVISIBLE
 
             viewLifecycleOwner.lifecycleScope.launch {
-                inventoryViewModel.inviteMember(inventoryName, email, nickname)
+//                inventoryViewModel.inviteMember(
+//                    inventoryName, email, nickname, inventoryId
+//                )
+                //TODO
+
             }
         }
 

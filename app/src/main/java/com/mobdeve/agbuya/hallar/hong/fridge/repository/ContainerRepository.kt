@@ -1,7 +1,5 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
-import androidx.lifecycle.LiveData
-import androidx.room.Query
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerIdName
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
@@ -22,4 +20,8 @@ class ContainerRepository @Inject constructor(
 
     suspend fun getContainerIdNameMap(userId: Int): List<ContainerIdName> =
         containerDao.getContainerIdNameMap(userId)
+
+    suspend fun assignFireAuthId(authId: String?) {
+        return containerDao.assignFireAuthId(authId)
+    }
 }

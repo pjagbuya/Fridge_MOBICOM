@@ -27,7 +27,6 @@ fun RecipeModel.RecipeIngredient.toEntity(recipeId: Int): RecipeIngredientEntity
     )
 }
 
-// RecipeEntity + RecipeIngredientEntity to RecipeModel
 fun RecipeEntity.toModel(ingredients: List<RecipeIngredientEntity>): RecipeModel {
     return RecipeModel(
         id = this.id,

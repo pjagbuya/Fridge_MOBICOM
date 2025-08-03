@@ -32,6 +32,9 @@ class ImageContainer(
     fun getColorId(): Int {
         return colorId
     }
+
+    fun getId(): Int = 0
+
     companion object{
 
 

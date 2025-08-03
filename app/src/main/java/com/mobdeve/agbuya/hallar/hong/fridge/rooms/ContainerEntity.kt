@@ -30,5 +30,6 @@ data class ContainerEntity(
     var currCap: Int,
     val maxCap: Int,
     val timeStamp: String,
-    val ownerUserId: Int
+    val ownerUserId: Int,
+    val fireAuthId: String? = null
 ): Parcelable

@@ -35,4 +35,10 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
         recipeDao.deleteIngredientsByRecipeId(recipe.id)
         recipeDao.deleteRecipeById(recipe.id)
     }
+
+    suspend fun assignUserAuthId(fireAuthId: String?){
+        return recipeDao.assignFireAuthId(fireAuthId)
+    }
+
+
 }
