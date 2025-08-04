@@ -1,5 +1,6 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
+import android.util.Log
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerIdName
 import com.mobdeve.agbuya.hallar.hong.fridge.rooms.ContainerEntity
@@ -27,7 +28,15 @@ class ContainerRepository @Inject constructor(
     fun getContainersByFirebaseUid(firebaseUid: String): Flow<List<ContainerEntity>> {
         return containerDao.getContainersByFirebaseUid(firebaseUid)
     }
+    suspend fun findContainerByNameOnce(name: String): ContainerEntity? {
+        return try {
+            containerDao.findByNameOnce(name)
 
+        } catch (e: Exception) {
+            Log.e("CONT REPO", "Error finding container by name: $name", e)
+            null // Return null on error
+        }
+    }
     // New method for container ID/name mapping by Firebase UID
     suspend fun getContainerIdNameMapByFirebaseUid(firebaseUid: String): List<ContainerIdName> {
         return containerDao.getContainerIdNameMapByFirebaseUid(firebaseUid)

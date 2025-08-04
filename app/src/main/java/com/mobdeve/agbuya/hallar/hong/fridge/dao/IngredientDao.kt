@@ -46,7 +46,6 @@ WHERE c.ownerUserId = :userId
     @Transaction
     suspend fun insertAndUpdateCapacity(ingredient: IngredientEntity) {
         insertIngredient(ingredient)
-        increaseContainerCap(ingredient.attachedContainerId)
     }
 
     @Query("UPDATE ContainerEntity SET currCap = currCap + 1 WHERE containerId = :containerId")
@@ -57,7 +56,8 @@ WHERE c.ownerUserId = :userId
 
     @Query("DELETE FROM IngredientEntity")
     suspend fun deleteAll()
-
+    @Query("SELECT * FROM IngredientEntity WHERE name = :name LIMIT 1")
+    suspend fun findByNameOnce(name: String): IngredientEntity?
     @Query("SELECT * FROM IngredientEntity WHERE attachedContainerId IN (:containerIds)")
     suspend fun getIngredientsByContainerIds(containerIds: List<Int>): List<IngredientEntity>
 

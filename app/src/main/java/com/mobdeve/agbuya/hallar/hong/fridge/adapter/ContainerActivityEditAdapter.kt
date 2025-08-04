@@ -54,7 +54,10 @@ class ContainerActivityEditAdapter(
         holder.okBtn.setOnClickListener {
 
             val model = updateDataToDatabase(position)
-            listener.onOkClick(position, model)
+            if(model!= null){
+                listener.onOkClick(position, model)
+
+            }
         }
 
         holder.cancelBtn.setOnClickListener {
@@ -69,7 +72,7 @@ class ContainerActivityEditAdapter(
         }
     }
 
-    private fun updateDataToDatabase(position: Int): ContainerEntity {
+    private fun updateDataToDatabase(position: Int): ContainerEntity? {
         val containerName = getContainerName()
         val model = data[position]
 
@@ -90,7 +93,7 @@ class ContainerActivityEditAdapter(
         } else {
             Toast.makeText(activity, "ERROR: Please fill in an appropriate name", Toast.LENGTH_LONG).show()
         }
-        return model
+        return null
     }
 
     override fun getItemCount(): Int {

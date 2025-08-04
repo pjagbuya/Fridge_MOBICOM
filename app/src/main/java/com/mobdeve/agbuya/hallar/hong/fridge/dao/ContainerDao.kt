@@ -17,7 +17,8 @@ interface ContainerDao {
 
     @Update
     suspend fun updateContainer(container: ContainerEntity)
-
+    @Query("SELECT * FROM ContainerEntity WHERE name = :name LIMIT 1")
+    suspend fun findByNameOnce(name: String): ContainerEntity?
     @Query("DELETE FROM ContainerEntity WHERE containerId = :containerId")
     suspend fun deleteContainerById(containerId: Int)
 

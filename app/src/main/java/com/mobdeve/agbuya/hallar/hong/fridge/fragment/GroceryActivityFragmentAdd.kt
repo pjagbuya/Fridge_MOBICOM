@@ -20,6 +20,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -69,8 +70,8 @@ class GroceryActivityFragmentAdd : Fragment() {
     // QR setup
     private lateinit var barcodeLauncher: ActivityResultLauncher<Intent>
 
-    private val containerViewModel: ContainerSharedViewModel by viewModels()
-    private val groceryViewModel: GrocerySharedViewModel by viewModels()
+    private val containerViewModel: ContainerSharedViewModel by activityViewModels()
+    private val groceryViewModel: GrocerySharedViewModel by activityViewModels()
 
 
     private lateinit var idToNameMap : Map<Int, String>
@@ -228,11 +229,10 @@ class GroceryActivityFragmentAdd : Fragment() {
             attachedContainerId = selectedContainerId
         )
 
-        groceryViewModel.addGrocery(newIngredientEntity)
+        groceryViewModel.addGrocery(newIngredientEntity, requireContext())
         Toast.makeText(requireContext(), "Grocery added!", Toast.LENGTH_SHORT).show()
         val firestoreHelper = FirestoreHelper(requireContext())
         // Give a small delay for the database insert and ViewModel update
-        groceryViewModel.syncNewlyAddedIngredient(newIngredientEntity, requireContext())
         lifecycleScope.launch {
             try {
                 // Sync groceries - ONE TIME sync

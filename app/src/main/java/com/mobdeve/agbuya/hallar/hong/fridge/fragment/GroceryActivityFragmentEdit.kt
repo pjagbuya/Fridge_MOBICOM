@@ -20,6 +20,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
@@ -84,8 +85,8 @@ class GroceryActivityFragmentEdit: Fragment() {
     }
 
     // Info for data models to modify
-    private val containerViewModel: ContainerSharedViewModel by viewModels()
-    private val groceryViewModel: GrocerySharedViewModel by viewModels()
+    private val containerViewModel: ContainerSharedViewModel by activityViewModels()
+    private val groceryViewModel: GrocerySharedViewModel by activityViewModels()
 
 
     private lateinit var idToNameMap : Map<Int, String>
@@ -460,7 +461,7 @@ class GroceryActivityFragmentEdit: Fragment() {
 
 
         val layoutChosen = R.layout.dropdown_item_for_update
-        var sortOptions = resources.getStringArray(R.array.item_type_array)
+        var sortOptions = resources.getStringArray(R.array.item_type_array_choice)
         var sortAdapter =
             ArrayAdapter(requireContext(), layoutChosen, sortOptions)
         binding.itemTypeDropDownActv.setAdapter(sortAdapter)

@@ -120,42 +120,39 @@ class ContainerSharedViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
-            Log.d(TAG, "Starting sync add for container ID: ${containerEntity.containerId}")
+        Log.d(TAG, "Starting sync add for container ID: ${containerEntity.containerId}")
 
-            // A delay might be needed to ensure Room has definitely finished assigning the ID
-            // and any related transactions (like updating user/container links) are complete.
-            // However, it doesn't need to be as long as waiting for Flow emission.
+        // A delay might be needed to ensure Room has definitely finished assigning the ID
+        // and any related transactions (like updating user/container links) are complete.
+        // However, it doesn't need to be as long as waiting for Flow emission.
 
-            try {
-                Log.d(TAG, "Creating FirestoreHelper and converting container ID: ${containerEntity.containerId}")
-                val firestoreHelper = FirestoreHelper(context)
-                val firestoreContainer = containerEntity.toFirestoreContainer() // Convert to Firestore model
-                val documentId = containerEntity.containerId.toString() // Use container ID as Firestore Doc ID
+        try {
+            Log.d(TAG, "Creating FirestoreHelper and converting container ID: ${containerEntity.containerId}")
+            val firestoreHelper = FirestoreHelper(context)
+            val firestoreContainer = containerEntity.toFirestoreContainer() // Convert to Firestore model
+            val documentId = containerEntity.containerId.toString() // Use container ID as Firestore Doc ID
 
-                Log.d(TAG, "Syncing newly added container data for Doc ID: $documentId, Name: '${containerEntity.name}'")
-                // Sync the new container data (creates/overwrites the document in Firestore)
-                firestoreHelper.syncToFirestore(
-                    collectionName = "containers", // Make sure this matches your intended Firestore collection
-                    documentId = documentId,       // Document ID is the container's ID
-                    data = firestoreContainer,     // Data to sync
-                    successMessage = "Container '${containerEntity.name}' added and synced successfully",
-                    failureMessage = "Failed to sync added container '${containerEntity.name}'"
-                )
-                Log.d(TAG, "Finished sync call for newly added container ID: ${containerEntity.containerId}")
+            Log.d(TAG, "Syncing newly added container data for Doc ID: $documentId, Name: '${containerEntity.name}'")
+            // Sync the new container data (creates/overwrites the document in Firestore)
+            firestoreHelper.syncToFirestore(
+                collectionName = "containers", // Make sure this matches your intended Firestore collection
+                documentId = documentId,       // Document ID is the container's ID
+                data = firestoreContainer,     // Data to sync
+                successMessage = "Container '${containerEntity.name}' added and synced successfully",
+                failureMessage = "Failed to sync added container '${containerEntity.name}'"
+            )
+            Log.d(TAG, "Finished sync call for newly added container ID: ${containerEntity.containerId}")
 
-            } catch (e: CancellationException) {
-                // viewModelScope job was cancelled
-                Log.i(TAG, "Sync add for container ID: ${containerEntity.containerId} was cancelled.", e)
-            } catch (e: Exception) {
-                // Handle general errors during the sync process
-                Log.e(TAG, "Error during syncAddContainer for container ID: ${containerEntity.containerId}", e)
-                // Optional: Implement retry logic or notify user via LiveData if needed
-            } finally {
-                Log.d(TAG, "syncAddContainer coroutine finished for container ID: ${containerEntity.containerId}")
-            }
+        } catch (e: CancellationException) {
+            // viewModelScope job was cancelled
+            Log.i(TAG, "Sync add for container ID: ${containerEntity.containerId} was cancelled.", e)
+        } catch (e: Exception) {
+            // Handle general errors during the sync process
+            Log.e(TAG, "Error during syncAddContainer for container ID: ${containerEntity.containerId}", e)
+            // Optional: Implement retry logic or notify user via LiveData if needed
+        } finally {
+            Log.d(TAG, "syncAddContainer coroutine finished for container ID: ${containerEntity.containerId}")
         }
-        Log.d(TAG, "syncAddContainer function launched viewModelScope coroutine for container ID: ${containerEntity.containerId}")
     }
 
     fun syncUpdateContainer(containerEntity: ContainerEntity, context: Context) {
@@ -247,12 +244,61 @@ class ContainerSharedViewModel @Inject constructor(
         _searchQuery.value = query
     }
 
-    fun addContainer(container: ContainerEntity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.addContainer(container)
+    fun addContainer(container: ContainerEntity, context: Context) {
+        val TAG = "ADD_AND_SYNC_CONTAINER"
+
+        // Basic validation
+        if (container.name.isBlank()) {
+            Log.w(TAG, "Cannot add container with blank name.")
+            return
+        }
+
+        // Get current user ID for more specific search (if implemented in DAO/Repository)
+        val currentUserUid = currentFirebaseUid // From your existing property
+
+        viewModelScope.launch(Dispatchers.IO) { // Launch on IO for database operations
+            try {
+                Log.d(TAG, "Adding container to local database: ${container.name}")
+                // 1. Add the container to the local Room database.
+                repository.addContainer(container)
+                Log.d(TAG, "Container '${container.name}' add request sent to local database.")
+
+                // 2. Attempt to find the newly added container by name
+                // Add a small delay to let Room process the insert
+
+                Log.d(TAG, "Searching for newly added container by name: ${container.name}")
+
+                // Find the container by name (user-specific search is better if implemented)
+                val addedContainerEntity = if (currentUserUid != null) {
+                    // Try user-specific search first (recommended)
+                    // repository.findContainerByNameOnceForUser(container.name, currentUserUid)
+                    // Fallback to simple name search for now or if user-specific isn't implemented
+                    repository.findContainerByNameOnce(container.name) // Fallback
+                } else {
+                    repository.findContainerByNameOnce(container.name)
+                }
+
+                if (addedContainerEntity != null && addedContainerEntity.containerId > 0) {
+                    Log.d(TAG, "Found newly added container entity with ID: ${addedContainerEntity.containerId}")
+                    // 3. Trigger sync with the entity retrieved from the database
+                    // This ensures the sync function gets the correct, database-assigned containerId
+                    syncAddContainer(addedContainerEntity, context) // Use the direct entity sync function
+                } else {
+                    Log.w(TAG, "Could not find the newly added container '${container.name}' in the database after insert.")
+                    // Optional: Handle case where entity isn't found
+                    // Maybe retry the find operation or log an error
+                }
+
+            } catch (e: CancellationException) {
+                // Handle coroutine cancellation (e.g., if ViewModel is cleared)
+                Log.i(TAG, "addContainer coroutine was cancelled for: ${container.name}. ViewModel might be cleared.", e)
+                // Optional: Schedule WorkManager task for guaranteed sync if critical
+            } catch (e: Exception) {
+                Log.e(TAG, "Error adding or syncing container: ${container.name}", e)
+                // Handle error (e.g., show user message via LiveData, retry mechanism)
+            }
         }
     }
-
     fun updateContainer(container: ContainerEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateContainer(container)

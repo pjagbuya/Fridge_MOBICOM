@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -52,6 +53,7 @@ class GroceryActivityFragmentView : Fragment() {
     private val containerViewModel: ContainerSharedViewModel by viewModels()
     private val groceryViewModel: GrocerySharedViewModel by viewModels()
     private lateinit var groceryList: ArrayList<Ingredient>
+    private lateinit var idToNameMap : Map<Int, String>
     private lateinit var selectedIngredient : IngredientEntity
 
     inline fun <reified T : Parcelable> Intent.parcelableArrayList(key: String): ArrayList<T>? = when {
@@ -73,6 +75,7 @@ class GroceryActivityFragmentView : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -109,6 +112,7 @@ class GroceryActivityFragmentView : Fragment() {
                         findNavController().navigateUp()
                     }
                 }
+
             }
         }
 
@@ -122,7 +126,6 @@ class GroceryActivityFragmentView : Fragment() {
             binding.quantityLabelTv.text = "Quantity: ${it.quantity} ${it.unit}"
             binding.dateBoughtTv.text = "Date bought: ${it.dateAdded}"
             binding.expirationDateLabelTv.text = "Expiration date: ${it.expirationDate}"
-            binding.storedInLabelTv.text = "Stored in: Container id ${it.attachedContainerId}"
             binding.categoryLabelTv.text = "Category: ${it.itemType}"
             binding.conditionLabelTv.text = "Condition: ${it.conditionType}"
             if(it.iconResId == -1){
@@ -131,6 +134,23 @@ class GroceryActivityFragmentView : Fragment() {
             }else{
                 binding.imageView.setImageResource(it.iconResId)
 
+            }
+
+// ... inside onViewCreated or another appropriate lifecycle method ...
+            lifecycleScope.launch {
+                // Use repeatOnLifecycle to collect while the Fragment is in a STARTED state or higher
+                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    // Collect the Flow<List<ContainerEntity>> from the ViewModel
+                    containerViewModel.readAllData.collect { containerList ->
+                        // This block runs every time containerViewModel.readAllData emits a new list
+                        Log.d("ContainerMaps", "Received updated container list with ${containerList.size} items")
+
+                        // Build the maps from the latest list of containers
+                        idToNameMap = containerList.associate { it.containerId to it.name }
+                        binding.storedInLabelTv.text = "Stored in: Container ${idToNameMap[it.attachedContainerId]}"
+
+                    }
+                }
             }
         }
     }

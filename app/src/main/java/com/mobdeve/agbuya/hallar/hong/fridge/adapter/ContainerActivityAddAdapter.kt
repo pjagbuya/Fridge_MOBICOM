@@ -39,7 +39,10 @@ class ContainerActivityAddAdapter(
         // TODO: Test Container Saving mechanisms
         holder.okBtn.setOnClickListener {
             val model = insertDataToDatabase(position)
-            listener.onOkClick(position, model)
+            if(model!= null){
+                listener.onOkClick(position, model)
+
+            }
         }
 
         holder.cancelBtn.setOnClickListener {
@@ -59,7 +62,7 @@ class ContainerActivityAddAdapter(
     }
 
 
-    private fun insertDataToDatabase(position: Int) : ContainerEntity{
+    private fun insertDataToDatabase(position: Int) : ContainerEntity?{
         val containerName = getContainerName()
         val model = data[position]
 
@@ -77,7 +80,7 @@ class ContainerActivityAddAdapter(
                 ownerUserId = userViewModel.loggedInUser.value?.id!! // Use actual logged-in user ID
             )
 
-            sharedContainerViewModel.addContainer(containerEntity)
+//            sharedContainerViewModel.addContainer(containerEntity, require)
 
             // Get current user ID from UserViewModel
 
@@ -89,7 +92,7 @@ class ContainerActivityAddAdapter(
             Toast.makeText(activity, "ERROR: Please fill in an appropriate name", Toast.LENGTH_LONG).show()
         }
 
-        return  model
+        return  null
     }
 
 

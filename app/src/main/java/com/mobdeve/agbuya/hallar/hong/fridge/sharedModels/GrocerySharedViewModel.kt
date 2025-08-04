@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.mobdeve.agbuya.hallar.hong.fridge.atomicClasses.Ingredient
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.AppDatabase
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserDao
+import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreContainer
 import com.mobdeve.agbuya.hallar.hong.fridge.converters.toFirestoreIngredient
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.IngredientDao
 import kotlinx.coroutines.launch
@@ -45,6 +46,7 @@ import kotlin.coroutines.cancellation.CancellationException
 @HiltViewModel
 class GrocerySharedViewModel @Inject constructor(
     private val repository: GroceryRepository,
+    private val containerRepository: ContainerRepository,
     private val auth: FirebaseAuth // Remove unused UserDao
 ) : ViewModel() {
 
@@ -60,6 +62,11 @@ class GrocerySharedViewModel @Inject constructor(
     val readAllData: StateFlow<List<IngredientEntity>> =
         (currentFirebaseUid?.let { uid ->
             repository.getIngredientsByFirebaseUid(uid)
+        } ?: emptyFlow())
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    val readAllContainerData: StateFlow<List<ContainerEntity>> =
+        (currentFirebaseUid?.let { uid ->
+            containerRepository.getContainersByFirebaseUid(uid)
         } ?: emptyFlow())
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -177,20 +184,18 @@ class GrocerySharedViewModel @Inject constructor(
 
         val firestoreHelper = FirestoreHelper(context)
 
-        viewModelScope.launch {
-            delay(5000)
-            val firestoreIngredient = ingredientEntity.toFirestoreIngredient()
-            val documentId = ingredientEntity.ingredientID.toString()
 
-            firestoreHelper.syncToFirestore(
-                collectionName = "ingredients",
-                documentId = documentId,
-                data = firestoreIngredient,
-                successMessage = "Ingredient '${ingredientEntity.name}' synced successfully",
-                failureMessage = "Failed to sync ingredient '${ingredientEntity.name}'"
-            )
+        val firestoreIngredient = ingredientEntity.toFirestoreIngredient()
+        val documentId = ingredientEntity.ingredientID.toString()
 
-        }
+        firestoreHelper.syncToFirestore(
+            collectionName = "ingredients",
+            documentId = documentId,
+            data = firestoreIngredient,
+            successMessage = "Ingredient '${ingredientEntity.name}' synced successfully",
+            failureMessage = "Failed to sync ingredient '${ingredientEntity.name}'"
+        )
+
     }
 
 
@@ -209,13 +214,98 @@ class GrocerySharedViewModel @Inject constructor(
     fun findGrocery(id: Int): Flow<IngredientEntity> {
         return repository.findGrocery(id)
     }
-
-    fun addGrocery(grocery: IngredientEntity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.addGrocery(grocery)
-        }
+// Inside GrocerySharedViewModel.kt
+fun syncUpdatedContainerCapacity(containerId: Int, context: Context) {
+    val TAG = "SYNC_CONT_CAP"
+    if (containerId <= 0) {
+        Log.w(TAG, "Invalid container ID for sync: $containerId")
+        return
     }
 
+    try {
+        val currentContainers = readAllContainerData.value // Get user-specific containers
+        val containerToUpdate = currentContainers.find { it.containerId == containerId }
+
+        if (containerToUpdate != null) {
+            Log.d(TAG, "Syncing updated capacity for container ID: $containerId")
+            val firestoreHelper = FirestoreHelper(context)
+            val firestoreContainer = containerToUpdate.toFirestoreContainer()
+            firestoreHelper.syncToFirestore(
+                "containers",
+                containerToUpdate.containerId.toString(),
+                firestoreContainer,
+                "Container capacity synced",
+                "Failed to sync container capacity"
+            )
+        } else {
+            Log.w(TAG, "Container ID $containerId not found for sync.")
+        }
+    } catch (e: Exception) {
+        Log.e(TAG, "Error syncing container capacity for ID: $containerId", e)
+    }
+}
+    fun addGrocery(grocery: IngredientEntity, context: Context) {
+        val TAG = "ADD_AND_SYNC_GROCERY"
+
+        // Basic validation
+        if (grocery.name.isBlank()) {
+            Log.w(TAG, "Cannot add grocery with blank name.")
+            return
+        }
+
+        // Get current user ID for more specific search (if implemented in DAO/Repository)
+        val currentUserUid = currentFirebaseUid // From your existing property
+
+        viewModelScope.launch(Dispatchers.IO) { // Launch on IO for database operations
+            try {
+                Log.d(TAG, "Adding grocery to local database: ${grocery.name}")
+                // 1. Add the grocery to the local Room database.
+                repository.addGrocery(grocery)
+                containerRepository.increaseCurrCap(grocery.attachedContainerId)
+                Log.d(TAG, "Grocery '${grocery.name}' added to local database request sent.")
+
+                // 2. Attempt to find the newly added grocery by name
+                // Add a small delay to let Room process the insert
+
+                Log.d(TAG, "Searching for newly added grocery by name: ${grocery.name}")
+                // Option A: Simple name search (might find wrong item if name isn't unique)
+                // val addedGroceryEntity = repository.findGroceryByNameOnce(grocery.name)
+
+                // Option B: User-specific name search (better)
+                val addedGroceryEntity = if (currentUserUid != null) {
+                    // You would need to add findGroceryByNameOnceForUser to your repository
+                    // repository.findGroceryByNameOnceForUser(grocery.name, currentUserUid)
+                    // For now, fallback to simple search or implement the user-specific one
+                    repository.findGroceryByNameOnce(grocery.name) // Fallback
+                } else {
+                    repository.findGroceryByNameOnce(grocery.name)
+                }
+
+
+                if (addedGroceryEntity != null && addedGroceryEntity.ingredientID > 0) {
+                    Log.d(TAG, "Found newly added grocery entity with ID: ${addedGroceryEntity.ingredientID}")
+                    // 3. Trigger sync with the entity retrieved from the database
+                    // This should now have the correct, database-assigned ingredientID
+                    syncNewlyAddedIngredient(addedGroceryEntity, context)
+                    syncUpdatedContainerCapacity(addedGroceryEntity.attachedContainerId, context)
+
+                    containerRepository
+
+                } else {
+                    Log.w(TAG, "Could not find the newly added grocery '${grocery.name}' in the database after insert.")
+                    // Optional: Handle case where entity isn't found
+                    // Maybe retry the find operation or log an error
+                }
+
+            } catch (e: CancellationException) {
+                // Handle coroutine cancellation (e.g., if ViewModel is cleared)
+                Log.i(TAG, "addGrocery coroutine was cancelled for: ${grocery.name}.", e)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error adding or syncing grocery: ${grocery.name}", e)
+                // Handle error (e.g., show user message via LiveData, retry mechanism)
+            }
+        }
+    }
     fun deleteGrocery(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteGrocery(id)

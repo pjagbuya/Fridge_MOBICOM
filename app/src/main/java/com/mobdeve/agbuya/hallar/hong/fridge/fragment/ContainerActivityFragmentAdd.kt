@@ -161,7 +161,7 @@ class ContainerActivityFragmentAdd : Fragment(){
                 object : ContainerEditActionListener {
                     override fun onOkClick(position: Int, model: ContainerEntity) {
                         val firestoreHelper = FirestoreHelper(requireContext())
-                        containerViewModel.syncAddContainer(model, requireContext())
+                        containerViewModel.addContainer(model, requireContext())
                         findNavController().navigateUp()
                     }
 
