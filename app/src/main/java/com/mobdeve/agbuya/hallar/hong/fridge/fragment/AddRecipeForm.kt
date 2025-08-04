@@ -95,6 +95,8 @@ class AddRecipeFragment : Fragment() {
     }
 
     private fun saveRecipe() {
+        val recipeId = sharedViewModel.currentRecipeId.value
+
         val name = binding.recipeNameEt.text.toString().trim()
         val description = binding.recipeDescriptionEt.text.toString().trim()
         val ingredients = sharedViewModel.ingredients.value ?: arrayListOf()
@@ -104,19 +106,27 @@ class AddRecipeFragment : Fragment() {
             return
         }
 
-        val newRecipe = RecipeModel(
-            name = name,
-            description = description,
-            ingredients = ingredients
-        )
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-//                recipeRepository.insertRecipe(newRecipe)
-                recipeRepository.saveRecipe(newRecipe)
-                Toast.makeText(requireContext(), "Recipe added successfully!", Toast.LENGTH_SHORT).show()
-                sharedViewModel.clearIngredients()
-                findNavController().popBackStack()
+                if (recipeId != null) {
+                    val existingRecipe = recipeRepository.getRecipeById(recipeId)
+                    recipeRepository.saveRecipe(existingRecipe)
+                    Toast.makeText(requireContext(), "edit successful", Toast.LENGTH_SHORT).show()
+                    sharedViewModel.clearIngredients()
+                    findNavController().popBackStack()
+                } else {
+                    val newRecipe = RecipeModel(
+                        name = name,
+                        description = description,
+                        ingredients = ingredients
+                    )
+                    recipeRepository.saveRecipe(newRecipe)
+                    Toast.makeText(requireContext(), "Recipe added successfully!", Toast.LENGTH_SHORT).show()
+                    sharedViewModel.clearIngredients()
+                    findNavController().popBackStack()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(requireContext(), "Failed to add recipe. Please try again.", Toast.LENGTH_LONG).show()

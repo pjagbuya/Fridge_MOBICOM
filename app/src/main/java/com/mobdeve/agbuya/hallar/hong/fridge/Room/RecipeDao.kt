@@ -30,6 +30,9 @@ interface RecipeDao {
     @Query("SELECT * FROM RecipeEntity")
     suspend fun getAllRecipes(): List<RecipeEntity>
 
+    @Query("SELECT * FROM RecipeIngredientEntity")
+    suspend fun getAllRecipeIngredients(): List<RecipeIngredientEntity>
+
     //get ingredients of a specific recipe
     @Query("SELECT * FROM RecipeIngredientEntity WHERE recipeId = :recipeId")
     suspend fun getIngredientsForRecipe(recipeId: Int): List<RecipeIngredientEntity>
@@ -51,4 +54,20 @@ interface RecipeDao {
 
     @Query("SELECT * FROM RecipeEntity WHERE id = :recipeId")
     abstract suspend fun getRecipeById(recipeId: Int): RecipeEntity
+
+    @Query("UPDATE RecipeEntity SET name = :name, description = :description WHERE id = :recipeId")
+    fun updateRecipeFields(recipeId: Int, name: String, description: String)
+
+    @Transaction
+    suspend fun updateRecipeById(
+        recipeId: Int,
+        name: String,
+        description: String,
+        ingredients: List<RecipeIngredientEntity>
+    ) {
+        updateRecipeFields(recipeId, name, description)
+        deleteIngredientsByRecipeId(recipeId)
+        insertIngredients(ingredients.map { it.copy(recipeId = recipeId) })
+    }
+
 }

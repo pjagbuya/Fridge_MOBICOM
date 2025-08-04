@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.mobdeve.agbuya.hallar.hong.fridge.Mappers.toEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.R
 import com.mobdeve.agbuya.hallar.hong.fridge.databinding.FragmentProfileLoginMainBinding
 import com.mobdeve.agbuya.hallar.hong.fridge.viewModel.UserViewModel
@@ -146,6 +147,31 @@ class LoginFragment : Fragment() {
                     val firestoreIngredient = grocery.toFirestoreIngredient()
                     // Use grocery ID as document ID, not user ID
                     firestoreHelper.syncToFirestore("ingredients", grocery.ingredientID.toString(), firestoreIngredient)
+                }
+            } catch (e: Exception) {
+                // Handle error
+            }
+        }
+
+        lifecycleScope.launch {
+            try {
+                val recipes = recipeViewModel.getAllRecipe()
+                recipes.forEach { recipe ->
+                    val firestoreRecipe = recipe.toFirestoreRecipe()
+                    firestoreHelper.syncToFirestore("recipes", recipe.id.toString(), firestoreRecipe)
+                }
+            } catch (e: Exception) {
+                // Handle error
+            }
+        }
+
+        lifecycleScope.launch {
+            try {
+                val recipeIngredients = recipeViewModel.getAllRecipeIngredients()
+                recipeIngredients.forEach { recipeIngredient ->
+                    val firestoreRecipeIngredient = recipeIngredient.toFirestoreRecipeIngredient()
+                    // Use grocery ID as document ID, not user ID
+                    firestoreHelper.syncToFirestore("recipesIngredients", recipeIngredient.ingredientId.toString(), firestoreRecipeIngredient)
                 }
             } catch (e: Exception) {
                 // Handle error

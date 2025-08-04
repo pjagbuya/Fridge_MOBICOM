@@ -21,6 +21,14 @@ class RecipeRepository @Inject constructor(private val recipeDao: RecipeDao) {
         }
     }
 
+    suspend fun getAllRecipes2(): List<RecipeEntity> {
+        return  recipeDao.getAllRecipes()
+    }
+
+    suspend fun getAllRecipeIngredients(): List<RecipeIngredientEntity> {
+        return  recipeDao.getAllRecipeIngredients()
+    }
+
     //insert a RecipeModel into DB
 //    suspend fun insertRecipe(recipe: RecipeModel) = withContext(Dispatchers.IO) {
 //        val recipeId = recipeDao.insertRecipe(recipe.toEntity()).toInt()
@@ -95,13 +103,19 @@ class RecipeRepository @Inject constructor(private val recipeDao: RecipeDao) {
                 entity,
                 recipe.ingredients.map { it.toEntity(0) }
             )
-        } else {
+        } else if (recipe.id != 0){
             // update existing recipe + replacing its ingredients
-            recipeDao.updateRecipe(entity)
-            recipeDao.deleteIngredientsByRecipeId(recipe.id)
-            val updatedIngredients = recipe.ingredients.map { it.toEntity(recipe.id) }
-            recipeDao.insertIngredients(updatedIngredients)
+//            recipeDao.updateRecipe(entity)
+//            recipeDao.deleteIngredientsByRecipeId(recipe.id)
+//            val updatedIngredients = recipe.ingredients.map { it.toEntity(recipe.id) }
+//            recipeDao.insertIngredients(updatedIngredients)
             // recipeDao.insertIngredients(recipe.ingredients.map { it.toEntity(recipe.id) })
+            recipeDao.deleteRecipeById(recipe.id)
+            recipeDao.deleteIngredientsByRecipeId(recipe.id)
+            recipeDao.insertRecipeWithIngredients(
+                entity,
+                recipe.ingredients.map { it.toEntity(recipe.id) }
+            )
         }
     }
 
@@ -110,5 +124,19 @@ class RecipeRepository @Inject constructor(private val recipeDao: RecipeDao) {
         val ingredients = recipeDao.getIngredientsForRecipe(id)
         recipe.toModel(ingredients)
     }
+
+
+
+    suspend fun updateRecipeById(
+        recipeId: Int,
+        name: String,
+        description: String,
+        ingredients: List<RecipeIngredientEntity>
+    ) {
+        recipeDao.updateRecipeFields(recipeId, name, description)
+        recipeDao.deleteIngredientsByRecipeId(recipeId)
+        recipeDao.insertIngredients(ingredients.map { it.copy(recipeId = recipeId) })
+    }
+
 
 }

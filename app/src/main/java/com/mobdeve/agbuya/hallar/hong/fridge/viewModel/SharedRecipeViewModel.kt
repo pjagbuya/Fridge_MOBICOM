@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeEntity
+import com.mobdeve.agbuya.hallar.hong.fridge.Room.RecipeIngredientEntity
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerIdName
 import com.mobdeve.agbuya.hallar.hong.fridge.domain.RecipeModel
 import com.mobdeve.agbuya.hallar.hong.fridge.repository.ContainerRepository
@@ -23,6 +25,24 @@ class SharedRecipeViewModel @Inject constructor(
     // LiveData to hold ingredients
     private val _ingredients = MutableLiveData<ArrayList<RecipeModel.RecipeIngredient>>(arrayListOf())
     val ingredients: LiveData<ArrayList<RecipeModel.RecipeIngredient>> = _ingredients
+
+    //get current recipeId
+    private val _currentRecipeId = MutableLiveData<Int?>()
+    val currentRecipeId: LiveData<Int?> = _currentRecipeId
+
+    fun setCurrentRecipeId(id: Int?) {
+        _currentRecipeId.value = id
+    }
+
+    suspend fun getAllRecipe() : List<RecipeEntity> {
+        return recipeRepo.getAllRecipes2()
+    }
+
+    suspend fun getAllRecipeIngredients() : List<RecipeIngredientEntity> {
+        return recipeRepo.getAllRecipeIngredients()
+    }
+
+
 
     fun addIngredient(ingredient: RecipeModel.RecipeIngredient) {
         val currentList = _ingredients.value ?: arrayListOf()
