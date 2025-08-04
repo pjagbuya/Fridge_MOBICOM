@@ -233,21 +233,7 @@ class GroceryActivityFragmentAdd : Fragment() {
         Toast.makeText(requireContext(), "Grocery added!", Toast.LENGTH_SHORT).show()
         val firestoreHelper = FirestoreHelper(requireContext())
         // Give a small delay for the database insert and ViewModel update
-        lifecycleScope.launch {
-            try {
-                // Sync groceries - ONE TIME sync
-                val containers = containerViewModel.readAllData.value
-                containers.forEach { container ->
-                    val firestoreContainer = container.toFirestoreContainer()
-                    // Use grocery ID as document ID, not user ID
-                    firestoreHelper.syncToFirestore("containers", container.containerId.toString(), firestoreContainer)
-                }
-            } catch (e: Exception) {
-                // Handle error
-                Log.d("ERRORS in CONTAINER","Conversion error: ${e.message}")
-
-            }
-        }
+        containerViewModel.increaseCurrCap(newIngredientEntity.attachedContainerId, requireContext())
 
         findNavController().navigateUp()
 
@@ -449,7 +435,7 @@ class GroceryActivityFragmentAdd : Fragment() {
 
 
         val layoutChosen = R.layout.dropdown_item_for_update
-        var sortOptions = resources.getStringArray(R.array.item_type_array)
+        var sortOptions = resources.getStringArray(R.array.item_type_array_choice)
         var sortAdapter =
             ArrayAdapter(requireContext(), layoutChosen, sortOptions)
         binding.itemTypeDropDownActv.setAdapter(sortAdapter)

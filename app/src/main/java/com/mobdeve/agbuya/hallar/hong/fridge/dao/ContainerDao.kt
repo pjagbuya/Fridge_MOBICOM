@@ -68,7 +68,8 @@ interface ContainerDao {
         WHERE u.fireAuthId = :firebaseUid
     """)
     suspend fun getContainerIdNameMapByFirebaseUid(firebaseUid: String): List<ContainerIdName>
-
+    @Query("SELECT * FROM ContainerEntity WHERE containerId = :containerId LIMIT 1")
+    suspend fun findContainerById(containerId: Int): ContainerEntity?
     // New search query by Firebase UID
     @Query("""
         SELECT c.* FROM ContainerEntity c

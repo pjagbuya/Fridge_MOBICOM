@@ -28,6 +28,22 @@ class ContainerRepository @Inject constructor(
     fun getContainersByFirebaseUid(firebaseUid: String): Flow<List<ContainerEntity>> {
         return containerDao.getContainersByFirebaseUid(firebaseUid)
     }
+    suspend fun findContainerById(containerId: Int): ContainerEntity? {
+        // Validate input ID
+        if (containerId <= 0) {
+            return null
+        }
+
+        return try {
+            val result = containerDao.findContainerById(containerId)
+
+            result
+        } catch (e: Exception) {
+            Log.e("CONTAINER REPO", "Error finding container by ID: $containerId", e)
+            // Return null on error to indicate failure
+            null
+        }
+    }
     suspend fun findContainerByNameOnce(name: String): ContainerEntity? {
         return try {
             containerDao.findByNameOnce(name)

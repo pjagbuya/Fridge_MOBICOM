@@ -222,11 +222,10 @@ class GroceryActivityFragmentEdit: Fragment() {
 
         val containerType = binding.containerTypeDropDownActv.text.toString()
         if(idToNameMap[originalContainerId] != containerType){
-            containerViewModel.decreaseCurrCap(selectedIngredient.attachedContainerId)
-            containerViewModel.increaseCurrCap(selectedContainerId)
+            containerViewModel.decreaseCurrCap(selectedIngredient.attachedContainerId, requireContext())
+            containerViewModel.increaseCurrCap(selectedContainerId, requireContext())
 
-            containerViewModel.syncUpdatedContainerCapacity(originalContainerId, requireContext())
-            containerViewModel.syncUpdatedContainerCapacity(selectedContainerId, requireContext())
+
         }else{
             selectedContainerId = originalContainerId
         }

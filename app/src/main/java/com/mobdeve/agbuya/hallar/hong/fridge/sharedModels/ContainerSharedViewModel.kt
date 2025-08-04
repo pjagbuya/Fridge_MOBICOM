@@ -70,36 +70,25 @@ class ContainerSharedViewModel @Inject constructor(
 
 
 
-    fun syncUpdatedContainerCapacity(containerId: Int, context: Context) {
+    fun syncUpdatedContainerCapacity(containerEntity: ContainerEntity, context: Context) {
         val TAG = "SYNC_CONT_CAP"
-        if (containerId <= 0) {
-            Log.w(TAG, "Invalid container ID for sync: $containerId")
-            return
-        }
 
-        viewModelScope.launch {
-            try {
-                delay(2000) // Give Room/Flow time to update
-                val currentContainers = readAllData.value // Get user-specific containers
-                val containerToUpdate = currentContainers.find { it.containerId == containerId }
 
-                if (containerToUpdate != null) {
-                    Log.d(TAG, "Syncing updated capacity for container ID: $containerId")
-                    val firestoreHelper = FirestoreHelper(context)
-                    val firestoreContainer = containerToUpdate.toFirestoreContainer()
-                    firestoreHelper.syncToFirestore(
-                        "containers",
-                        containerToUpdate.containerId.toString(),
-                        firestoreContainer,
-                        "Container capacity synced",
-                        "Failed to sync container capacity"
-                    )
-                } else {
-                    Log.w(TAG, "Container ID $containerId not found for sync.")
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error syncing container capacity for ID: $containerId", e)
+        try {
+            val containerToUpdate = containerEntity
+
+            if (containerToUpdate != null) {
+                val firestoreHelper = FirestoreHelper(context)
+                val firestoreContainer = containerToUpdate.toFirestoreContainer()
+                firestoreHelper.syncToFirestore(
+                    "containers",
+                    containerToUpdate.containerId.toString(),
+                    firestoreContainer,
+                    "Container capacity synced",
+                    "Failed to sync container capacity"
+                )
             }
+        } catch (e: Exception) {
         }
     }
     // Inside ContainerSharedViewModel.kt
@@ -165,6 +154,7 @@ class ContainerSharedViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            delay(1000)
             Log.d(TAG, "Starting sync update for container ID: ${containerEntity.containerId}")
             // A small delay might be useful to ensure Room transaction is fully complete,
             // but it doesn't need to be as long as waiting for Flow emission like in 'add' scenarios.
@@ -311,9 +301,77 @@ class ContainerSharedViewModel @Inject constructor(
         }
     }
 
-    fun decreaseCurrCap(containerId: Int) {
+    fun increaseCurrCap(containerId: Int, context: Context) {
+        val TAG = "INCREASE_CAP"
+        if (containerId <= 0) {
+            Log.w(TAG, "Invalid container ID for increase: $containerId")
+            return
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
-            repository.decreaseCurrCap(containerId)
+            try {
+                Log.d(TAG, "Increasing capacity for container ID: $containerId")
+                // 1. Update the local database
+                repository.increaseCurrCap(containerId)
+                Log.d(TAG, "Local capacity increased for container ID: $containerId")
+
+                // 2. Find the updated container entity and sync it
+                // Add a small delay to let Room process the update
+                delay(200)
+                val updatedContainerEntity = findContainerById(containerId)
+                if (updatedContainerEntity != null) {
+                    Log.d(TAG, "Found updated container, syncing capacity. New currCap: ${updatedContainerEntity.currCap}")
+                    syncUpdatedContainerCapacity(updatedContainerEntity, context)
+                } else {
+                    Log.w(TAG, "Could not find container ID $containerId to sync after increase.")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error increasing capacity or syncing for container ID: $containerId", e)
+            }
+        }
+    }
+
+    fun decreaseCurrCap(containerId: Int, context: Context) {
+        val TAG = "DECREASE_CAP"
+        if (containerId <= 0) {
+            Log.w(TAG, "Invalid container ID for decrease: $containerId")
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                Log.d(TAG, "Decreasing capacity for container ID: $containerId")
+                // 1. Update the local database
+                repository.decreaseCurrCap(containerId)
+                Log.d(TAG, "Local capacity decreased for container ID: $containerId")
+
+                // 2. Find the updated container entity and sync it
+                // Add a small delay to let Room process the update
+                val updatedContainerEntity = findContainerById(containerId) // <-- Uses findContainerById
+                if (updatedContainerEntity != null) {
+                    Log.d(TAG, "Found updated container, syncing capacity. New currCap: ${updatedContainerEntity.currCap}")
+                    // Call the suspend version directly within this coroutine
+                    syncUpdatedContainerCapacity(updatedContainerEntity, context) // <-- Pass the found entity
+                } else {
+                    Log.w(TAG, "Could not find container ID $containerId to sync after decrease.")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error decreasing capacity or syncing for container ID: $containerId", e)
+            }
+        }
+    }
+    private suspend fun findContainerById(containerId: Int): ContainerEntity? {
+        val TAG = "FIND_CONT_BY_ID"
+        return try {
+            // Get the current list of containers from the StateFlow
+            val currentContainers = readAllData.value
+            // Find the one with the matching ID
+            val foundContainer = currentContainers.find { it.containerId == containerId }
+            Log.d(TAG, "Container ID $containerId ${if (foundContainer != null) "found" else "not found"} in readAllData.value (${currentContainers.size} items)")
+            foundContainer
+        } catch (e: Exception) {
+            Log.e(TAG, "Error finding container by ID: $containerId", e)
+            null
         }
     }
     fun increaseCurrCap(containerId: Int) {

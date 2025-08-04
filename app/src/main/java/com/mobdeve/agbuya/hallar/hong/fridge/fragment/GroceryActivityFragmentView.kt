@@ -90,7 +90,7 @@ class GroceryActivityFragmentView : Fragment() {
                     }
 
                     binding.deleteBtn.setOnClickListener {
-                        containerViewModel.decreaseCurrCap(selectedIngredient.attachedContainerId)
+                        containerViewModel.decreaseCurrCap(selectedIngredient.attachedContainerId, requireContext())
                         groceryViewModel.deleteGrocery(selectedIngredient.ingredientID)
                         val firestoreHelper = FirestoreHelper(requireContext())
                         groceryViewModel.syncDeletedIngredient(selectedIngredient.ingredientID, requireContext()) // Assuming it uses ID only now

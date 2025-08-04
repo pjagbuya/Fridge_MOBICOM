@@ -261,7 +261,6 @@ fun syncUpdatedContainerCapacity(containerId: Int, context: Context) {
                 Log.d(TAG, "Adding grocery to local database: ${grocery.name}")
                 // 1. Add the grocery to the local Room database.
                 repository.addGrocery(grocery)
-                containerRepository.increaseCurrCap(grocery.attachedContainerId)
                 Log.d(TAG, "Grocery '${grocery.name}' added to local database request sent.")
 
                 // 2. Attempt to find the newly added grocery by name

@@ -1,5 +1,6 @@
 package com.mobdeve.agbuya.hallar.hong.fridge.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.mobdeve.agbuya.hallar.hong.fridge.Room.UserDao
 import com.mobdeve.agbuya.hallar.hong.fridge.dao.ContainerDao
@@ -20,7 +21,14 @@ class GroceryRepository @Inject constructor(
     suspend fun addGrocery(grocery: IngredientEntity) {
         groceryDao.insertAndUpdateCapacity(grocery)
     }
-
+    suspend fun findGroceryByNameOnce(name: String): IngredientEntity? {
+        return try {
+            groceryDao.findByNameOnce(name)
+        } catch (e: Exception) {
+            Log.e("GroceryRepository", "Error finding grocery by name: $name", e)
+            null // Return null on error
+        }
+    }
     // Flow for observing a single grocery item by ID
     fun findGrocery(id: Int): Flow<IngredientEntity> {
         return groceryDao.getIngredientById(id)
